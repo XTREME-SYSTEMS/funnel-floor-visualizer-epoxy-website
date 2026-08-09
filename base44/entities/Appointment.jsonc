@@ -1,0 +1,45 @@
+{
+  "name": "Appointment",
+  "type": "object",
+  "properties": {
+    "lead_id": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "PHONE CONSULTATION",
+        "IN-HOME ESTIMATE"
+      ],
+      "default": "PHONE CONSULTATION"
+    },
+    "date": {
+      "type": "string",
+      "format": "date"
+    },
+    "time": {
+      "type": "string"
+    },
+    "salesperson": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "booked",
+        "completed",
+        "cancelled",
+        "no_show"
+      ],
+      "default": "booked"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "lead_id",
+    "date",
+    "time"
+  ]
+}

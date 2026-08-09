@@ -1,0 +1,145 @@
+{
+  "name": "Lead",
+  "type": "object",
+  "properties": {
+    "first_name": {
+      "type": "string"
+    },
+    "last_name": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "address": {
+      "type": "string"
+    },
+    "city": {
+      "type": "string"
+    },
+    "state": {
+      "type": "string"
+    },
+    "zip": {
+      "type": "string"
+    },
+    "latitude": {
+      "type": "number"
+    },
+    "longitude": {
+      "type": "number"
+    },
+    "lead_source": {
+      "type": "string",
+      "default": "website"
+    },
+    "utm_source": {
+      "type": "string"
+    },
+    "utm_campaign": {
+      "type": "string"
+    },
+    "landing_page": {
+      "type": "string"
+    },
+    "garage_size": {
+      "type": "string"
+    },
+    "custom_length": {
+      "type": "number"
+    },
+    "custom_width": {
+      "type": "number"
+    },
+    "square_footage": {
+      "type": "number"
+    },
+    "floor_condition": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "desired_system": {
+      "type": "string"
+    },
+    "timeline": {
+      "type": "string"
+    },
+    "photos": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "estimate_mid": {
+      "type": "number"
+    },
+    "estimate_low": {
+      "type": "number"
+    },
+    "estimate_high": {
+      "type": "number"
+    },
+    "package_options": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "tier": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "low": {
+            "type": "number"
+          },
+          "high": {
+            "type": "number"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "assigned_salesperson": {
+      "type": "string"
+    },
+    "appointment_status": {
+      "type": "string",
+      "default": "none"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "NEW ESTIMATE",
+        "CONTACT ATTEMPTED",
+        "PHONE CONSULTATION BOOKED",
+        "PHONE CONSULTATION COMPLETED",
+        "IN-HOME ESTIMATE BOOKED",
+        "IN-HOME ESTIMATE COMPLETED",
+        "PROPOSAL SENT",
+        "WON",
+        "LOST",
+        "NURTURE"
+      ],
+      "default": "NEW ESTIMATE"
+    },
+    "won_value": {
+      "type": "number"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "first_name",
+    "email",
+    "phone"
+  ]
+}

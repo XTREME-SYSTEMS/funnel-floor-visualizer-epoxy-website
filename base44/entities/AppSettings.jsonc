@@ -1,0 +1,189 @@
+{
+  "name": "AppSettings",
+  "type": "object",
+  "properties": {
+    "company_name": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "service_area": {
+      "type": "string"
+    },
+    "is_test_pricing": {
+      "type": "boolean",
+      "default": true
+    },
+    "size_defaults": {
+      "type": "object",
+      "properties": {
+        "one_car": {
+          "type": "number"
+        },
+        "two_car": {
+          "type": "number"
+        },
+        "three_car": {
+          "type": "number"
+        },
+        "four_car": {
+          "type": "number"
+        },
+        "not_sure": {
+          "type": "number"
+        }
+      }
+    },
+    "systems": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "image_url": {
+            "type": "string"
+          },
+          "price_per_sqft": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "condition_adjustments": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "percent": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "minimum_project_price": {
+      "type": "number",
+      "default": 1800
+    },
+    "range_low_percent": {
+      "type": "number",
+      "default": 12
+    },
+    "range_high_percent": {
+      "type": "number",
+      "default": 15
+    },
+    "packages": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "tier": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "multiplier": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "salesperson": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "bio": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "photo_url": {
+          "type": "string"
+        }
+      }
+    },
+    "google_rating": {
+      "type": "number"
+    },
+    "google_review_count": {
+      "type": "number"
+    },
+    "testimonials": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "location": {
+            "type": "string"
+          },
+          "quote": {
+            "type": "string"
+          },
+          "rating": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "gallery": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "before_url": {
+            "type": "string"
+          },
+          "after_url": {
+            "type": "string"
+          },
+          "caption": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "calendar_url": {
+      "type": "string"
+    },
+    "disclaimer": {
+      "type": "string"
+    },
+    "consent_language": {
+      "type": "string"
+    },
+    "hero_image_url": {
+      "type": "string"
+    }
+  }
+}

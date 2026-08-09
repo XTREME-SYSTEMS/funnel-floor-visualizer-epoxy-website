@@ -1,0 +1,21 @@
+{
+  "name": "FunnelEvent",
+  "type": "object",
+  "properties": {
+    "event": {
+      "type": "string"
+    },
+    "session_id": {
+      "type": "string"
+    },
+    "lead_id": {
+      "type": "string"
+    },
+    "meta": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "event"
+  ]
+}

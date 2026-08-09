@@ -7,6 +7,17 @@ import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import ScrollToTop from './components/ScrollToTop';
 // Add page imports here
+import Home from '@/pages/Home';
+import Estimator from '@/pages/Estimator';
+import Results from '@/pages/Results';
+import Book from '@/pages/Book';
+import Booked from '@/pages/Booked';
+import AdminLayout from '@/components/admin/AdminLayout';
+import Dashboard from '@/pages/admin/Dashboard';
+import Leads from '@/pages/admin/Leads';
+import LeadDetail from '@/pages/admin/LeadDetail';
+import Pipeline from '@/pages/admin/Pipeline';
+import SettingsPage from '@/pages/admin/SettingsPage';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -34,7 +45,18 @@ const AuthenticatedApp = () => {
   // Render the main app
   return (
     <Routes>
-      {/* Add your page Route elements here */}
+      <Route path="/" element={<Home />} />
+      <Route path="/estimate" element={<Estimator />} />
+      <Route path="/results/:id" element={<Results />} />
+      <Route path="/book/:id" element={<Book />} />
+      <Route path="/booked/:id" element={<Booked />} />
+      <Route path="/admin" element={<AdminLayout />}>
+        <Route index element={<Dashboard />} />
+        <Route path="leads" element={<Leads />} />
+        <Route path="leads/:id" element={<LeadDetail />} />
+        <Route path="pipeline" element={<Pipeline />} />
+        <Route path="settings" element={<SettingsPage />} />
+      </Route>
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
