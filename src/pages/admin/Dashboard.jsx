@@ -26,7 +26,7 @@ export default function Dashboard() {
   const convRate = leads.length ? Math.round((won.length / leads.length) * 100) : 0;
 
   const starts = events.filter((e) => e.event === "estimator_started").length;
-  const visitors = events.filter((e) => e.event === "visitor_landed").length;
+  const visitors = events.filter((e) => e.event === "page_view").length;
   const newLeads = leads.filter((l) => l.status === "NEW ESTIMATE");
 
   const funnel = [

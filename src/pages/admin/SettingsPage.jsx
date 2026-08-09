@@ -54,6 +54,8 @@ export default function SettingsPage() {
         <Field label="Phone"><Input value={form.phone || ""} onChange={(e) => set({ phone: e.target.value })} /></Field>
         <Field label="Email"><Input value={form.email || ""} onChange={(e) => set({ email: e.target.value })} /></Field>
         <Field label="Service area"><Input value={form.service_area || ""} onChange={(e) => set({ service_area: e.target.value })} /></Field>
+        <Field label="Primary city"><Input value={form.primary_city || ""} onChange={(e) => set({ primary_city: e.target.value })} /></Field>
+        <Field label="Primary state"><Input value={form.primary_state || ""} onChange={(e) => set({ primary_state: e.target.value })} /></Field>
         <Field label="Hero image URL"><Input value={form.hero_image_url || ""} onChange={(e) => set({ hero_image_url: e.target.value })} /></Field>
         <Field label="Calendar / scheduler URL (optional embed)"><Input value={form.calendar_url || ""} onChange={(e) => set({ calendar_url: e.target.value })} /></Field>
         <div className="sm:col-span-2 flex items-center gap-3 pt-2">
@@ -155,6 +157,19 @@ export default function SettingsPage() {
           { key: "caption", label: "Caption", wide: true }
         ]}
       />
+
+      <div className="rounded-2xl bg-white border border-stone-200 p-6 grid gap-4 sm:grid-cols-2">
+        <h2 className="font-semibold text-stone-900 sm:col-span-2">SEO</h2>
+        <Field label="Site name"><Input value={form.seo?.site_name || ""} onChange={(e) => set({ seo: { ...form.seo, site_name: e.target.value } })} /></Field>
+        <Field label="Business category"><Input value={form.seo?.business_category || ""} onChange={(e) => set({ seo: { ...form.seo, business_category: e.target.value } })} /></Field>
+        <Field label="Default meta title"><Input value={form.seo?.default_title || ""} onChange={(e) => set({ seo: { ...form.seo, default_title: e.target.value } })} /></Field>
+        <Field label="Business hours"><Input value={form.seo?.business_hours || ""} onChange={(e) => set({ seo: { ...form.seo, business_hours: e.target.value } })} /></Field>
+        <div className="sm:col-span-2">
+          <Field label="Default meta description"><Textarea value={form.seo?.default_description || ""} onChange={(e) => set({ seo: { ...form.seo, default_description: e.target.value } })} /></Field>
+        </div>
+        <Field label="Google Business Profile URL"><Input value={form.seo?.gbp_url || ""} onChange={(e) => set({ seo: { ...form.seo, gbp_url: e.target.value } })} /></Field>
+        <Field label="Review URL"><Input value={form.seo?.review_url || ""} onChange={(e) => set({ seo: { ...form.seo, review_url: e.target.value } })} /></Field>
+      </div>
 
       <div className="rounded-2xl bg-white border border-stone-200 p-6 space-y-4">
         <h2 className="font-semibold text-stone-900">Legal copy</h2>

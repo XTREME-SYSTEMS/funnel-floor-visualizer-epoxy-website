@@ -69,7 +69,12 @@ export default function LeadDetail() {
       <Link to="/admin/leads" className="text-sm text-stone-500 hover:text-stone-900">← All leads</Link>
       <div className="flex flex-wrap items-center gap-4 justify-between">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight text-stone-900">{lead.first_name} {lead.last_name}</h1>
+          <div className="flex items-center gap-3">
+            <h1 className="text-2xl font-semibold tracking-tight text-stone-900">{lead.first_name} {lead.last_name}</h1>
+            {typeof lead.lead_score === "number" && (
+              <span className="text-xs font-bold bg-amber-500 text-stone-950 px-2.5 py-1 rounded-full">SCORE {lead.lead_score}</span>
+            )}
+          </div>
           <p className="text-stone-500 text-sm mt-1">
             <a href={`tel:${lead.phone}`} className="underline">{lead.phone}</a> · <a href={`mailto:${lead.email}`} className="underline">{lead.email}</a>
           </p>
@@ -90,6 +95,10 @@ export default function LeadDetail() {
           <Row label="Estimate shown">{money(lead.estimate_low)} – {money(lead.estimate_high)}</Row>
           <Row label="Estimate midpoint">{money(lead.estimate_mid)}</Row>
           <Row label="Lead source">{lead.lead_source} {lead.utm_source ? `· ${lead.utm_source}` : ""} {lead.utm_campaign || ""}</Row>
+          <Row label="Attribution">{[lead.utm_medium, lead.utm_term, lead.utm_content].filter(Boolean).join(" · ") || "organic"}</Row>
+          <Row label="Device / referrer">{[lead.device, lead.referrer].filter(Boolean).join(" · ") || "—"}</Row>
+          <Row label="Landing page">{lead.landing_page || "/"}</Row>
+          <Row label="Lead score">{lead.lead_score ?? 0}</Row>
           <Row label="Assigned to">{lead.assigned_salesperson || "—"}</Row>
           <Row label="Submitted">{format(new Date(lead.created_date), "MMM d, yyyy p")}</Row>
 

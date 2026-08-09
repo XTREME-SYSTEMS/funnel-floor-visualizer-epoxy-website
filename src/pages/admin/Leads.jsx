@@ -59,7 +59,7 @@ export default function Leads() {
         <table className="w-full text-sm">
           <thead className="bg-stone-50 text-stone-500">
             <tr>
-              {["Date", "Name", "City / ZIP", "System", "Sq ft", "Estimate", "Timeline", "Status"].map((h) => (
+              {["Date", "Name", "City / ZIP", "System", "Sq ft", "Estimate", "Timeline", "Score", "Status"].map((h) => (
                 <th key={h} className="text-left font-medium px-4 py-3 whitespace-nowrap">{h}</th>
               ))}
             </tr>
@@ -81,12 +81,17 @@ export default function Leads() {
                 <td className="px-4 py-3 whitespace-nowrap tabular-nums">{money(l.estimate_low)} – {money(l.estimate_high)}</td>
                 <td className="px-4 py-3 whitespace-nowrap text-stone-600">{l.timeline}</td>
                 <td className="px-4 py-3 whitespace-nowrap">
+                  {typeof l.lead_score === "number" ? (
+                    <span className={`text-xs font-bold px-2 py-1 rounded ${l.lead_score >= 40 ? "bg-amber-500 text-stone-950" : "bg-stone-100 text-stone-600"}`}>{l.lead_score}</span>
+                  ) : "—"}
+                </td>
+                <td className="px-4 py-3 whitespace-nowrap">
                   <span className="text-xs font-semibold bg-stone-100 px-2 py-1 rounded">{l.status}</span>
                 </td>
               </tr>
             ))}
             {!rows.length && (
-              <tr><td colSpan={8} className="px-4 py-12 text-center text-stone-500">No leads match these filters yet.</td></tr>
+              <tr><td colSpan={9} className="px-4 py-12 text-center text-stone-500">No leads match these filters yet.</td></tr>
             )}
           </tbody>
         </table>
