@@ -5,7 +5,7 @@ export function calcSquareFootage(settings, data) {
     return Math.round(l * w);
   }
   const d = settings.size_defaults || {};
-  return d[data.garage_size] || d.not_sure || 400;
+  return d[data.garage_size] || d.not_sure || 440;
 }
 
 export function calcEstimate(settings, data) {
@@ -33,6 +33,18 @@ export function calcEstimate(settings, data) {
   }));
 
   return { sqft, mid: Math.round(mid), low, high, packages, system };
+}
+
+export function calcLeadScore(settings, data, extras = {}) {
+  const w = settings.lead_scoring || {};
+  let score = 0;
+  if (w.timeline && data.timeline) score += w.timeline[data.timeline] || 0;
+  if (w.garage_size && data.garage_size) score += w.garage_size[data.garage_size] || 0;
+  if (w.has_full_address && data.address && data.city && data.state && data.zip) score += w.has_full_address;
+  if (w.has_photos && (data.photos || []).length) score += w.has_photos;
+  if (w.consultation_booked && extras.consultation_booked) score += w.consultation_booked;
+  if (w.call_clicked && extras.call_clicked) score += w.call_clicked;
+  return score;
 }
 
 export const money = (n) => `$${Math.round(n || 0).toLocaleString()}`;

@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { format } from "date-fns";
 import { trackEvent } from "@/lib/tracking";
 
-const STATUSES = ["NEW ESTIMATE", "CONTACT ATTEMPTED", "PHONE CONSULTATION BOOKED", "PHONE CONSULTATION COMPLETED", "IN-HOME ESTIMATE BOOKED", "IN-HOME ESTIMATE COMPLETED", "PROPOSAL SENT", "WON", "LOST", "NURTURE"];
+const STATUSES = ["NEW ESTIMATE", "CONTACT ATTEMPTED", "CONSULTATION BOOKED", "CONSULTATION COMPLETED", "IN-HOME ESTIMATE BOOKED", "IN-HOME ESTIMATE COMPLETED", "PROPOSAL SENT", "WON", "LOST", "NURTURE"];
 
 const Row = ({ label, children }) => (
   <div className="py-3 border-b border-stone-100 flex justify-between gap-6 text-sm">

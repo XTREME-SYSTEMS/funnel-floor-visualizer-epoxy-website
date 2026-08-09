@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /admin/*
+Disallow: /results/
+Disallow: /book/
+Disallow: /booked/
+
+Sitemap: https://epoxygaragefloorestimate.com/sitemap.xml

@@ -18,11 +18,15 @@ import Leads from '@/pages/admin/Leads';
 import LeadDetail from '@/pages/admin/LeadDetail';
 import Pipeline from '@/pages/admin/Pipeline';
 import SettingsPage from '@/pages/admin/SettingsPage';
+import PompanoBeach from '@/pages/seo/PompanoBeach';
+import EpoxyGarageFloorCost from '@/pages/seo/EpoxyGarageFloorCost';
+import TwoCarGarageEpoxyCost from '@/pages/seo/TwoCarGarageEpoxyCost';
+import ThreeCarGarageEpoxyCost from '@/pages/seo/ThreeCarGarageEpoxyCost';
+import GarageFloorCoatingCost from '@/pages/seo/GarageFloorCoatingCost';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
 
-  // Show loading spinner while checking app public settings or auth
   if (isLoadingPublicSettings || isLoadingAuth) {
     return (
       <div className="fixed inset-0 flex items-center justify-center">
@@ -31,18 +35,15 @@ const AuthenticatedApp = () => {
     );
   }
 
-  // Handle authentication errors
   if (authError) {
     if (authError.type === 'user_not_registered') {
       return <UserNotRegisteredError />;
     } else if (authError.type === 'auth_required') {
-      // Redirect to login automatically
       navigateToLogin();
       return null;
     }
   }
 
-  // Render the main app
   return (
     <Routes>
       <Route path="/" element={<Home />} />
@@ -50,6 +51,11 @@ const AuthenticatedApp = () => {
       <Route path="/results/:id" element={<Results />} />
       <Route path="/book/:id" element={<Book />} />
       <Route path="/booked/:id" element={<Booked />} />
+      <Route path="/fl/pompano-beach" element={<PompanoBeach />} />
+      <Route path="/epoxy-garage-floor-cost" element={<EpoxyGarageFloorCost />} />
+      <Route path="/2-car-garage-epoxy-cost" element={<TwoCarGarageEpoxyCost />} />
+      <Route path="/3-car-garage-epoxy-cost" element={<ThreeCarGarageEpoxyCost />} />
+      <Route path="/garage-floor-coating-cost" element={<GarageFloorCoatingCost />} />
       <Route path="/admin" element={<AdminLayout />}>
         <Route index element={<Dashboard />} />
         <Route path="leads" element={<Leads />} />

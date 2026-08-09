@@ -8,7 +8,7 @@ import { money } from "@/lib/pricing";
 import { format } from "date-fns";
 import { TIMELINE_OPTIONS } from "@/lib/defaults";
 
-const STATUSES = ["NEW ESTIMATE", "CONTACT ATTEMPTED", "PHONE CONSULTATION BOOKED", "PHONE CONSULTATION COMPLETED", "IN-HOME ESTIMATE BOOKED", "IN-HOME ESTIMATE COMPLETED", "PROPOSAL SENT", "WON", "LOST", "NURTURE"];
+const STATUSES = ["NEW ESTIMATE", "CONTACT ATTEMPTED", "CONSULTATION BOOKED", "CONSULTATION COMPLETED", "IN-HOME ESTIMATE BOOKED", "IN-HOME ESTIMATE COMPLETED", "PROPOSAL SENT", "WON", "LOST", "NURTURE"];
 
 function Select({ value, onChange, options, placeholder }) {
   return (

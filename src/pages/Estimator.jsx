@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { useSettings } from "@/lib/useSettings";
-import { calcEstimate } from "@/lib/pricing";
-import { trackEvent } from "@/lib/tracking";
+import { calcEstimate, calcLeadScore } from "@/lib/pricing";
+import { trackEvent, getDeviceType } from "@/lib/tracking";
 import { loadDraft, saveDraft, clearDraft, captureAttribution } from "@/lib/estimatorStore";
 import AddressStep from "@/components/estimator/AddressStep";
 import SizeStep from "@/components/estimator/SizeStep";
@@ -13,13 +13,21 @@ import TimelineStep from "@/components/estimator/TimelineStep";
 import PhotoStep from "@/components/estimator/PhotoStep";
 import ContactStep from "@/components/estimator/ContactStep";
 
-const EVENTS = ["address_completed", "garage_size_completed", "condition_completed", "floor_selected", "timeline_completed", "contact_started"];
+const EVENTS = [
+  "address_completed",
+  "garage_size_selected",
+  "condition_selected",
+  "system_selected",
+  "timeline_selected",
+  "photos_uploaded"
+];
 
 export default function Estimator() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { settings, isLoading } = useSettings();
   const [step, setStep] = useState(0);
-  const [data, setData] = useState(loadDraft());
+  const [data, setData] = useState(() => ({ ...loadDraft(), ...prefillFromQuery(searchParams) }));
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
@@ -33,7 +41,7 @@ export default function Estimator() {
   };
 
   const next = () => {
-    trackEvent(EVENTS[step]);
+    trackEvent(EVENTS[step], { step });
     setStep((s) => s + 1);
     window.scrollTo(0, 0);
   };
@@ -47,6 +55,7 @@ export default function Estimator() {
   const submit = async () => {
     setSubmitting(true);
     const est = calcEstimate(settings, data);
+    const score = calcLeadScore(settings, data);
     const lead = await base44.entities.Lead.create({
       first_name: data.first_name,
       last_name: data.last_name,
@@ -68,15 +77,21 @@ export default function Estimator() {
       estimate_low: est.low,
       estimate_high: est.high,
       package_options: est.packages,
+      lead_score: score,
       assigned_salesperson: settings.salesperson?.name || "",
       status: "NEW ESTIMATE",
       appointment_status: "none",
+      device: getDeviceType(),
       ...captureAttribution()
     });
     await trackEvent("lead_created", { lead_id: lead.id });
     clearDraft();
     navigate(`/results/${lead.id}`);
   };
+
+  useEffect(() => {
+    if (step === 6) trackEvent("contact_gate_viewed");
+  }, [step]);
 
   if (isLoading) {
     return (
@@ -95,4 +110,11 @@ export default function Estimator() {
   if (step === 4) return <TimelineStep {...props} />;
   if (step === 5) return <PhotoStep {...props} />;
   return <ContactStep {...props} submitting={submitting} onSubmit={submit} />;
+}
+
+function prefillFromQuery(sp) {
+  const pre = {};
+  const size = sp.get("size");
+  if (size) pre.garage_size = size;
+  return pre;
 }

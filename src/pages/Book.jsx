@@ -31,7 +31,7 @@ export default function Book() {
       salesperson: settings.salesperson?.name || "",
       status: "booked"
     });
-    await base44.entities.Lead.update(id, { status: "PHONE CONSULTATION BOOKED", appointment_status: "phone_booked" });
+    await base44.entities.Lead.update(id, { status: "CONSULTATION BOOKED", appointment_status: "consultation_booked" });
     await trackEvent("consultation_booked", { lead_id: id });
     navigate(`/booked/${appt.id}`);
   };

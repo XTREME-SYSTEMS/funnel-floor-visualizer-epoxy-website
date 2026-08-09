@@ -36,13 +36,28 @@
       "type": "string",
       "default": "website"
     },
+    "referrer": {
+      "type": "string"
+    },
+    "landing_page": {
+      "type": "string"
+    },
     "utm_source": {
+      "type": "string"
+    },
+    "utm_medium": {
       "type": "string"
     },
     "utm_campaign": {
       "type": "string"
     },
-    "landing_page": {
+    "utm_term": {
+      "type": "string"
+    },
+    "utm_content": {
+      "type": "string"
+    },
+    "device": {
       "type": "string"
     },
     "garage_size": {
@@ -107,6 +122,10 @@
         }
       }
     },
+    "lead_score": {
+      "type": "number",
+      "default": 0
+    },
     "assigned_salesperson": {
       "type": "string"
     },
@@ -119,8 +138,8 @@
       "enum": [
         "NEW ESTIMATE",
         "CONTACT ATTEMPTED",
-        "PHONE CONSULTATION BOOKED",
-        "PHONE CONSULTATION COMPLETED",
+        "CONSULTATION BOOKED",
+        "CONSULTATION COMPLETED",
         "IN-HOME ESTIMATE BOOKED",
         "IN-HOME ESTIMATE COMPLETED",
         "PROPOSAL SENT",

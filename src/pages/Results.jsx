@@ -9,6 +9,7 @@ import PackageCards from "@/components/results/PackageCards";
 import TrustSection from "@/components/results/TrustSection";
 import Gallery from "@/components/home/Gallery";
 import Reviews from "@/components/home/Reviews";
+import { Phone } from "lucide-react";
 
 const Row = ({ label, value }) => (
   <div className="py-3 border-b border-stone-200 flex justify-between gap-6 text-sm">
@@ -26,6 +27,8 @@ export default function Results() {
     if (lead) trackEvent("estimate_viewed", { lead_id: lead.id });
   }, [lead]);
 
+  const callNow = () => trackEvent("call_clicked", { lead_id: id, location: "results_sticky" });
+
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-stone-50">
@@ -38,27 +41,27 @@ export default function Results() {
   const system = (settings.systems || []).find((s) => s.key === lead.desired_system);
 
   return (
-    <div className="bg-stone-50 min-h-screen">
+    <div className="bg-stone-50 min-h-screen pb-24 md:pb-0">
       <div className="bg-stone-950 text-white">
         <div className="max-w-3xl mx-auto px-6 py-6 flex items-center justify-between">
           <Link to="/" className="font-semibold tracking-tight">{settings.company_name}</Link>
-          <a href={`tel:${settings.phone}`} className="text-sm text-stone-300">{settings.phone}</a>
+          <a href={`tel:${settings.phone}`} onClick={() => trackEvent("call_clicked", { lead_id: id, location: "header" })} className="text-sm text-stone-300">{settings.phone}</a>
         </div>
       </div>
 
       <div className="max-w-3xl mx-auto px-6 py-12 space-y-10">
         <div>
           <h1 className="text-3xl md:text-4xl font-semibold tracking-tight text-stone-900">
-            Your Estimated Garage Floor Investment
+            Your Garage Floor Estimate
           </h1>
           <p className="mt-2 text-stone-500">Prepared for {lead.first_name} {lead.last_name}</p>
         </div>
 
         <div className="rounded-3xl bg-white border border-stone-200 p-7">
-          <Row label="Property address" value={`${lead.address}, ${lead.city}, ${lead.state} ${lead.zip}`} />
-          <Row label="Estimated garage size" value={`${(lead.square_footage || 0).toLocaleString()} sq ft`} />
-          <Row label="Selected floor system" value={system?.name || lead.desired_system} />
-          <Row label="Project timeline" value={lead.timeline} />
+          <Row label="Property" value={`${lead.address}, ${lead.city}, ${lead.state} ${lead.zip}`} />
+          <Row label="Approximate square footage" value={`${(lead.square_footage || 0).toLocaleString()} sq ft`} />
+          <Row label="Selected finish" value={system?.name || lead.desired_system} />
+          <Row label="Timeline" value={lead.timeline} />
 
           <div className="mt-8 text-center">
             <div className="text-xs font-bold tracking-[0.25em] text-amber-600">ESTIMATED PROJECT RANGE</div>
@@ -71,8 +74,7 @@ export default function Results() {
               </div>
             )}
             <p className="mt-5 text-sm text-stone-500 leading-relaxed max-w-xl mx-auto">
-              This is an initial project estimate based on the information you provided. Your exact price will be confirmed
-              after speaking with a floor specialist and, when necessary, inspecting your concrete.
+              This is a preliminary estimate based on the information provided. Final pricing is confirmed after your project details and concrete condition are reviewed.
             </p>
           </div>
         </div>
@@ -93,6 +95,24 @@ export default function Results() {
 
       <Reviews settings={settings} />
       <Gallery items={settings.gallery} />
+
+      {/* Mobile sticky CTA */}
+      <div className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-white border-t border-stone-200 px-4 py-3 flex gap-3">
+        <a
+          href={`tel:${settings.phone}`}
+          onClick={callNow}
+          className="flex-1 h-12 rounded-xl border border-stone-300 flex items-center justify-center gap-2 font-semibold text-stone-900"
+        >
+          <Phone className="h-4 w-4" /> CALL
+        </a>
+        <Link
+          to={`/book/${lead.id}`}
+          onClick={() => trackEvent("consultation_clicked", { lead_id: lead.id, location: "sticky" })}
+          className="flex-1 h-12 rounded-xl bg-amber-500 text-stone-950 font-bold flex items-center justify-center"
+        >
+          BOOK FREE CONSULT
+        </Link>
+      </div>
 
       <footer className="bg-stone-950 text-stone-400 py-10 px-6 text-sm">
         <div className="max-w-3xl mx-auto">

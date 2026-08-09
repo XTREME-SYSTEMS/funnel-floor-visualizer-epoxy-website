@@ -5,6 +5,12 @@
     "company_name": {
       "type": "string"
     },
+    "public_business_name": {
+      "type": "string"
+    },
+    "legal_business_name": {
+      "type": "string"
+    },
     "phone": {
       "type": "string"
     },
@@ -12,6 +18,12 @@
       "type": "string"
     },
     "service_area": {
+      "type": "string"
+    },
+    "primary_city": {
+      "type": "string"
+    },
+    "primary_state": {
       "type": "string"
     },
     "is_test_pricing": {
@@ -110,6 +122,29 @@
         }
       }
     },
+    "lead_scoring": {
+      "type": "object",
+      "properties": {
+        "timeline": {
+          "type": "object"
+        },
+        "garage_size": {
+          "type": "object"
+        },
+        "has_full_address": {
+          "type": "number"
+        },
+        "has_photos": {
+          "type": "number"
+        },
+        "consultation_booked": {
+          "type": "number"
+        },
+        "call_clicked": {
+          "type": "number"
+        }
+      }
+    },
     "salesperson": {
       "type": "object",
       "properties": {
@@ -184,6 +219,39 @@
     },
     "hero_image_url": {
       "type": "string"
+    },
+    "seo": {
+      "type": "object",
+      "properties": {
+        "site_name": {
+          "type": "string"
+        },
+        "default_title": {
+          "type": "string"
+        },
+        "default_description": {
+          "type": "string"
+        },
+        "business_hours": {
+          "type": "string"
+        },
+        "business_category": {
+          "type": "string"
+        },
+        "gbp_url": {
+          "type": "string"
+        },
+        "review_url": {
+          "type": "string"
+        },
+        "social_profiles": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
     }
-  }
+  },
+  "required": []
 }
