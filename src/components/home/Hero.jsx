@@ -11,15 +11,15 @@ const trust = [
 
 export default function Hero({ settings }) {
   return (
-    <section className="relative flex items-end bg-stone-950">
+    <section className="relative flex items-end bg-stone-950 border-b-2 border-amber-500/80">
       <img
         src={settings.hero_image_url}
         alt="Premium residential garage with black, white and gray flake epoxy floor, gray cabinets and chrome countertops"
         className="w-full h-auto block"
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-stone-950 via-stone-950/60 to-transparent" />
-      <div className="absolute inset-x-0 bottom-0">
-        <div className="max-w-6xl mx-auto px-6 pb-10 pt-20">
+      <div className="absolute inset-0 bg-gradient-to-t from-stone-950 via-stone-950/50 to-stone-950/20" />
+      <div className="absolute inset-0 flex items-center">
+        <div className="w-full max-w-6xl mx-auto px-6">
           <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="max-w-2xl">
             <span className="inline-block text-amber-400 text-xs font-semibold tracking-[0.2em] uppercase">{settings.service_area}</span>
             <h1 className="mt-4 text-4xl md:text-6xl font-semibold tracking-tight text-white leading-[1.05]">
@@ -39,7 +39,7 @@ export default function Hero({ settings }) {
           </motion.div>
         </div>
       </div>
-      <a href="#how-it-works" className="absolute bottom-3 left-1/2 -translate-x-1/2 text-white/70 hover:text-white transition flex flex-col items-center gap-1">
+      <a href="#how-it-works" className="absolute bottom-2 left-1/2 -translate-x-1/2 text-white/70 hover:text-white transition flex flex-col items-center gap-1">
         <span className="text-[10px] font-semibold tracking-[0.2em] uppercase">Scroll</span>
         <ChevronDown className="h-5 w-5 animate-bounce" />
       </a>
