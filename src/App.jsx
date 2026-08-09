@@ -9,6 +9,7 @@ import ScrollToTop from './components/ScrollToTop';
 // Add page imports here
 import Home from '@/pages/Home';
 import Estimator from '@/pages/Estimator';
+import Funnel from '@/pages/Funnel';
 import Results from '@/pages/Results';
 import Book from '@/pages/Book';
 import Booked from '@/pages/Booked';
@@ -48,6 +49,7 @@ const AuthenticatedApp = () => {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/estimate" element={<Estimator />} />
+      <Route path="/funnel" element={<Funnel />} />
       <Route path="/results/:id" element={<Results />} />
       <Route path="/book/:id" element={<Book />} />
       <Route path="/booked/:id" element={<Booked />} />

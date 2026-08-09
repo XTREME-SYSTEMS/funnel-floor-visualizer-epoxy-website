@@ -22,7 +22,7 @@ export default function PopularStyles({ settings }) {
             </div>
           ))}
         </div>
-        <Link to="/estimate" className="mt-10 inline-flex items-center gap-2 font-semibold text-stone-900 hover:gap-3 transition-all">
+        <Link to="/funnel" className="mt-10 inline-flex items-center gap-2 font-semibold text-stone-900 hover:gap-3 transition-all">
           See which finish fits your budget <ArrowRight className="h-4 w-4" />
         </Link>
       </div>

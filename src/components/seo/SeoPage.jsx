@@ -16,7 +16,7 @@ export default function SeoPage({ slug, title, metaDescription, h1, breadcrumbs,
     if (canon) canon.setAttribute('href', `https://epoxygaragefloorestimate.com/${slug}/`);
   }, [slug, title, metaDescription]);
 
-  const estimateLink = prefillSize ? `/estimate?size=${prefillSize}` : "/estimate";
+  const estimateLink = prefillSize ? `/funnel` : `/funnel`;
 
   return (
     <div className="bg-white">

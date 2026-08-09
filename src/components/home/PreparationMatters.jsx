@@ -24,7 +24,7 @@ export default function PreparationMatters() {
             </div>
           ))}
         </div>
-        <Link to="/estimate" className="mt-10 inline-flex h-14 px-8 items-center justify-center rounded-xl bg-amber-500 hover:bg-amber-400 transition text-stone-950 font-bold tracking-wide">
+        <Link to="/funnel" className="mt-10 inline-flex h-14 px-8 items-center justify-center rounded-xl bg-amber-500 hover:bg-amber-400 transition text-stone-950 font-bold tracking-wide">
           GET MY FREE ESTIMATE
         </Link>
       </div>

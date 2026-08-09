@@ -24,7 +24,7 @@ export default function Hero({ settings }) {
           <p className="mt-5 text-lg text-stone-300 leading-relaxed">
             Get a personalized garage floor estimate in about 60 seconds.
           </p>
-          <Link to="/estimate" className="mt-8 inline-flex w-full sm:w-auto items-center justify-center h-16 px-10 rounded-xl bg-amber-500 hover:bg-amber-400 transition text-stone-950 text-base font-bold tracking-wide">
+          <Link to="/funnel" className="mt-8 inline-flex w-full sm:w-auto items-center justify-center h-16 px-10 rounded-xl bg-amber-500 hover:bg-amber-400 transition text-stone-950 text-base font-bold tracking-wide">
             GET MY FREE ESTIMATE
           </Link>
           <p className="mt-3 text-sm text-stone-400">
