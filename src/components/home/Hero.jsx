@@ -13,7 +13,7 @@ const trust = [
 export default function Hero({ settings }) {
   return (
     <section className="relative min-h-[68vh] flex items-end">
-      <Image src={settings.hero_image_url} alt="Premium residential garage with black, white and gray flake epoxy floor, gray cabinets and chrome countertops" fittingType="fill" className="absolute inset-0 h-full w-full" />
+      <Image src={settings.hero_image_url} alt="Premium residential garage with black, white and gray flake epoxy floor, gray cabinets and chrome countertops" fittingType="fit" className="absolute inset-0 h-full w-full" />
       <div className="absolute inset-0 bg-gradient-to-t from-stone-950 via-stone-950/80 to-stone-950/30" />
       <div className="relative w-full max-w-6xl mx-auto px-6 pb-12 pt-28">
         <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="max-w-2xl">
