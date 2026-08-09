@@ -11,11 +11,11 @@ const trust = [
 
 export default function Hero({ settings }) {
   return (
-    <section className="relative flex items-end bg-stone-950 border-b-2 border-amber-500/80">
+    <section className="relative h-[72vh] min-h-[520px] bg-stone-950 border-b-2 border-amber-500/80 overflow-hidden">
       <img
         src={settings.hero_image_url}
         alt="Premium residential garage with black, white and gray flake epoxy floor, gray cabinets and chrome countertops"
-        className="w-full h-auto block"
+        className="absolute inset-0 w-full h-full object-cover"
       />
       <div className="absolute inset-0 bg-gradient-to-t from-stone-950 via-stone-950/50 to-stone-950/20" />
       <div className="absolute inset-0 flex items-center">
