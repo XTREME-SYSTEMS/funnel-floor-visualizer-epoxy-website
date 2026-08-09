@@ -2,15 +2,15 @@ import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useSettings } from "@/lib/useSettings";
 import { trackEvent } from "@/lib/tracking";
+import Nav from "@/components/home/Nav";
 import Hero from "@/components/home/Hero";
-import TrustStrip from "@/components/home/TrustStrip";
-import HowItWorks from "@/components/home/HowItWorks";
+import WinMore from "@/components/home/WinMore";
+import BeforeAfterShowcase from "@/components/home/BeforeAfterShowcase";
+import LeadCapture from "@/components/home/LeadCapture";
+import MobileSection from "@/components/home/MobileSection";
 import Gallery from "@/components/home/Gallery";
-import WhatAffectsPricing from "@/components/home/WhatAffectsPricing";
-import PopularStyles from "@/components/home/PopularStyles";
 import Reviews from "@/components/home/Reviews";
-import PreparationMatters from "@/components/home/PreparationMatters";
-import ServiceArea from "@/components/home/ServiceArea";
+import SalespersonProfile from "@/components/home/SalespersonProfile";
 import FAQ from "@/components/home/FAQ";
 import FinalCta from "@/components/home/FinalCta";
 
@@ -23,22 +23,17 @@ export default function Home() {
 
   return (
     <div className="bg-white">
-      <header className="absolute top-0 inset-x-0 z-30">
-        <div className="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between">
-          <span className="text-white font-semibold tracking-tight text-sm md:text-base">{settings.company_name}</span>
-          <a href={`tel:${settings.phone}`} className="text-sm text-white/80 hover:text-white">{settings.phone}</a>
-        </div>
-      </header>
+      <Nav settings={settings} />
 
       <Hero settings={settings} />
-      <TrustStrip settings={settings} />
-      <HowItWorks />
+
+      <WinMore />
+      <BeforeAfterShowcase />
+      <LeadCapture />
+      <MobileSection />
       <Gallery items={settings.gallery} />
-      <WhatAffectsPricing />
-      <PopularStyles settings={settings} />
       <Reviews settings={settings} />
-      <PreparationMatters />
-      <ServiceArea settings={settings} />
+      <SalespersonProfile settings={settings} />
       <FAQ />
       <FinalCta settings={settings} />
 

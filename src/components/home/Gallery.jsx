@@ -3,7 +3,7 @@ import React from "react";
 export default function Gallery({ items = [] }) {
   if (!items.length) return null;
   return (
-    <section className="bg-stone-100 py-20 px-6">
+    <section id="gallery" className="bg-stone-100 py-20 px-6">
       <div className="max-w-6xl mx-auto">
         <h2 className="text-3xl md:text-4xl font-semibold tracking-tight text-stone-900">Before &amp; after</h2>
         <p className="mt-3 text-stone-500">Real residential garages we've transformed.</p>

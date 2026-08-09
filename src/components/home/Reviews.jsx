@@ -4,7 +4,7 @@ import { Star } from "lucide-react";
 export default function Reviews({ settings }) {
   const items = settings.testimonials || [];
   return (
-    <section className="bg-white py-20 px-6">
+    <section id="reviews" className="bg-white py-20 px-6">
       <div className="max-w-6xl mx-auto">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <h2 className="text-3xl md:text-4xl font-semibold tracking-tight text-stone-900">What homeowners say</h2>
