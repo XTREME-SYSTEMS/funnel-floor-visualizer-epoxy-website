@@ -55,14 +55,14 @@ export const DEFAULT_SETTINGS = {
     { name: "Alicia B.", location: "Deerfield Beach, FL", quote: "Loved that I got a price range before anyone called me.", rating: 5 }
   ],
   gallery: [
-    { before_url: "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=800", after_url: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800", caption: "2-car garage, premium flake — Pompano Beach" },
-    { before_url: "https://images.unsplash.com/photo-1520697222862-c5b2c1e6b0a1?w=800", after_url: "https://images.unsplash.com/photo-1615529182904-14819c35db37?w=800", caption: "3-car garage, metallic finish — Coral Springs" },
-    { before_url: "https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=800", after_url: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800", caption: "1-car garage, solid color — Deerfield Beach" }
+    { before_url: "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/2fa2f386d_generated_image.png", after_url: "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/37f839d5d_generated_image.png", caption: "2-car garage, gray/black/white flake — Pompano Beach" },
+    { before_url: "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/2fa2f386d_generated_image.png", after_url: "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/0df228a3a_generated_image.png", caption: "2-car garage, tan/brown Outback flake — Coral Springs" },
+    { before_url: "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/2fa2f386d_generated_image.png", after_url: "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/daa85fba2_generated_image.png", caption: "2-car garage, blue/gray Rapids flake — Deerfield Beach" }
   ],
   calendar_url: "",
   disclaimer: "This is a preliminary project estimate — not a contract, proposal, or guaranteed final price. Final pricing may change based on actual square footage, concrete condition, moisture, cracks, repairs, existing coatings, preparation requirements, access, selected system, and other site-specific conditions confirmed during an in-home inspection.",
   consent_language: "By submitting this form you agree to be contacted by phone, text, and email about your garage floor estimate. Message and data rates may apply. You can opt out at any time.",
-  hero_image_url: "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/bd60851ce_image.png",
+  hero_image_url: "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/37f839d5d_generated_image.png",
   seo: {
     site_name: "EpoxyGarageFloorEstimate.com",
     default_title: "Epoxy Garage Floor Cost & Instant Estimate | Pompano Beach FL",

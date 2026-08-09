@@ -6,6 +6,7 @@ import Nav from "@/components/home/Nav";
 import Hero from "@/components/home/Hero";
 import WinMore from "@/components/home/WinMore";
 import BeforeAfterShowcase from "@/components/home/BeforeAfterShowcase";
+import FlakeShowcase from "@/components/home/FlakeShowcase";
 import LeadCapture from "@/components/home/LeadCapture";
 import MobileSection from "@/components/home/MobileSection";
 import Gallery from "@/components/home/Gallery";
@@ -29,6 +30,7 @@ export default function Home() {
 
       <WinMore />
       <BeforeAfterShowcase />
+      <FlakeShowcase />
       <LeadCapture />
       <MobileSection />
       <Gallery items={settings.gallery} />

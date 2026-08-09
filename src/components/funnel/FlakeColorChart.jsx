@@ -16,7 +16,7 @@ const COLORS = [
   { n: "12", name: "Snowfall", code: "FB-602", desc: "Light gray / White / Dark gray" }
 ];
 
-const CHART_URL = "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/0c94209f4_xps-top-flake-colors-approved.webp";
+const CHART_URL = "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/108afbd51_xps-top-flake-colors-approved.webp";
 
 export default function FlakeColorChart({ selected, onSelect }) {
   return (
