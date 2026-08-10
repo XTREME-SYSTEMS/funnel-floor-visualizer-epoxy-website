@@ -1,24 +1,29 @@
-import { createClientFromRequest } from 'npm:@base44/sdk@0.8.40';
+import { secrets } from "base44:runtime";
 
 // Estimates a residential garage's square footage from a street address.
-// Uses OpenStreetMap Nominatim (free, no key) to geocode + validate the address,
-// then the Overpass API to find building footprints at that location.
-// Falls back to a size-based estimate when no building data is found.
+//
+// Primary source: Browserbase Fetch against Zillow. Zillow server-renders
+// property facts (garage spaces, interior sqft, parking description) into its
+// homedetails pages, so Fetch's structured-JSON extraction can pull them
+// without executing JavaScript. The lookup is two-step:
+//   1. Fetch the Zillow search page and extract a homedetails URL from it.
+//   2. Fetch that homedetails page and extract garage + interior sqft.
+// Zillow shields its search with PerimeterX bot detection, so this step can be
+// intermittently blocked — when it is, we fall through to the fallbacks below.
+//
+// Fallback 1: OpenStreetMap Nominatim (geocode) + Overpass (building footprints).
+// Fallback 2: a size-based estimate chosen by the visitor.
 
 const NOMINATIM_URL = "https://nominatim.openstreetmap.org/search";
 const OVERPASS_URL = "https://overpass-api.de/api/interpreter";
+const BROWSERBASE_FETCH_URL = "https://api.browserbase.com/v1/fetch";
 const EARTH_RADIUS_M = 6378137;
 
-function haversineArea(lat1, lon1, lat2, lon2) {
-  // approximate area of a lat/lon bounding box in sq meters
-  const latRad = (lat1 + lat2) / 2 * Math.PI / 180;
-  const widthM = (lon2 - lon1) * Math.PI / 180 * EARTH_RADIUS_M * Math.cos(latRad);
-  const heightM = (lat2 - lat1) * Math.PI / 180 * EARTH_RADIUS_M;
-  return Math.abs(widthM * heightM);
-}
+// Standard single garage bay ≈ 12' x 20' (240 sqft); 220 is a conservative avg.
+const SQFT_PER_GARAGE_BAY = 220;
+const GARAGE_FRACTION_OF_LIVING = 0.20;
 
 function polygonAreaM2(ring) {
-  // shoelace on lat/lon converted to meters (local projection)
   if (!ring || ring.length < 3) return 0;
   const lat0 = ring[0][1] * Math.PI / 180;
   const mPerDegLat = EARTH_RADIUS_M * Math.PI / 180;
@@ -34,6 +39,10 @@ function polygonAreaM2(ring) {
 
 function sqMetersToSqFt(m2) {
   return Math.round(m2 * 10.7639);
+}
+
+function clamp(n, min, max) {
+  return Math.min(Math.max(n, min), max);
 }
 
 async function geocode(address) {
@@ -92,18 +101,113 @@ async function findBuildings(lat, lon) {
   }).filter(Boolean);
 }
 
+// Single Browserbase Fetch call (proxies + redirects enabled). Returns the
+// parsed response envelope, or null on failure/timeout.
+async function bbFetch(apiKey, payload) {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 25000);
+  try {
+    const res = await fetch(BROWSERBASE_FETCH_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-BB-API-Key": apiKey
+      },
+      body: JSON.stringify({ proxies: true, allowRedirects: true, ...payload }),
+      signal: controller.signal
+    });
+    if (!res.ok) return null;
+    return await res.json();
+  } catch {
+    return null;
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
+// Pull the first Zillow homedetails URL out of a markdown search-results page.
+function extractHomedetailsUrl(markdown) {
+  if (typeof markdown !== "string" || !markdown) return null;
+  const re = /https:\/\/www\.zillow\.com\/homedetails\/[^\s)"']+\/\d+_zpid\//g;
+  const match = re.exec(markdown);
+  return match ? match[0] : null;
+}
+
+// Parse a car count out of a free-text parking description, e.g.
+// "2 car garage", "one car carport", "1-car garage".
+function parseCarCount(desc) {
+  if (!desc || typeof desc !== "string") return null;
+  const words = { one: 1, two: 2, three: 3, four: 4, five: 5 };
+  const wordMatch = desc.match(/\b(one|two|three|four|five)\b[\s-]?car\b/i);
+  if (wordMatch) return words[wordMatch[1].toLowerCase()] ?? null;
+  const numMatch = desc.match(/(\d+)\s*[-\s]?car\b/i);
+  if (numMatch) return parseInt(numMatch[1], 10);
+  return null;
+}
+
+// Two-step Zillow scrape via Browserbase Fetch. Returns the extracted property
+// facts, or null when Browserbase is unconfigured, blocked, or no property found.
+async function browserbasePropertyLookup(address) {
+  const apiKey = secrets.get("BROWSERBASE_API_KEY");
+  if (!apiKey) return null;
+
+  // Step 1: search results → homedetails URL
+  const searchUrl = `https://www.zillow.com/homes/${encodeURIComponent(address)}/`;
+  const searchData = await bbFetch(apiKey, { url: searchUrl, format: "markdown" });
+  const detailUrl = extractHomedetailsUrl(searchData?.content);
+  if (!detailUrl) return null;
+
+  // Step 2: homedetails page → structured facts
+  const schema = {
+    type: "object",
+    properties: {
+      found: { type: "boolean", description: "True if a single matching property listing was found" },
+      garage_spaces: { type: "number", description: "Number of enclosed garage parking spaces (0 if none)" },
+      interior_sqft: { type: "number", description: "Interior living area in square feet" },
+      beds: { type: "number", description: "Number of bedrooms" },
+      baths: { type: "number", description: "Number of bathrooms" },
+      parking_desc: { type: "string", description: "Free-text parking/garage description if present" }
+    },
+    required: ["found"]
+  };
+  const detailData = await bbFetch(apiKey, { url: detailUrl, format: "json", schema });
+  let content = detailData?.content;
+  if (typeof content === "string") {
+    try { content = JSON.parse(content); } catch { return null; }
+  }
+  if (!content || content.found === false) return null;
+  return content;
+}
+
+// Convert extracted property facts to a garage sqft estimate.
+function garageSqftFromListing(listing) {
+  if (!listing) return null;
+  let spaces = Number(listing.garage_spaces);
+  if (!Number.isFinite(spaces) || spaces < 1) {
+    const fromDesc = parseCarCount(listing.parking_desc);
+    if (fromDesc) spaces = fromDesc;
+  }
+  if (Number.isFinite(spaces) && spaces >= 1) {
+    return clamp(Math.round(spaces * SQFT_PER_GARAGE_BAY), 200, 1000);
+  }
+  const interior = Number(listing.interior_sqft);
+  if (Number.isFinite(interior) && interior >= 400) {
+    return clamp(Math.round(interior * GARAGE_FRACTION_OF_LIVING), 200, 900);
+  }
+  return null;
+}
+
 export default async function(req) {
   try {
     // Public utility used in the lead-gen funnel (unauthenticated visitors).
-    // Only calls public OpenStreetMap APIs — no user data accessed.
+    // Only calls public property/OpenStreetMap APIs — no user data accessed.
     const body = await req.json();
     const address = body?.address;
-    const fallbackSize = body?.garage_size || "two_car";
     const fallbackSqft = body?.fallback_sqft || 440;
 
     if (!address) return Response.json({ error: "Address is required" }, { status: 400 });
 
-    // 1. Geocode the address
+    // 1. Geocode the address (validates it and gives lat/lon for the OSM fallback)
     const geo = await geocode(address);
     if (!geo) {
       return Response.json({
@@ -114,31 +218,43 @@ export default async function(req) {
       });
     }
 
-    // 2. Look up nearby building footprints
+    // 2. Try Browserbase (Zillow) first — most accurate garage data
+    const listing = await browserbasePropertyLookup(address);
+    const listingSqft = garageSqftFromListing(listing);
+    if (listingSqft) {
+      return Response.json({
+        address_valid: true,
+        sqft: listingSqft,
+        latitude: geo.lat,
+        longitude: geo.lon,
+        matched_address: geo.displayName,
+        source: "browserbase_zillow",
+        garage_spaces: listing.garage_spaces ?? null,
+        interior_sqft: listing.interior_sqft ?? null,
+        parking_desc: listing.parking_desc ?? null
+      });
+    }
+
+    // 3. Fall back to OpenStreetMap building footprints
     let buildings = [];
     try {
       buildings = await findBuildings(geo.lat, geo.lon);
-    } catch (e) {
+    } catch {
       // Overpass may be unavailable; fall through to estimate
     }
 
-    // 3. Determine garage sqft
     let sqft = fallbackSqft;
     let source = "fallback_size";
 
     const garages = buildings.filter((b) => b.isGarage);
     if (garages.length) {
-      // Use the largest garage footprint found
       const best = garages.reduce((a, b) => (b.areaM2 > a.areaM2 ? b : a));
       sqft = sqMetersToSqFt(best.areaM2);
       source = "osm_garage_footprint";
     } else if (buildings.length) {
-      // No dedicated garage — estimate garage as a fraction of the largest building
       const largest = buildings.reduce((a, b) => (b.areaM2 > a.areaM2 ? b : a));
       const homeSqft = sqMetersToSqFt(largest.areaM2);
-      // Garage is typically 18-25% of a home's footprint; cap to reasonable garage range
-      const estimated = Math.round(homeSqft * 0.22);
-      sqft = Math.min(Math.max(estimated, 200), 1000);
+      sqft = clamp(Math.round(homeSqft * 0.22), 200, 1000);
       source = "osm_building_estimate";
     }
 
@@ -150,7 +266,8 @@ export default async function(req) {
       matched_address: geo.displayName,
       source,
       buildings_found: buildings.length,
-      garage_found: garages.length > 0
+      garage_found: garages.length > 0,
+      browserbase_attempted: !!secrets.get("BROWSERBASE_API_KEY")
     });
   } catch (error) {
     return Response.json({ error: error.message }, { status: 500 });
