@@ -87,12 +87,13 @@ export default function LocationMap() {
 
   return (
     <div className="rounded-3xl border border-stone-200 overflow-hidden bg-white shadow-sm">
-      <div className="grid lg:grid-cols-5">
-        {/* Map */}
-        <div className="lg:col-span-3 h-80 lg:h-auto min-h-[320px] relative bg-stone-100">
+      <div>
+        {/* Map — full width so the entire USA is visible */}
+        <div className="h-[380px] md:h-[460px] relative bg-stone-100">
           <MapContainer
             center={[39.5, -98.35]}
             zoom={4}
+            zoomSnap={0.25}
             scrollWheelZoom={false}
             style={{ height: "100%", width: "100%", zIndex: 0 }}
             ref={mapRef}
@@ -123,7 +124,7 @@ export default function LocationMap() {
         </div>
 
         {/* Side panel */}
-        <div className="lg:col-span-2 p-6 lg:p-8 flex flex-col">
+        <div className="p-6 lg:p-8 flex flex-col">
           <div className="inline-flex items-center gap-2 text-xs font-bold tracking-[0.2em] text-amber-600">
             <MapPin className="h-4 w-4" /> FIND YOUR NEAREST STORE
           </div>
