@@ -1,0 +1,86 @@
+{
+  "name": "SeoContent",
+  "type": "object",
+  "properties": {
+    "route": {
+      "type": "string",
+      "description": "Route path, e.g. / or /epoxy-garage-floor-cost"
+    },
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 500
+    },
+    "faq": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "q": {
+            "type": "string"
+          },
+          "a": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "version": {
+      "type": "number",
+      "default": 1
+    },
+    "optimized_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "optimization_notes": {
+      "type": "string",
+      "maxLength": 2000
+    },
+    "performance_snapshot": {
+      "type": "object",
+      "properties": {
+        "impressions": {
+          "type": "number"
+        },
+        "clicks": {
+          "type": "number"
+        },
+        "ctr": {
+          "type": "number"
+        },
+        "avg_position": {
+          "type": "number"
+        },
+        "top_queries": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "query": {
+                "type": "string"
+              },
+              "impressions": {
+                "type": "number"
+              },
+              "clicks": {
+                "type": "number"
+              },
+              "position": {
+                "type": "number"
+              }
+            }
+          }
+        },
+        "snapshot_at": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "required": [
+    "route"
+  ]
+}
