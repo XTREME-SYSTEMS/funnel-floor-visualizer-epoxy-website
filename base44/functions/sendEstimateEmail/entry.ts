@@ -6,7 +6,7 @@ export default async function (req: Request): Promise<Response> {
   try {
     const base44 = createClientFromRequest(req);
     const body = await req.json();
-    const { lead_id, floor_image_url, origin, preview } = body;
+    const { lead_id, floor_image_url, origin, preview, to_email } = body;
 
     const settingsList = await base44.asServiceRole.entities.AppSettings.list(1);
     const settings = settingsList[0] || {};
@@ -44,7 +44,8 @@ export default async function (req: Request): Promise<Response> {
     if (!lead_id) return Response.json({ error: "lead_id required" }, { status: 400 });
     const lead = await base44.asServiceRole.entities.Lead.get(lead_id);
     if (!lead) return Response.json({ error: "Lead not found" }, { status: 404 });
-    if (!lead.email) return Response.json({ error: "Lead has no email address" }, { status: 400 });
+    const recipient = to_email || lead.email;
+    if (!recipient) return Response.json({ error: "No recipient email address" }, { status: 400 });
 
     // Fetch the floor image (if provided) to embed inline
     let inline = [];
@@ -76,7 +77,7 @@ export default async function (req: Request): Promise<Response> {
     const fromName = settings.public_business_name || "EpoxyGarageFloorEstimate.com";
     const from = `${fromName} <${fromEmail}>`;
 
-    const mimeBytes = buildMime({ from, to: lead.email, subject, html, inline });
+    const mimeBytes = buildMime({ from, to: recipient, subject, html, inline });
     const raw = base64Url(mimeBytes);
     const sendRes = await fetch("https://gmail.googleapis.com/gmail/v1/users/me/messages/send", {
       method: "POST",
@@ -86,7 +87,7 @@ export default async function (req: Request): Promise<Response> {
     const result = await sendRes.json();
     if (!sendRes.ok) return Response.json({ error: "Gmail send failed", detail: result }, { status: 502 });
 
-    return Response.json({ ok: true, messageId: result.id, to: lead.email, from: fromEmail });
+    return Response.json({ ok: true, messageId: result.id, to: recipient, from: fromEmail });
   } catch (error) {
     return Response.json({ error: error.message }, { status: 500 });
   }
