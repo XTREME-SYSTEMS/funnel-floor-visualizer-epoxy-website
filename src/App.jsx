@@ -34,6 +34,7 @@ import ReviewsPage from '@/pages/Reviews';
 import AboutPage from '@/pages/About';
 import ContactPage from '@/pages/Contact';
 import Competitors from '@/pages/admin/Competitors';
+import GoogleSeo from '@/pages/admin/GoogleSeo';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -82,6 +83,7 @@ const AuthenticatedApp = () => {
         <Route path="pipeline" element={<Pipeline />} />
         <Route path="emails" element={<Emails />} />
         <Route path="competitors" element={<Competitors />} />
+        <Route path="google" element={<GoogleSeo />} />
         <Route path="settings" element={<SettingsPage />} />
       </Route>
       <Route path="*" element={<PageNotFound />} />

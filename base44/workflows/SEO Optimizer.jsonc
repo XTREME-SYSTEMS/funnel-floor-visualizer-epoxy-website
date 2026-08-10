@@ -1,0 +1,51 @@
+{
+  "trigger": {
+    "condition": null,
+    "config": {
+      "trigger_type": "scheduled",
+      "events": [],
+      "schedule_mode": "recurring",
+      "cron_expression": "0 7 * * 1",
+      "one_time_date": null,
+      "timezone": "America/New_York",
+      "interval_value": null,
+      "interval_unit": null,
+      "interval_anchor": null,
+      "ends_type": "never",
+      "ends_on_date": null,
+      "ends_after_count": null
+    }
+  },
+  "description": "Weekly automated pull of Google Search Console performance data followed by AI re-optimization of page titles, meta descriptions, and FAQ across the site.",
+  "definition": {
+    "document": {
+      "dsl": "1.0.0",
+      "name": "seo_optimizer",
+      "version": "1.0",
+      "namespace": "base44"
+    },
+    "do": [
+      {
+        "pull": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "pullSearchConsoleData",
+            "args": {}
+          },
+          "then": "optimize"
+        }
+      },
+      {
+        "optimize": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "optimizeSeo",
+            "args": {}
+          },
+          "then": "end"
+        }
+      }
+    ]
+  },
+  "name": "SEO Optimizer"
+}
