@@ -22,30 +22,40 @@ export default function Nav({ settings }) {
   ];
 
   return (
-    <header className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${scrolled ? "bg-white/95 backdrop-blur shadow-sm" : "bg-transparent"}`}>
-      <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-        <Logo colorClass={scrolled ? "text-stone-900" : "text-white"} />
+    <header className="fixed top-0 inset-x-0 z-50">
+      {/* 10% OFF promo bar — clickable to the estimate funnel */}
+      <Link
+        to="/funnel"
+        className="block bg-amber-500 text-stone-950 text-center text-xs font-bold tracking-wide py-1.5 hover:bg-amber-400 transition"
+      >
+        🎉 10% OFF YOUR GARAGE FLOOR COATING — TAP TO GET YOUR FREE ESTIMATE
+      </Link>
 
-        <nav className="hidden md:flex items-center gap-7">
-          {links.map((l) => (
-            l.to
-              ? <Link key={l.label} to={l.to} className={`text-sm font-medium transition ${scrolled ? "text-stone-600 hover:text-stone-900" : "text-white/80 hover:text-white"}`}>{l.label}</Link>
-              : <a key={l.label} href={l.href} className={`text-sm font-medium transition ${scrolled ? "text-stone-600 hover:text-stone-900" : "text-white/80 hover:text-white"}`}>{l.label}</a>
-          ))}
-        </nav>
+      <div className={`transition-all duration-300 ${scrolled ? "bg-white/95 backdrop-blur shadow-sm" : "bg-transparent"}`}>
+        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+          <Logo colorClass={scrolled ? "text-stone-900" : "text-white"} />
 
-        <div className="hidden md:flex items-center gap-3">
-          <a href={`tel:${settings.phone}`} className={`flex items-center gap-1.5 text-sm font-medium ${scrolled ? "text-stone-600" : "text-white/80"}`}>
-            <Phone className="h-4 w-4" /> {settings.phone}
-          </a>
-          <Link to="/funnel" className="h-9 px-5 inline-flex items-center rounded-lg bg-amber-500 hover:bg-amber-400 text-stone-950 text-sm font-semibold transition">
-            Get Free Estimate
-          </Link>
+          <nav className="hidden md:flex items-center gap-7">
+            {links.map((l) => (
+              l.to
+                ? <Link key={l.label} to={l.to} className={`text-sm font-medium transition ${scrolled ? "text-stone-700 hover:text-amber-500" : "text-white hover:text-amber-500"}`}>{l.label}</Link>
+                : <a key={l.label} href={l.href} className={`text-sm font-medium transition ${scrolled ? "text-stone-700 hover:text-amber-500" : "text-white hover:text-amber-500"}`}>{l.label}</a>
+            ))}
+          </nav>
+
+          <div className="hidden md:flex items-center gap-3">
+            <a href={`tel:${settings.phone}`} className={`flex items-center gap-1.5 text-sm font-medium transition ${scrolled ? "text-stone-700 hover:text-amber-500" : "text-white hover:text-amber-500"}`}>
+              <Phone className="h-4 w-4" /> {settings.phone}
+            </a>
+            <Link to="/funnel" className="h-9 px-5 inline-flex items-center rounded-lg bg-amber-500 hover:bg-amber-400 text-stone-950 text-sm font-semibold transition">
+              Get Free Estimate
+            </Link>
+          </div>
+
+          <button onClick={() => setOpen(!open)} className={`md:hidden ${scrolled ? "text-stone-900" : "text-white"}`}>
+            {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </button>
         </div>
-
-        <button onClick={() => setOpen(!open)} className={`md:hidden ${scrolled ? "text-stone-900" : "text-white"}`}>
-          {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-        </button>
       </div>
 
       {open && (
