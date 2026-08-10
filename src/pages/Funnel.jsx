@@ -2,28 +2,20 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { useSettings } from "@/lib/useSettings";
-import { calcSquareFootage, calcEstimate, calcLeadScore, money } from "@/lib/pricing";
+import { calcEstimate, calcLeadScore, money } from "@/lib/pricing";
 import { trackEvent, getDeviceType } from "@/lib/tracking";
 import { captureAttribution } from "@/lib/estimatorStore";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, ArrowLeft, CheckCircle2, Phone, Clock, ShieldCheck } from "lucide-react";
+import BackButton from "@/components/BackButton";
 import ScrapeProgress from "@/components/funnel/ScrapeProgress";
 import FlakeColorChart from "@/components/funnel/FlakeColorChart";
+import PhotoUpload from "@/components/funnel/PhotoUpload";
 import BeforeAfter from "@/components/funnel/BeforeAfter";
-import FloorVisualizer from "@/components/funnel/FloorVisualizer";
-import BackButton from "@/components/BackButton";
 
 const BEFORE_URL = "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/2fa2f386d_generated_image.png";
 const AFTER_URL = "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/b2326e50a_generated_image.png";
-
-const SIZES = [
-  { key: "one_car", label: "1-Car Garage", desc: "~240 sq ft" },
-  { key: "two_car", label: "2-Car Garage", desc: "~440 sq ft" },
-  { key: "three_car", label: "3-Car Garage", desc: "~660 sq ft" },
-  { key: "four_car", label: "4+ Car Garage", desc: "~880 sq ft" },
-  { key: "not_sure", label: "I'm Not Sure", desc: "We'll detect it for you" }
-];
 
 const CONDITIONS = [
   { key: "good", label: "Clean / bare concrete", desc: "No major issues" },
@@ -34,7 +26,8 @@ const CONDITIONS = [
   { key: "major", label: "Major damage / not sure", desc: "We'll assess it" }
 ];
 
-const STEP_EVENTS = ["funnel_started", "address_entered", "size_selected", "condition_selected", "contact_entered"];
+// Steps: 0 welcome · 1 address · 2 condition · 3 color · 4 photos · 5 contact · 6 scrape · 7 results
+const STEP_EVENTS = ["funnel_started", "address_entered", "condition_selected", "color_selected", "photos_uploaded", "contact_entered"];
 
 export default function Funnel() {
   const navigate = useNavigate();
@@ -43,8 +36,6 @@ export default function Funnel() {
   const [data, setData] = useState({ floor_condition: [], photos: [] });
   const [leadId, setLeadId] = useState(null);
   const [detectedSqft, setDetectedSqft] = useState(null);
-  const [selectedFlake, setSelectedFlake] = useState(null);
-  const [visualizerColor, setVisualizerColor] = useState(null);
   const [submitting, setSubmitting] = useState(false);
   const lookupPromise = React.useRef(null);
 
@@ -63,10 +54,34 @@ export default function Funnel() {
     update({ floor_condition: arr.includes(key) ? arr.filter((k) => k !== key) : [...arr, key] });
   };
 
-  const submitContact = async () => {
+  // Contact submit: kick off the real property lookup, then run the scrape
+  // animation. The lead is NOT created here — we wait for the lookup so the
+  // estimate uses the actual scraped square footage, not a guess.
+  const submitContact = () => {
     setSubmitting(true);
-    const sqft = calcSquareFootage(settings, data);
-    const est = calcEstimate(settings, { ...data, square_footage: sqft });
+    const fullAddress = `${data.address}, ${data.city}, ${data.state} ${data.zip}`;
+    lookupPromise.current = base44.functions
+      .invoke("propertyLookup", { address: fullAddress, fallback_sqft: 440 })
+      .then((res) => res.data)
+      .catch(() => ({ sqft: 440, source: "fallback_size", address_valid: false }));
+    trackEvent("contact_entered", { step: 5 });
+    setSubmitting(false);
+    setStep(6);
+    window.scrollTo(0, 0);
+  };
+
+  // After the scrape animation, resolve the lookup, build the estimate from
+  // the real square footage, and create the lead with all questionnaire answers.
+  const onScrapeComplete = async () => {
+    const fallback = 440;
+    let result = { sqft: fallback };
+    if (lookupPromise.current) {
+      try { result = await lookupPromise.current; } catch { result = { sqft: fallback }; }
+    }
+    const sqft = Number(result.sqft) || fallback;
+    setDetectedSqft(sqft);
+
+    const est = calcEstimate(settings, { ...data, square_footage: sqft, desired_system: "flake" });
     const score = calcLeadScore(settings, data);
     const lead = await base44.entities.Lead.create({
       first_name: data.first_name,
@@ -77,11 +92,11 @@ export default function Funnel() {
       city: data.city,
       state: data.state,
       zip: data.zip,
-      garage_size: data.garage_size,
       square_footage: sqft,
       floor_condition: data.floor_condition,
       timeline: data.timeline || "AS SOON AS POSSIBLE",
       desired_system: "flake",
+      photos: data.photos || [],
       estimate_mid: est.mid,
       estimate_low: est.low,
       estimate_high: est.high,
@@ -90,56 +105,18 @@ export default function Funnel() {
       assigned_salesperson: settings.salesperson?.name || "",
       status: "NEW ESTIMATE",
       device: getDeviceType(),
+      notes: data.flake_color
+        ? `Selected flake color: ${data.flake_color}${data.flake_color_name ? ` (${data.flake_color_name})` : ""}`
+        : "",
+      latitude: result.latitude || null,
+      longitude: result.longitude || null,
       ...captureAttribution()
     });
     setLeadId(lead.id);
     await trackEvent("lead_created", { lead_id: lead.id });
-    // Kick off the real property lookup in parallel with the scrape animation
-    const fallback = calcSquareFootage(settings, data);
-    const fullAddress = `${data.address}, ${data.city}, ${data.state} ${data.zip}`;
-    lookupPromise.current = base44.functions
-      .invoke("propertyLookup", { address: fullAddress, garage_size: data.garage_size, fallback_sqft: fallback })
-      .then((res) => res.data)
-      .catch(() => ({ sqft: fallback, source: "fallback_size", address_valid: false }));
-    setSubmitting(false);
-    next();
-  };
-
-  const onScrapeComplete = async () => {
-    const fallback = calcSquareFootage(settings, data);
-    let result = { sqft: fallback };
-    if (lookupPromise.current) {
-      try { result = await lookupPromise.current; } catch (e) { result = { sqft: fallback }; }
-    }
-    const sqft = Number(result.sqft) || fallback;
-    setDetectedSqft(sqft);
-    // Persist the verified sqft + coordinates back to the lead
-    if (leadId) {
-      base44.entities.Lead.update(leadId, {
-        square_footage: sqft,
-        latitude: result.latitude || null,
-        longitude: result.longitude || null
-      }).catch(() => {});
-    }
-    trackEvent("scrape_complete", { lead_id: leadId, sqft, source: result.source });
-    next();
-  };
-
-  const saveFlake = async (code) => {
-    setSelectedFlake(code);
-    if (leadId) {
-      await base44.entities.Lead.update(leadId, { notes: `Selected flake color: ${code}` });
-      trackEvent("flake_selected", { lead_id: leadId, flake: code });
-    }
-  };
-
-  const saveVisualizerColor = async (color) => {
-    setVisualizerColor(color);
-    if (leadId) {
-      const note = `Visualizer selection: ${color.color_name} (${color.code}, ${color.system})`;
-      await base44.entities.Lead.update(leadId, { desired_system: color.system, notes: note });
-      trackEvent("visualizer_color_selected", { lead_id: leadId, color: color.code, system: color.system });
-    }
+    trackEvent("scrape_complete", { lead_id: lead.id, sqft, source: result.source });
+    setStep(7);
+    window.scrollTo(0, 0);
   };
 
   if (isLoading) {
@@ -147,12 +124,12 @@ export default function Funnel() {
   }
 
   // Scrape animation step
-  if (step === 5) {
+  if (step === 6) {
     return <ScrapeProgress address={`${data.address}, ${data.city}, ${data.state} ${data.zip}`} onComplete={onScrapeComplete} />;
   }
 
   const totalSteps = 5;
-  const progressPct = step <= 4 ? (step / totalSteps) * 100 : 100;
+  const progressPct = step <= 5 ? (step / totalSteps) * 100 : 100;
 
   return (
     <div className="min-h-screen bg-stone-50 flex flex-col">
@@ -163,7 +140,7 @@ export default function Funnel() {
             <BackButton className="text-stone-300 hover:text-white" showLabel={false} />
             <button onClick={() => navigate("/")} className="font-semibold tracking-tight text-sm">{settings.company_name}</button>
           </div>
-          {step > 0 && step <= 4 && (
+          {step > 0 && step <= 5 && (
             <button onClick={back} className="flex items-center gap-1 text-sm text-stone-400 hover:text-white">
               <ArrowLeft className="h-4 w-4" /> Back
             </button>
@@ -172,7 +149,7 @@ export default function Funnel() {
       </header>
 
       {/* Progress bar */}
-      {step <= 4 && (
+      {step <= 5 && (
         <div className="h-1 bg-stone-200">
           <div className="h-full bg-amber-500 transition-all duration-500" style={{ width: `${progressPct}%` }} />
         </div>
@@ -206,7 +183,7 @@ export default function Funnel() {
           {/* Step 1: Address */}
           {step === 1 && (
             <div>
-              <StepHeader n="1" title="What's your property address?" sub="We'll use public records to find your garage's square footage." />
+              <StepHeader n="1" title="What's your property address?" sub="We'll use public records to find your garage's exact square footage — no guessing." />
               <div className="space-y-3 mt-6">
                 <Input placeholder="Street address" value={data.address || ""} onChange={(e) => update({ address: e.target.value })} className="h-12" />
                 <div className="grid grid-cols-2 gap-3">
@@ -225,32 +202,10 @@ export default function Funnel() {
             </div>
           )}
 
-          {/* Step 2: Garage size */}
+          {/* Step 2: Floor condition */}
           {step === 2 && (
             <div>
-              <StepHeader n="2" title="How big is your garage?" sub="Pick the closest match — we'll verify with our property lookup." />
-              <div className="space-y-2 mt-6">
-                {SIZES.map((s) => (
-                  <button
-                    key={s.key}
-                    onClick={() => { update({ garage_size: s.key }); next(); }}
-                    className={`w-full text-left rounded-xl border p-4 flex items-center justify-between transition ${data.garage_size === s.key ? "border-amber-500 bg-amber-50" : "border-stone-200 bg-white hover:border-stone-300"}`}
-                  >
-                    <div>
-                      <div className="font-semibold text-stone-900">{s.label}</div>
-                      <div className="text-sm text-stone-500">{s.desc}</div>
-                    </div>
-                    {data.garage_size === s.key && <CheckCircle2 className="h-5 w-5 text-amber-500" />}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Step 3: Floor condition */}
-          {step === 3 && (
-            <div>
-              <StepHeader n="3" title="What's the condition of your floor?" sub="Select all that apply. This helps us prepare the right way." />
+              <StepHeader n="2" title="What's the condition of your floor?" sub="Select all that apply. This helps us prepare the right way." />
               <div className="space-y-2 mt-6">
                 {CONDITIONS.map((c) => {
                   const active = (data.floor_condition || []).includes(c.key);
@@ -279,10 +234,48 @@ export default function Funnel() {
             </div>
           )}
 
-          {/* Step 4: Contact info */}
+          {/* Step 3: Flake color */}
+          {step === 3 && (
+            <div>
+              <StepHeader n="3" title="Choose your flake color" sub="Pick your favorite blend from our most popular epoxy flake colors." />
+              <div className="mt-6">
+                <FlakeColorChart
+                  selected={data.flake_color}
+                  onSelect={(c) => update({ flake_color: c.code, flake_color_name: c.name })}
+                />
+              </div>
+              <Button
+                onClick={next}
+                disabled={!data.flake_color}
+                className="mt-6 h-14 w-full text-base font-bold bg-stone-950 hover:bg-stone-800"
+              >
+                CONTINUE <ArrowRight className="h-5 w-5" />
+              </Button>
+            </div>
+          )}
+
+          {/* Step 4: Photos */}
           {step === 4 && (
             <div>
-              <StepHeader n="4" title="Last step — where do we send your estimate?" sub="We'll look up your garage and prepare your personalized quote." />
+              <StepHeader n="4" title="Add photos of your garage floor" sub="Optional, but it helps us give you a more accurate quote. You can skip this step." />
+              <div className="mt-6">
+                <PhotoUpload photos={data.photos || []} onChange={(urls) => update({ photos: urls })} />
+              </div>
+              <div className="mt-6 space-y-2">
+                <Button onClick={next} className="h-14 w-full text-base font-bold bg-stone-950 hover:bg-stone-800">
+                  CONTINUE <ArrowRight className="h-5 w-5" />
+                </Button>
+                <button onClick={next} className="w-full h-11 text-sm font-medium text-stone-500 hover:text-stone-800">
+                  SKIP FOR NOW
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Step 5: Contact info */}
+          {step === 5 && (
+            <div>
+              <StepHeader n="5" title="Last step — where do we send your estimate?" sub="We'll look up your garage and prepare your personalized quote." />
               <div className="space-y-3 mt-6">
                 <div className="grid grid-cols-2 gap-3">
                   <Input placeholder="First name" value={data.first_name || ""} onChange={(e) => update({ first_name: e.target.value })} className="h-12" />
@@ -297,13 +290,13 @@ export default function Funnel() {
                 disabled={!data.first_name || !data.email || !data.phone || submitting}
                 className="mt-4 h-14 w-full text-base font-bold bg-amber-500 hover:bg-amber-400 text-stone-950"
               >
-                {submitting ? "LOOKING UP YOUR GARAGE…" : <>LOOK UP MY GARAGE <ArrowRight className="h-5 w-5" /></>}
+                LOOK UP MY GARAGE <ArrowRight className="h-5 w-5" />
               </Button>
             </div>
           )}
 
-          {/* Step 6: Results */}
-          {step === 6 && (
+          {/* Step 7: Results */}
+          {step === 7 && (
             <div className="space-y-8">
               {/* Detected sq ft */}
               <div className="rounded-2xl bg-stone-950 p-7 text-center">
@@ -320,7 +313,7 @@ export default function Funnel() {
                 <div className="mt-5 pt-5 border-t border-stone-800">
                   <div className="text-xs font-bold tracking-[0.2em] text-amber-500">ESTIMATED PROJECT RANGE</div>
                   <div className="mt-2 text-3xl font-semibold text-white tabular-nums">
-                    {money(calcEstimate(settings, { ...data, square_footage: detectedSqft }).low)} – {money(calcEstimate(settings, { ...data, square_footage: detectedSqft }).high)}
+                    {(() => { const e = calcEstimate(settings, { ...data, square_footage: detectedSqft, desired_system: "flake" }); return `${money(e.low)} – ${money(e.high)}`; })()}
                   </div>
                 </div>
               </div>
@@ -332,17 +325,14 @@ export default function Funnel() {
                 <BeforeAfter beforeUrl={BEFORE_URL} afterUrl={AFTER_URL} />
               </div>
 
-              {/* Flake color chart */}
-              <div>
-                <h3 className="text-xl font-semibold text-stone-900 mb-1">Choose your flake color</h3>
-                <p className="text-sm text-stone-500 mb-4">Top 12 popular epoxy flake blends from Xtreme Polishing Systems.</p>
-                <FlakeColorChart selected={selectedFlake} onSelect={saveFlake} />
-              </div>
-
-              {/* Floor visualizer */}
-              <div className="rounded-2xl border border-stone-200 bg-white p-6">
-                <FloorVisualizer onColorSelected={saveVisualizerColor} />
-              </div>
+              {/* Selected color confirmation */}
+              {data.flake_color && (
+                <div className="rounded-2xl border border-stone-200 bg-white p-6">
+                  <div className="text-xs font-bold tracking-[0.2em] text-amber-600">YOUR SELECTED COLOR</div>
+                  <div className="mt-2 text-lg font-semibold text-stone-900">{data.flake_color_name}</div>
+                  <div className="text-sm text-stone-500">{data.flake_color}</div>
+                </div>
+              )}
 
               {/* Xtreme Polishing Systems message */}
               <div className="rounded-2xl bg-amber-50 border border-amber-200 p-7 text-center">
@@ -375,7 +365,7 @@ export default function Funnel() {
 function StepHeader({ n, title, sub }) {
   return (
     <div>
-      <div className="text-xs font-bold tracking-[0.2em] text-amber-500">STEP {n} OF 4</div>
+      <div className="text-xs font-bold tracking-[0.2em] text-amber-500">STEP {n} OF 5</div>
       <h1 className="mt-2 text-2xl md:text-3xl font-semibold tracking-tight text-stone-900">{title}</h1>
       <p className="mt-2 text-stone-500">{sub}</p>
     </div>

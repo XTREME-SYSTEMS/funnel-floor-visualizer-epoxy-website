@@ -34,7 +34,7 @@ export default function FlakeColorChart({ selected, onSelect }) {
             <button
               key={c.code}
               type="button"
-              onClick={() => onSelect?.(c.code)}
+              onClick={() => onSelect?.(c)}
               className={`text-left rounded-xl border p-3 transition ${active ? "border-amber-500 bg-amber-50 ring-2 ring-amber-500" : "border-stone-200 bg-white hover:border-stone-300"}`}
             >
               <div className="flex items-center justify-between">
