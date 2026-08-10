@@ -4,7 +4,6 @@ import { useSettings } from "@/lib/useSettings";
 import { trackEvent } from "@/lib/tracking";
 import Nav from "@/components/home/Nav";
 import Hero from "@/components/home/Hero";
-import WinMore from "@/components/home/WinMore";
 import BeforeAfterShowcase from "@/components/home/BeforeAfterShowcase";
 import FlakeShowcase from "@/components/home/FlakeShowcase";
 import FloorTypeGallery from "@/components/home/FloorTypeGallery";
@@ -29,7 +28,6 @@ export default function Home() {
 
       <Hero settings={settings} />
 
-      <WinMore />
       <BeforeAfterShowcase />
       <FloorTypeGallery />
       <FlakeShowcase />
