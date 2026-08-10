@@ -116,6 +116,15 @@ export default function LocationMap() {
       <div>
         {/* Map — full width so the entire USA is visible */}
         <div className="h-[380px] md:h-[460px] relative bg-stone-100">
+          {result && result.preciseLat ? (
+            <iframe
+              title="XPS Xpress storefront"
+              src={`https://maps.google.com/maps?q=&layer=c&cbll=${result.preciseLat},${result.preciseLng}&z=17&output=svembed`}
+              className="w-full h-full border-0"
+              loading="lazy"
+              allowFullScreen
+            />
+          ) : (
           <MapContainer
             center={[39.5, -98.35]}
             zoom={4}
@@ -156,6 +165,7 @@ export default function LocationMap() {
             )}
             <Recenter center={result ? [result.preciseLat || result.lat, result.preciseLng || result.lng] : userPos ? [userPos.lat, userPos.lng] : null} zoom={result ? 18 : 6} resetKey={resetKey} />
           </MapContainer>
+          )}
         </div>
 
         {/* Side panel */}
