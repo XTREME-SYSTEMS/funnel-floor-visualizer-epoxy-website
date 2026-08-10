@@ -41,11 +41,15 @@ const userIcon = L.divIcon({
 });
 
 // Recenter the map when a target is set
-function Recenter({ center }) {
+function Recenter({ center, zoom, resetKey }) {
   const map = useMap();
   useEffect(() => {
-    if (center) map.flyTo(center, 6, { duration: 1.2 });
-  }, [center, map]);
+    if (center) {
+      map.flyTo(center, zoom, { duration: 1.4 });
+    } else {
+      map.flyTo([39.5, -98.35], 4, { duration: 1.2 });
+    }
+  }, [center, zoom, resetKey, map]);
   return null;
 }
 
@@ -55,7 +59,16 @@ export default function LocationMap() {
   const [error, setError] = useState("");
   const [result, setResult] = useState(null);
   const [userPos, setUserPos] = useState(null);
+  const [resetKey, setResetKey] = useState(0);
   const mapRef = useRef(null);
+
+  const handleReset = () => {
+    setResult(null);
+    setUserPos(null);
+    setZip("");
+    setError("");
+    setResetKey((k) => k + 1);
+  };
 
   const handleLookup = async (e) => {
     e?.preventDefault();
@@ -102,6 +115,12 @@ export default function LocationMap() {
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
+            {result && (
+              <TileLayer
+                attribution='Tiles &copy; Esri &mdash; Source: Esri, Maxar, Earthstar Geographics'
+                url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+              />
+            )}
             {XPS_LOCATIONS.map((loc, i) => (
               <Marker key={i} position={[loc.lat, loc.lng]} icon={loc.hq ? hqIcon : xpsIcon}>
                 <Popup>
@@ -119,7 +138,7 @@ export default function LocationMap() {
                 <Popup>You are here (ZIP {zip})</Popup>
               </Marker>
             )}
-            <Recenter center={result ? [result.lat, result.lng] : userPos ? [userPos.lat, userPos.lng] : null} />
+            <Recenter center={result ? [result.lat, result.lng] : userPos ? [userPos.lat, userPos.lng] : null} zoom={result ? 18 : 6} resetKey={resetKey} />
           </MapContainer>
         </div>
 
@@ -164,6 +183,12 @@ export default function LocationMap() {
               </div>
               <div className="mt-1 text-sm text-stone-600">{result.address}</div>
               <div className="mt-1 text-sm text-stone-500">About {result.distance} miles from you</div>
+              <button
+                onClick={handleReset}
+                className="mt-3 inline-flex h-9 px-3 items-center gap-1.5 rounded-lg border border-stone-300 hover:border-stone-400 text-stone-600 hover:text-stone-900 text-xs font-semibold transition"
+              >
+                <MapPin className="h-3.5 w-3.5" /> View full map
+              </button>
               <a
                 href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`XPS Xpress ${result.address} ${result.city} ${result.state}`)}`}
                 target="_blank"
