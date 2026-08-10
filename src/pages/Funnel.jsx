@@ -103,12 +103,9 @@ export default function Funnel() {
 
   // After the scrape animation, resolve the lookup, build the estimate from
   // the real square footage, and create the lead with all questionnaire answers.
-  const onScrapeComplete = async () => {
+  const onScrapeComplete = async (result) => {
     const fallback = 440;
-    let result = { sqft: fallback };
-    if (lookupPromise.current) {
-      try { result = await lookupPromise.current; } catch { result = { sqft: fallback }; }
-    }
+    result = result && Number(result.sqft) ? result : { sqft: fallback };
     const sqft = Number(result.sqft) || fallback;
     setDetectedSqft(sqft);
 
@@ -154,7 +151,7 @@ export default function Funnel() {
 
   // Scrape animation step
   if (step === 6) {
-    return <ScrapeProgress address={`${data.address}, ${data.city}, ${data.state} ${data.zip}`} onComplete={onScrapeComplete} />;
+    return <ScrapeProgress address={`${data.address}, ${data.city}, ${data.state} ${data.zip}`} lookup={lookupPromise.current} onComplete={onScrapeComplete} />;
   }
 
   const totalSteps = 5;
