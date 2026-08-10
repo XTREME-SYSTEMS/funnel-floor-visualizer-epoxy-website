@@ -93,18 +93,33 @@ export default function LocationMap() {
       const lng = parseFloat(place.longitude);
       setUserPos({ lat, lng });
       const nearest = nearestLocation(lat, lng);
-      // Geocode the store's exact street address so the satellite view
-      // lands on the actual building, not just the city center.
+      // Geocode the store's street address so Street View lands on the
+      // actual building. Strip suite/unit details (they confuse geocoders).
+      const street = nearest.address.replace(/,?\s*(Suite|Ste|Unit|Apt|#)\s*.*/i, "");
+      const fullAddr = `${street}, ${nearest.city}, ${nearest.state}`;
       try {
-        const q = encodeURIComponent(`${nearest.address}, ${nearest.city}, ${nearest.state}`);
-        const geoRes = await fetch(`https://nominatim.openstreetmap.org/search?q=${q}&format=json&limit=1&countrycodes=us`);
-        const geoData = await geoRes.json();
-        if (geoData?.[0]) {
-          nearest.preciseLat = parseFloat(geoData[0].lat);
-          nearest.preciseLng = parseFloat(geoData[0].lon);
+        let geoLat = null, geoLng = null;
+        // 1) Google Geocoding API — most accurate for US addresses
+        if (mapsKey) {
+          try {
+            const gRes = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(fullAddr)}&key=${mapsKey}`);
+            const gData = await gRes.json();
+            const loc = gData?.results?.[0]?.geometry?.location;
+            if (gData?.status === "OK" && loc) { geoLat = loc.lat; geoLng = loc.lng; }
+          } catch {}
         }
+        // 2) Nominatim fallback
+        if (geoLat === null) {
+          const oRes = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(fullAddr)}&format=json&limit=1&countrycodes=us`);
+          const oData = await oRes.json();
+          if (oData?.[0]) { geoLat = parseFloat(oData[0].lat); geoLng = parseFloat(oData[0].lon); }
+        }
+        // 3) Store coordinates fallback
+        nearest.preciseLat = geoLat ?? nearest.lat;
+        nearest.preciseLng = geoLng ?? nearest.lng;
       } catch {
-        // fall back to city-center coordinates
+        nearest.preciseLat = nearest.lat;
+        nearest.preciseLng = nearest.lng;
       }
       setResult(nearest);
     } catch {
