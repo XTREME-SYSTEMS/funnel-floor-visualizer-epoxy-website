@@ -119,6 +119,8 @@ export default function LocationMap() {
           <MapContainer
             center={[39.5, -98.35]}
             zoom={4}
+            minZoom={3}
+            maxZoom={18}
             zoomSnap={0.25}
             scrollWheelZoom={false}
             style={{ height: "100%", width: "100%", zIndex: 0 }}
@@ -132,6 +134,7 @@ export default function LocationMap() {
               <TileLayer
                 attribution='Tiles &copy; Esri &mdash; Source: Esri, Maxar, Earthstar Geographics'
                 url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+                maxZoom={18}
               />
             )}
             {XPS_LOCATIONS.map((loc, i) => (
@@ -151,7 +154,7 @@ export default function LocationMap() {
                 <Popup>You are here (ZIP {zip})</Popup>
               </Marker>
             )}
-            <Recenter center={result ? [result.preciseLat || result.lat, result.preciseLng || result.lng] : userPos ? [userPos.lat, userPos.lng] : null} zoom={result ? 19 : 6} resetKey={resetKey} />
+            <Recenter center={result ? [result.preciseLat || result.lat, result.preciseLng || result.lng] : userPos ? [userPos.lat, userPos.lng] : null} zoom={result ? 18 : 6} resetKey={resetKey} />
           </MapContainer>
         </div>
 
