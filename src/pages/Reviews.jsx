@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Star, ArrowRight, ExternalLink } from "lucide-react";
 import PageHero from "@/components/PageHero";
+import PageNav from "@/components/PageNav";
 import { useSettings } from "@/lib/useSettings";
 
 export default function Reviews() {
@@ -14,6 +15,7 @@ export default function Reviews() {
 
   return (
     <div className="min-h-screen bg-stone-50">
+      <PageNav />
       <PageHero
         eyebrow="Real Homeowners, Real Floors"
         title="Reviews"

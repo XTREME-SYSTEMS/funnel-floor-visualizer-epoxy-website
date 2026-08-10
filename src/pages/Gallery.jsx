@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import PageHero from "@/components/PageHero";
+import PageNav from "@/components/PageNav";
 import BeforeAfter from "@/components/funnel/BeforeAfter";
 import { FLOOR_SYSTEM_DATA } from "@/lib/colorData";
 
@@ -43,6 +44,7 @@ const CATEGORY_LABEL = {
 export default function Gallery() {
   return (
     <div className="min-h-screen bg-stone-50">
+      <PageNav />
       <PageHero
         eyebrow="Explore Our Floor Systems"
         title="Gallery"

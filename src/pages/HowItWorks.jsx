@@ -6,6 +6,7 @@ import {
   Calculator, Phone, CalendarCheck, ShieldCheck, Clock,
   Star, CheckCircle2,
 } from "lucide-react";
+import PageNav from "@/components/PageNav";
 
 const STEPS = [
   { icon: MapPin, t: "Enter your address", d: "Tell us where your garage is. We look up its real square footage from public property records — no guessing.", accent: "from-sky-500 to-blue-600" },
@@ -159,6 +160,7 @@ export default function HowItWorks() {
 
   return (
     <div className="min-h-screen bg-stone-50">
+      <PageNav />
       {/* HERO */}
       <section className="relative overflow-hidden bg-stone-950 px-6 pt-28 pb-20 md:pt-36 md:pb-28">
         <div className="absolute inset-0 opacity-30">
