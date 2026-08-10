@@ -50,6 +50,20 @@ export default function WhoWeAre({ settings }) {
           </p>
         </div>
 
+        {/* Company video */}
+        <div className="rounded-3xl overflow-hidden border border-stone-200 shadow-sm mb-16 bg-stone-950">
+          <video
+            src="https://media.base44.com/videos/public/6a77f4491f0bf92de9a3ed8b/c6dd25b4f_XPS_Training_Class.mp4"
+            poster={TRAINING_IMG}
+            controls
+            loop
+            autoPlay
+            muted
+            playsInline
+            className="w-full aspect-video object-cover"
+          />
+        </div>
+
         {/* Stats band */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-16">
           {stats.map((s) => (
