@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Clock, ShieldCheck, BadgeCheck, Phone } from "lucide-react";
+import { Clock, ShieldCheck, BadgeCheck } from "lucide-react";
 
 const trust = [
   { icon: BadgeCheck, text: "Free estimate" },
@@ -35,9 +35,6 @@ export default function Hero({ settings }) {
                 <span key={i}>{i > 0 && " • "}{t.text}</span>
               ))}
             </p>
-            <a href={`tel:${settings.phone}`} className="mt-4 inline-flex items-center gap-2 text-white text-lg font-semibold drop-shadow-[0_2px_6px_rgba(0,0,0,0.85)] hover:text-amber-400 transition">
-              <Phone className="h-5 w-5" /> {settings.phone}
-            </a>
           </motion.div>
         </div>
       </div>
