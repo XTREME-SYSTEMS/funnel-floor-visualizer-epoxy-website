@@ -38,11 +38,11 @@ const pillars = [
 export default function WhoWeAre({ settings }) {
   const sp = settings.salesperson || {};
   return (
-    <section className="bg-white py-20 md:py-28 px-6">
+    <section className="bg-white pt-10 pb-20 md:pt-12 md:pb-28 px-6">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-14">
           <div className="text-4xl md:text-6xl font-bold tracking-[0.25em] text-amber-500">WHO WE ARE</div>
-          <h2 className="mt-4 text-3xl md:text-5xl font-semibold tracking-tight text-stone-900">
+          <h2 className="mt-10 text-3xl md:text-5xl font-semibold tracking-tight text-stone-900">
             Backed by Xtreme Polishing Systems
           </h2>
           <p className="mt-4 text-stone-600 max-w-3xl mx-auto leading-relaxed">

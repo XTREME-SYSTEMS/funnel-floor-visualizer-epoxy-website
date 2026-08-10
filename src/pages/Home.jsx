@@ -35,8 +35,8 @@ export default function Home() {
       <FlakeShowcase />
       <LeadCapture />
       <MobileSection />
-      <Gallery items={settings.gallery} />
       <WhoWeAre settings={settings} />
+      <Gallery items={settings.gallery} />
       <FAQ />
       <FinalCta settings={settings} />
 
