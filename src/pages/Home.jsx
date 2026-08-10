@@ -4,6 +4,7 @@ import { useSettings } from "@/lib/useSettings";
 import { trackEvent } from "@/lib/tracking";
 import Nav from "@/components/home/Nav";
 import Hero from "@/components/home/Hero";
+import MarketingSection from "@/components/home/MarketingSection";
 import BeforeAfterShowcase from "@/components/home/BeforeAfterShowcase";
 import FlakeShowcase from "@/components/home/FlakeShowcase";
 import FloorTypeGallery from "@/components/home/FloorTypeGallery";
@@ -27,6 +28,8 @@ export default function Home() {
       <Nav settings={settings} />
 
       <Hero settings={settings} />
+
+      <MarketingSection />
 
       <BeforeAfterShowcase />
       <FloorTypeGallery />
