@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Clock, ShieldCheck, BadgeCheck, ChevronDown } from "lucide-react";
+import { Clock, ShieldCheck, BadgeCheck } from "lucide-react";
 
 const trust = [
   { icon: BadgeCheck, text: "Free estimate" },
@@ -15,7 +15,7 @@ export default function Hero({ settings }) {
       <img
         src={settings.hero_image_url}
         alt="Premium residential garage with black, white and gray flake epoxy floor, gray cabinets and chrome countertops"
-        className="absolute inset-0 w-full h-full object-cover object-center"
+        className="absolute inset-0 w-full h-full object-cover object-bottom"
       />
       <div className="absolute inset-0 bg-gradient-to-t from-stone-950/40 via-transparent to-transparent" />
       <div className="absolute inset-0 flex items-center">
@@ -39,10 +39,6 @@ export default function Hero({ settings }) {
           </motion.div>
         </div>
       </div>
-      <a href="#how-it-works" className="absolute bottom-2 left-1/2 -translate-x-1/2 text-white/70 hover:text-white transition flex flex-col items-center gap-1">
-        <span className="text-[10px] font-semibold tracking-[0.2em] uppercase">Scroll</span>
-        <ChevronDown className="h-5 w-5 animate-bounce" />
-      </a>
     </section>
   );
 }
