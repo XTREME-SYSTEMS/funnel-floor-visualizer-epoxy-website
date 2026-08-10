@@ -19,7 +19,7 @@ export default function SalespersonProfile({ settings }) {
         </div>
         <div className="max-w-md mx-auto rounded-3xl border border-stone-200 overflow-hidden bg-white shadow-sm">
           {sp.photo_url && (
-            <div className="h-56 bg-stone-100">
+            <div className="h-80 bg-stone-100">
               <Image src={sp.photo_url} alt={sp.name} fittingType="fill" focalPointX={0.5} focalPointY={0} className="h-full w-full" />
             </div>
           )}
