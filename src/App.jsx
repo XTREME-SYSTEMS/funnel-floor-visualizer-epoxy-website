@@ -6,6 +6,7 @@ import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import ScrollToTop from './components/ScrollToTop';
+import RouteSeo from '@/components/Seo';
 // Add page imports here
 import Home from '@/pages/Home';
 import Estimator from '@/pages/Estimator';
@@ -32,6 +33,7 @@ import GalleryPage from '@/pages/Gallery';
 import ReviewsPage from '@/pages/Reviews';
 import AboutPage from '@/pages/About';
 import ContactPage from '@/pages/Contact';
+import Competitors from '@/pages/admin/Competitors';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -79,6 +81,7 @@ const AuthenticatedApp = () => {
         <Route path="leads/:id" element={<LeadDetail />} />
         <Route path="pipeline" element={<Pipeline />} />
         <Route path="emails" element={<Emails />} />
+        <Route path="competitors" element={<Competitors />} />
         <Route path="settings" element={<SettingsPage />} />
       </Route>
       <Route path="*" element={<PageNotFound />} />
@@ -94,6 +97,7 @@ function App() {
       <QueryClientProvider client={queryClientInstance}>
         <Router>
           <ScrollToTop />
+          <RouteSeo />
           <AuthenticatedApp />
         </Router>
         <Toaster />
