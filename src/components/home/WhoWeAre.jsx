@@ -6,7 +6,7 @@ import LocationMap from "@/components/home/LocationMap";
 
 const TRAINING_IMG = "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/8bb317033_IMG_8152-min_c55bf5c4-40e1-4893-b5c7-699a395f36c6.jpg";
 const SHOWROOM_IMG = "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/74e7fe427_images1.jpg";
-const XPS_IMG = "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/106857dbd_images2.jpg";
+const XPS_IMG = "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/92ad83dc2_xtreme-polishing-systems-blog-paragraph_03_d7345246-7dbb-4a6d-8e86-08bcc63927be.webp";
 
 const stats = [
   { value: "30+", label: "Years in business" },
