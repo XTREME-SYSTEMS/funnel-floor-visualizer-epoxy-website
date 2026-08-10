@@ -1,6 +1,8 @@
 // Branded garage-floor estimate email template. Shared so the send function
 // and any admin preview use the exact same markup.
 
+import { scopeForLead, WARRANTY_TEXT, FAQS } from "./companyContent.ts";
+
 function money(n) {
   const v = Math.round(Number(n) || 0);
   return v.toLocaleString("en-US");
@@ -30,6 +32,7 @@ export function estimateEmailHtml(lead, settings, origin, hasImage, gallery = []
   const mid = money(lead.estimate_mid);
   const bookUrl = `${origin}/book/${lead.id}`;
   const packages = Array.isArray(lead.package_options) ? lead.package_options : [];
+  const scope = scopeForLead(lead.floor_condition);
 
   const pkgCards = packages
     .map(
@@ -65,6 +68,27 @@ export function estimateEmailHtml(lead, settings, origin, hasImage, gallery = []
     ? `<table style="width:100%;border-collapse:separate;border-spacing:0;margin:20px 0;"><tr>${pkgCards}</tr></table>`
     : "";
 
+  const scopeBlock = scope.length
+    ? `<div style="margin:24px 0;">
+         <div style="font-size:15px;font-weight:800;color:#0c0a09;letter-spacing:0.5px;margin-bottom:12px;">SCOPE OF WORK &mdash; WHAT'S INCLUDED</div>
+         <table style="width:100%;font-size:13px;color:#44403c;line-height:1.5;">
+           ${scope.map((s) => `<tr><td style="padding:8px 0;border-bottom:1px solid #f5f5f4;vertical-align:top;width:24px;"><span style="color:#65a30d;font-weight:800;">&#10003;</span></td><td style="padding:8px 0;border-bottom:1px solid #f5f5f4;"><strong style="color:#0c0a09;">${esc(s.label)}</strong><br/><span style="color:#78716c;">${esc(s.detail)}</span></td></tr>`).join("")}
+         </table>
+       </div>`
+    : "";
+
+  const warrantyBlock = `<div style="margin:24px 0;background:#fafaf9;border:1px solid #e7e5e4;border-radius:12px;padding:18px;">
+    <div style="font-size:13px;font-weight:800;color:#0c0a09;letter-spacing:1px;margin-bottom:8px;">OUR WARRANTY</div>
+    <p style="font-size:13px;color:#44403c;line-height:1.6;margin:0;">${esc(WARRANTY_TEXT)}</p>
+  </div>`;
+
+  const faqBlock = FAQS.length
+    ? `<div style="margin:24px 0;">
+         <div style="font-size:15px;font-weight:800;color:#0c0a09;letter-spacing:0.5px;margin-bottom:12px;">FREQUENTLY ASKED QUESTIONS</div>
+         ${FAQS.map((f) => `<div style="margin-bottom:12px;"><div style="font-weight:700;color:#0c0a09;font-size:13px;">${esc(f.q)}</div><div style="color:#78716c;font-size:13px;line-height:1.5;margin-top:2px;">${esc(f.a)}</div></div>`).join("")}
+       </div>`
+    : "";
+
   return `<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
 <body style="margin:0;padding:0;background:#f5f5f4;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
   <div style="max-width:600px;margin:0 auto;background:#ffffff;border-radius:16px;overflow:hidden;border:1px solid #e7e5e4;">
@@ -83,10 +107,13 @@ export function estimateEmailHtml(lead, settings, origin, hasImage, gallery = []
       ${imageBlock}
       ${galleryBlock}
       ${pkgBlock}
+      ${scopeBlock}
       <div style="margin:24px 0;text-align:center;">
         <a href="${esc(bookUrl)}" style="display:inline-block;background:#a3e635;color:#0c0a09;font-weight:800;font-size:15px;text-decoration:none;padding:14px 28px;border-radius:10px;">Book my free consultation</a>
         <div style="margin-top:12px;font-size:13px;color:#44403c;">or call <a href="${phoneHref}" style="color:#0c0a09;font-weight:700;">${phone}</a></div>
       </div>
+      ${warrantyBlock}
+      ${faqBlock}
       <div style="margin:28px 0 8px;">
         <div style="font-size:13px;font-weight:800;color:#0c0a09;letter-spacing:1px;text-align:center;margin-bottom:14px;">WHY HOMEOWNERS CHOOSE US</div>
         <table style="width:100%;border-collapse:separate;border-spacing:6px;"><tr>
