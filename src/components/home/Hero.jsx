@@ -11,7 +11,7 @@ const trust = [
 
 export default function Hero({ settings }) {
   return (
-    <section className="relative h-[72vh] min-h-[520px] bg-stone-950 overflow-hidden">
+    <section className="relative h-[72vh] min-h-[520px] bg-stone-950 overflow-hidden border-b-2 border-amber-500">
       <img
         src={settings.hero_image_url}
         alt="Premium residential garage with black, white and gray flake epoxy floor, gray cabinets and chrome countertops"
