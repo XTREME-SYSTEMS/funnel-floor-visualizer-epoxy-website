@@ -12,7 +12,7 @@ import LeadCapture from "@/components/home/LeadCapture";
 import MobileSection from "@/components/home/MobileSection";
 import Gallery from "@/components/home/Gallery";
 import Reviews from "@/components/home/Reviews";
-import SalespersonProfile from "@/components/home/SalespersonProfile";
+import WhoWeAre from "@/components/home/WhoWeAre";
 import FAQ from "@/components/home/FAQ";
 import FinalCta from "@/components/home/FinalCta";
 
@@ -38,7 +38,7 @@ export default function Home() {
       <MobileSection />
       <Gallery items={settings.gallery} />
       <Reviews settings={settings} />
-      <SalespersonProfile settings={settings} />
+      <WhoWeAre settings={settings} />
       <FAQ />
       <FinalCta settings={settings} />
 
