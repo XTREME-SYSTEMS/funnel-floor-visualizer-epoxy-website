@@ -41,8 +41,8 @@ export default function WhoWeAre({ settings }) {
     <section className="bg-white py-20 md:py-28 px-6">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-14">
-          <div className="text-sm md:text-base font-bold tracking-[0.25em] text-amber-500">WHO WE ARE</div>
-          <h2 className="mt-3 text-4xl md:text-6xl font-semibold tracking-tight text-stone-900">
+          <div className="text-2xl md:text-3xl font-bold tracking-[0.25em] text-amber-500">WHO WE ARE</div>
+          <h2 className="mt-4 text-6xl md:text-8xl lg:text-9xl font-semibold tracking-tight text-stone-900 leading-[1.05]">
             Backed by Xtreme Polishing Systems
           </h2>
           <p className="mt-4 text-stone-600 max-w-3xl mx-auto leading-relaxed">
