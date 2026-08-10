@@ -5,6 +5,7 @@ import { RefreshCw, Sparkles, Rocket, CheckCircle2, AlertTriangle, Loader2, Glob
 import { Button } from "@/components/ui/button";
 import { bustSeoOverrides } from "@/components/Seo";
 import GoogleSetupWizard from "@/components/admin/GoogleSetupWizard";
+import GoogleAutoVerifier from "@/components/admin/GoogleAutoVerifier";
 
 export default function GoogleSeo() {
   const [data, setData] = useState(null);
@@ -70,6 +71,7 @@ export default function GoogleSeo() {
         </p>
       </div>
 
+      <GoogleAutoVerifier onVerified={() => run("refresh", "pullSearchConsoleData")} />
       <GoogleSetupWizard onVerified={() => run("refresh", "pullSearchConsoleData")} />
 
       {/* Action bar */}

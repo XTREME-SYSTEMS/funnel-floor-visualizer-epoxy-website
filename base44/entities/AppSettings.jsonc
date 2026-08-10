@@ -36,6 +36,10 @@
       "type": "string",
       "description": "Google Search Console HTML verification meta tag content value"
     },
+    "google_refresh_token": {
+      "type": "string",
+      "description": "Encrypted-style storage for the Google OAuth refresh token used by the auto-verifier bridge"
+    },
     "is_test_pricing": {
       "type": "boolean",
       "default": true
