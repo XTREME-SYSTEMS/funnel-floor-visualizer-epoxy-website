@@ -11,7 +11,6 @@ import FloorTypeGallery from "@/components/home/FloorTypeGallery";
 import LeadCapture from "@/components/home/LeadCapture";
 import MobileSection from "@/components/home/MobileSection";
 import Gallery from "@/components/home/Gallery";
-import Reviews from "@/components/home/Reviews";
 import WhoWeAre from "@/components/home/WhoWeAre";
 import FAQ from "@/components/home/FAQ";
 import FinalCta from "@/components/home/FinalCta";
@@ -37,7 +36,6 @@ export default function Home() {
       <LeadCapture />
       <MobileSection />
       <Gallery items={settings.gallery} />
-      <Reviews settings={settings} />
       <WhoWeAre settings={settings} />
       <FAQ />
       <FinalCta settings={settings} />

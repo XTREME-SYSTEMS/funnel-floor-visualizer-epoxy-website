@@ -41,27 +41,13 @@ export default function WhoWeAre({ settings }) {
     <section className="bg-white py-20 md:py-28 px-6">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-14">
-          <div className="text-xs font-bold tracking-[0.2em] text-amber-500">WHO WE ARE</div>
-          <h2 className="mt-3 text-3xl md:text-5xl font-semibold tracking-tight text-stone-900">
+          <div className="text-sm md:text-base font-bold tracking-[0.25em] text-amber-500">WHO WE ARE</div>
+          <h2 className="mt-3 text-4xl md:text-6xl font-semibold tracking-tight text-stone-900">
             Backed by Xtreme Polishing Systems
           </h2>
           <p className="mt-4 text-stone-600 max-w-3xl mx-auto leading-relaxed">
             Your estimate isn't coming from a lead farm. It's coming from a family-owned, Florida-based company that has been perfecting concrete and epoxy flooring for nearly 30 years — the same team that trains the pros and supplies the industry.
           </p>
-        </div>
-
-        {/* Company video */}
-        <div className="rounded-3xl overflow-hidden border border-stone-200 shadow-sm mb-16 bg-stone-950">
-          <video
-            src="https://media.base44.com/videos/public/6a77f4491f0bf92de9a3ed8b/c6dd25b4f_XPS_Training_Class.mp4"
-            poster={TRAINING_IMG}
-            controls
-            loop
-            autoPlay
-            muted
-            playsInline
-            className="w-full aspect-video object-cover"
-          />
         </div>
 
         {/* Stats band */}
