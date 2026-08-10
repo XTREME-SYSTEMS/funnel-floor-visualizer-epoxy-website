@@ -45,8 +45,8 @@ export default function FlakeShowcase() {
         </div>
 
         <div className="mt-8 text-center">
-          <Link to="/funnel" className="inline-flex items-center gap-2 font-semibold text-stone-900 hover:gap-3 transition-all">
-            See all 12 colors in the estimator <ArrowRight className="h-5 w-5" />
+          <Link to="/funnel" className="inline-flex h-12 px-8 items-center justify-center gap-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold transition">
+            Use the floor visualizer <ArrowRight className="h-5 w-5" />
           </Link>
         </div>
       </div>
