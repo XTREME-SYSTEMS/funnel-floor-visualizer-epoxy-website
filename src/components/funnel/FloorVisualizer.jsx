@@ -3,6 +3,7 @@ import { Upload, Loader2, Wand2, ImageIcon } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { COLOR_DATA } from "@/lib/colorData";
 import BeforeAfter from "@/components/funnel/BeforeAfter";
+import SwatchImg from "@/components/ui/SwatchImg";
 
 const SYSTEMS = [
   { key: "flake", label: "Flake" },
@@ -126,7 +127,7 @@ export default function FloorVisualizer({ onColorSelected }) {
                     : "border-stone-200 bg-white hover:border-stone-300"
                 }`}
               >
-                <img src={c.image_url} alt={c.color_name} loading="lazy" className="h-12 w-full object-cover rounded-lg" />
+                <SwatchImg src={c.image_url} alt={c.color_name} wrapperClassName="h-12 w-full rounded-lg" />
                 <span className="text-[11px] font-medium text-stone-700 truncate w-full text-center">{c.color_name}</span>
                 <span className="text-[10px] text-stone-400">{c.code}</span>
               </button>

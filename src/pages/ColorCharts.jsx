@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { ArrowRight, Search } from "lucide-react";
 import { COLOR_DATA } from "@/lib/colorData";
 import { Input } from "@/components/ui/input";
+import SwatchImg from "@/components/ui/SwatchImg";
 
 const SYSTEMS = [
   { key: "all", label: "All Finishes" },
@@ -92,11 +93,11 @@ export default function ColorCharts() {
           {shown.map((c) => (
             <div key={c.code} className="group rounded-2xl overflow-hidden bg-white border border-stone-200 shadow-sm hover:shadow-md transition">
               <div className="relative aspect-square overflow-hidden bg-stone-100">
-                <img
+                <SwatchImg
                   src={c.image_url}
                   alt={`${c.color_name} (${c.code})`}
-                  loading="lazy"
-                  className="h-full w-full object-cover group-hover:scale-105 transition duration-500"
+                  wrapperClassName="h-full w-full"
+                  imgClassName="group-hover:scale-105 transition duration-500"
                 />
                 <span className="absolute top-2 right-2 text-[10px] font-bold tracking-widest bg-stone-950/80 text-white px-2 py-1 rounded">
                   {c.code}
