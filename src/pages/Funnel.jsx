@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, ArrowLeft, CheckCircle2, Phone, Clock, ShieldCheck } from "lucide-react";
 import BackButton from "@/components/BackButton";
 import ScrapeProgress from "@/components/funnel/ScrapeProgress";
-import FlakeColorChart from "@/components/funnel/FlakeColorChart";
+import ColorPicker from "@/components/funnel/ColorPicker";
 import PhotoUpload from "@/components/funnel/PhotoUpload";
 import BeforeAfter from "@/components/funnel/BeforeAfter";
 
@@ -95,7 +95,7 @@ export default function Funnel() {
       square_footage: sqft,
       floor_condition: data.floor_condition,
       timeline: data.timeline || "AS SOON AS POSSIBLE",
-      desired_system: "flake",
+      desired_system: data.desired_system || "flake",
       photos: data.photos || [],
       estimate_mid: est.mid,
       estimate_low: est.low,
@@ -106,7 +106,7 @@ export default function Funnel() {
       status: "NEW ESTIMATE",
       device: getDeviceType(),
       notes: data.flake_color
-        ? `Selected flake color: ${data.flake_color}${data.flake_color_name ? ` (${data.flake_color_name})` : ""}`
+        ? `Selected color: ${data.flake_color}${data.flake_color_name ? ` (${data.flake_color_name})` : ""}`
         : "",
       latitude: result.latitude || null,
       longitude: result.longitude || null,
@@ -237,11 +237,11 @@ export default function Funnel() {
           {/* Step 3: Flake color */}
           {step === 3 && (
             <div>
-              <StepHeader n="3" title="Choose your flake color" sub="Pick your favorite blend from our most popular epoxy flake colors." />
+              <StepHeader n="3" title="Choose your color" sub="Browse every finish system and pick the color you love — we'll match it to your estimate." />
               <div className="mt-6">
-                <FlakeColorChart
+                <ColorPicker
                   selected={data.flake_color}
-                  onSelect={(c) => update({ flake_color: c.code, flake_color_name: c.name })}
+                  onSelect={(c) => update({ flake_color: c.code, flake_color_name: c.name, desired_system: c.system })}
                 />
               </div>
               <Button
@@ -313,7 +313,7 @@ export default function Funnel() {
                 <div className="mt-5 pt-5 border-t border-stone-800">
                   <div className="text-xs font-bold tracking-[0.2em] text-amber-500">ESTIMATED PROJECT RANGE</div>
                   <div className="mt-2 text-3xl font-semibold text-white tabular-nums">
-                    {(() => { const e = calcEstimate(settings, { ...data, square_footage: detectedSqft, desired_system: "flake" }); return `${money(e.low)} – ${money(e.high)}`; })()}
+                    {(() => { const e = calcEstimate(settings, { ...data, square_footage: detectedSqft, desired_system: data.desired_system || "flake" }); return `${money(e.low)} – ${money(e.high)}`; })()}
                   </div>
                 </div>
               </div>
