@@ -18,7 +18,7 @@ export default function FlakeShowcase() {
         <div className="text-center mb-12">
           <div className="text-xs font-bold tracking-[0.2em] text-amber-500">PREMIUM FLAKE FINISHES</div>
           <h2 className="mt-3 text-3xl md:text-5xl font-semibold tracking-tight text-stone-900">
-            Ultra-lifelike garage flake floors
+            Garage flake floors
           </h2>
           <p className="mt-4 text-stone-600 max-w-2xl mx-auto">
             Choose from the top 12 market-popular flake blends, cross-checked against XPS/Torginol color availability. Here are three of our most popular finishes.
