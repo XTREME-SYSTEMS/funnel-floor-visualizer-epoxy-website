@@ -1,4 +1,5 @@
 import { createClientFromRequest } from "npm:@base44/sdk@0.8.40";
+import { logStep } from "../../shared/sopLog.ts";
 
 const SITE = "https://epoxygaragefloorestimate.com";
 const SITEMAP = `${SITE}/sitemap.xml`;
@@ -60,7 +61,7 @@ async function indexNowPost(endpoint) {
 export default async function (req: Request): Promise<Response> {
   try {
     // Require an authenticated admin caller.
-    createClientFromRequest(req);
+    const base44 = createClientFromRequest(req);
 
     // IndexNow is the single protocol consumed by Bing, Yandex, Seznam & Naver.
     // Hit the central endpoint plus Yandex's own endpoint for redundancy.
@@ -68,6 +69,8 @@ export default async function (req: Request): Promise<Response> {
       indexNowPost("https://api.indexnow.org/IndexNow"),
       indexNowPost("https://yandex.com/indexnow"),
     ]);
+
+    await logStep(base44, { category: "seo", action: "Submitted URLs to indexers", detail: `${URLS.length} URLs via IndexNow`, meta: `central:${central.status} yandex:${yandex.status}`, source: "submitToIndexers" });
 
     return Response.json({
       ok: true,

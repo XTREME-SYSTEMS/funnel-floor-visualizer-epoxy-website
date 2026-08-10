@@ -1,0 +1,38 @@
+{
+  "name": "SopLog",
+  "type": "object",
+  "properties": {
+    "category": {
+      "type": "string",
+      "enum": [
+        "build",
+        "seo",
+        "lead",
+        "email",
+        "integration",
+        "content",
+        "ops"
+      ],
+      "default": "ops"
+    },
+    "action": {
+      "type": "string"
+    },
+    "detail": {
+      "type": "string",
+      "maxLength": 1000
+    },
+    "meta": {
+      "type": "string",
+      "description": "JSON string of extra context"
+    },
+    "source": {
+      "type": "string",
+      "description": "Function or agent that logged the step"
+    }
+  },
+  "required": [
+    "category",
+    "action"
+  ]
+}

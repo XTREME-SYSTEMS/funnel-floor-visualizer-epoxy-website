@@ -1,4 +1,5 @@
 import { createClientFromRequest } from "npm:@base44/sdk@0.8.40";
+import { logStep } from "../../shared/sopLog.ts";
 
 // AI-driven persistent SEO optimizer.
 // For each SeoContent record that has Search Console performance data,
@@ -75,6 +76,8 @@ Write an improved, click-optimized, keyword-rich title tag (max 60 characters) a
       });
       improved.push({ route: rec.route, title: newTitle, notes: out.notes });
     }
+
+    await logStep(base44, { category: "seo", action: "Ran AI SEO optimizer", detail: `${improved.length} pages optimized`, source: "optimizeSeo" });
 
     return Response.json({ ok: true, improved: improved.length, items: improved });
   } catch (error) {

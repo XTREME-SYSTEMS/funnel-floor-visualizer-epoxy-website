@@ -39,6 +39,7 @@ import LocationSeoPage from '@/pages/seo/LocationSeoPage';
 import GeneratedPageView from '@/pages/seo/GeneratedPageView';
 import Guides from '@/pages/seo/Guides';
 import SeoFactory from '@/pages/admin/SeoFactory';
+import SopSystem from '@/pages/admin/SopSystem';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -90,6 +91,7 @@ const AuthenticatedApp = () => {
         <Route path="competitors" element={<Competitors />} />
         <Route path="google" element={<GoogleSeo />} />
         <Route path="factory" element={<SeoFactory />} />
+        <Route path="sop" element={<SopSystem />} />
         <Route path="settings" element={<SettingsPage />} />
       </Route>
       <Route path="/:state/:citySlug" element={<LocationSeoPage />} />

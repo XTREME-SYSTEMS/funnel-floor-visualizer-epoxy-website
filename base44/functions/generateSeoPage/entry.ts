@@ -1,4 +1,5 @@
 import { createClientFromRequest } from "npm:@base44/sdk@0.8.40";
+import { logStep } from "../../shared/sopLog.ts";
 
 const SITE = "https://epoxygaragefloorestimate.com";
 const INDEXNOW_KEY = "a3e6350908f1c2d4e6b8a0123456789a";
@@ -102,6 +103,8 @@ Return only JSON matching the schema.`;
         }),
       });
     } catch {}
+
+    await logStep(base44, { category: "content", action: "Generated SEO page", detail: `${topic} → /${slug}`, source: "generateSeoPage" });
 
     return Response.json({ ok: true, page: created });
   } catch (error) {

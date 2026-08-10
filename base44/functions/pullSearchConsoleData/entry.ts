@@ -1,4 +1,5 @@
 import { createClientFromRequest } from "npm:@base44/sdk@0.8.40";
+import { logStep } from "../../shared/sopLog.ts";
 
 const SITE = "https://epoxygaragefloorestimate.com";
 const PRIORITY_PATHS = [
@@ -127,6 +128,8 @@ export default async function (req: Request): Promise<Response> {
       positionSum: acc.positionSum + r.position,
       n: acc.n + 1,
     }), { impressions: 0, clicks: 0, positionSum: 0, n: 0 });
+
+    await logStep(base44, { category: "seo", action: "Pulled Search Console data", detail: `${totals.impressions} impressions, ${totals.clicks} clicks`, source: "pullSearchConsoleData" });
 
     return Response.json({
       ok: true,
