@@ -1,0 +1,30 @@
+{
+  "name": "EmailLog",
+  "type": "object",
+  "properties": {
+    "lead_id": {
+      "type": "string"
+    },
+    "to_email": {
+      "type": "string"
+    },
+    "subject": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string",
+      "description": "estimate | followup:reminder | followup:gallery | followup:offer | followup:final"
+    },
+    "message_id": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "default": "sent"
+    }
+  },
+  "required": [
+    "to_email",
+    "type"
+  ]
+}

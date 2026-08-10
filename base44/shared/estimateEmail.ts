@@ -17,7 +17,7 @@ export function estimateSubject(lead) {
   return `Your Garage Floor Estimate — $${money(lead.estimate_low)}–$${money(lead.estimate_high)}`;
 }
 
-export function estimateEmailHtml(lead, settings, origin, hasImage) {
+export function estimateEmailHtml(lead, settings, origin, hasImage, gallery = []) {
   const company = esc(settings.public_business_name || "EpoxyGarageFloorEstimate.com");
   const phone = esc(settings.phone || "");
   const phoneHref = `tel:${(settings.phone || "").replace(/[^\d]/g, "")}`;
@@ -52,6 +52,15 @@ export function estimateEmailHtml(lead, settings, origin, hasImage) {
        </div>`
     : "";
 
+  const galleryBlock = gallery.length
+    ? `<div style="margin:24px 0;">
+         <div style="font-size:13px;font-weight:800;color:#0c0a09;letter-spacing:1px;text-align:center;margin-bottom:12px;">REAL XPS TRANSFORMATIONS</div>
+         <table style="width:100%;border-collapse:separate;border-spacing:6px;"><tr>
+           ${gallery.map((g) => `<td style="width:33%;vertical-align:top;"><img src="cid:${g.cid}" alt="${esc(g.alt)}" style="width:100%;border-radius:10px;border:1px solid #e7e5e4;display:block;"/><div style="font-size:10px;color:#78716c;margin-top:4px;text-align:center;">${esc(g.caption)}</div></td>`).join("")}
+         </tr></table>
+       </div>`
+    : "";
+
   const pkgBlock = packages.length
     ? `<table style="width:100%;border-collapse:separate;border-spacing:0;margin:20px 0;"><tr>${pkgCards}</tr></table>`
     : "";
@@ -72,6 +81,7 @@ export function estimateEmailHtml(lead, settings, origin, hasImage) {
         <div style="font-size:13px;color:#44403c;">Most projects like yours land around <strong>$${mid}</strong></div>
       </div>
       ${imageBlock}
+      ${galleryBlock}
       ${pkgBlock}
       <div style="margin:24px 0;text-align:center;">
         <a href="${esc(bookUrl)}" style="display:inline-block;background:#a3e635;color:#0c0a09;font-weight:800;font-size:15px;text-decoration:none;padding:14px 28px;border-radius:10px;">Book my free consultation</a>

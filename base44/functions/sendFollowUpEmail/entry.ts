@@ -61,6 +61,17 @@ export default async function (req: Request): Promise<Response> {
     const result = await sendRes.json();
     if (!sendRes.ok) return Response.json({ error: "Gmail send failed", detail: result }, { status: 502 });
 
+    try {
+      await base44.asServiceRole.entities.EmailLog.create({
+        lead_id: lead.id,
+        to_email: recipient,
+        subject,
+        type: `followup:${stage}`,
+        message_id: result.id,
+        status: "sent",
+      });
+    } catch {}
+
     return Response.json({ ok: true, messageId: result.id, stage, to: recipient });
   } catch (error) {
     return Response.json({ error: error.message }, { status: 500 });

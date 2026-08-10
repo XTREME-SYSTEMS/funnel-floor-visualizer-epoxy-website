@@ -18,6 +18,7 @@ import Dashboard from '@/pages/admin/Dashboard';
 import Leads from '@/pages/admin/Leads';
 import LeadDetail from '@/pages/admin/LeadDetail';
 import Pipeline from '@/pages/admin/Pipeline';
+import Emails from '@/pages/admin/Emails';
 import SettingsPage from '@/pages/admin/SettingsPage';
 import PompanoBeach from '@/pages/seo/PompanoBeach';
 import EpoxyGarageFloorCost from '@/pages/seo/EpoxyGarageFloorCost';
@@ -67,6 +68,7 @@ const AuthenticatedApp = () => {
         <Route path="leads" element={<Leads />} />
         <Route path="leads/:id" element={<LeadDetail />} />
         <Route path="pipeline" element={<Pipeline />} />
+        <Route path="emails" element={<Emails />} />
         <Route path="settings" element={<SettingsPage />} />
       </Route>
       <Route path="*" element={<PageNotFound />} />

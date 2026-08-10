@@ -1,6 +1,7 @@
 import { createClientFromRequest } from "npm:@base44/sdk@0.8.40";
 import { buildMime, base64Url } from "../../shared/gmailMime.ts";
 import { estimateEmailHtml, estimateSubject } from "../../shared/estimateEmail.ts";
+import { GALLERY_IMAGES } from "../../shared/companyContent.ts";
 
 export default async function (req: Request): Promise<Response> {
   try {
@@ -60,7 +61,24 @@ export default async function (req: Request): Promise<Response> {
       } catch {}
     }
 
-    const html = estimateEmailHtml(lead, settings, appOrigin, inline.length > 0);
+    // Fetch real XPS transformation photos to embed inline in the gallery
+    const gallery = [];
+    for (let i = 0; i < GALLERY_IMAGES.length; i++) {
+      const g = GALLERY_IMAGES[i];
+      try {
+        const r = await fetch(g.url, { headers: { "User-Agent": "Mozilla/5.0" } });
+        if (r.ok) {
+          const bytes = new Uint8Array(await r.arrayBuffer());
+          const type = r.headers.get("content-type") || "image/jpeg";
+          const cid = `gallery-${i + 1}`;
+          inline.push({ cid, type, bytes });
+          gallery.push({ cid, alt: g.alt, caption: g.caption });
+        }
+      } catch {}
+    }
+
+    const hasFloor = inline.some((x) => x.cid === "floor-image");
+    const html = estimateEmailHtml(lead, settings, appOrigin, hasFloor, gallery);
     const subject = estimateSubject(lead);
 
     const { accessToken } = await base44.asServiceRole.connectors.getConnection("gmail");
@@ -86,6 +104,17 @@ export default async function (req: Request): Promise<Response> {
     });
     const result = await sendRes.json();
     if (!sendRes.ok) return Response.json({ error: "Gmail send failed", detail: result }, { status: 502 });
+
+    try {
+      await base44.asServiceRole.entities.EmailLog.create({
+        lead_id: lead.id,
+        to_email: recipient,
+        subject,
+        type: "estimate",
+        message_id: result.id,
+        status: "sent",
+      });
+    } catch {}
 
     return Response.json({ ok: true, messageId: result.id, to: recipient, from: fromEmail });
   } catch (error) {
