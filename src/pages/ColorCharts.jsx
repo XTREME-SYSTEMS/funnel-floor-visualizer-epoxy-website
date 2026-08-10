@@ -95,6 +95,7 @@ export default function ColorCharts() {
               <div className="relative aspect-square overflow-hidden bg-stone-100">
                 <SwatchImg
                   src={c.image_url}
+                  hex={c.hex}
                   alt={`${c.color_name} (${c.code})`}
                   wrapperClassName="h-full w-full group-hover:scale-105 transition duration-500"
                 />
