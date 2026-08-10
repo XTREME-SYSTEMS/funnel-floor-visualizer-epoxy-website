@@ -11,14 +11,17 @@ export default function PhotoUpload({ photos = [], onChange }) {
     const files = Array.from(e.target.files || []).slice(0, 5 - photos.length);
     if (!files.length) return;
     setUploading(true);
-    const urls = [];
-    for (const file of files) {
-      const { file_url } = await base44.integrations.Core.UploadFile({ file });
-      urls.push(file_url);
+    try {
+      const urls = [];
+      for (const file of files) {
+        const { file_url } = await base44.integrations.Core.UploadFile({ file });
+        urls.push(file_url);
+      }
+      onChange([...photos, ...urls]);
+    } finally {
+      setUploading(false);
+      e.target.value = "";
     }
-    onChange([...photos, ...urls]);
-    setUploading(false);
-    e.target.value = "";
   };
 
   return (
