@@ -9,7 +9,7 @@ export default function CtaBand({ settings }) {
           See your garage floor price range in about 60 seconds
         </h2>
         <p className="mt-3 text-stone-900/70">Free · No obligation · Final pricing confirmed after inspection</p>
-        <Link to="/estimate" className="mt-8 inline-flex h-16 px-10 items-center justify-center rounded-xl bg-stone-950 text-white font-bold tracking-wide hover:bg-stone-800 transition">
+        <Link to="/estimate" className="mt-8 inline-flex h-16 px-10 items-center justify-center rounded-xl bg-amber-500 hover:bg-amber-400 transition text-stone-950 font-bold tracking-wide">
           GET MY FREE ESTIMATE
         </Link>
         <p className="mt-6 text-sm text-stone-900/70">

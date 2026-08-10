@@ -88,7 +88,7 @@ export default function SeoPage({ slug, title, metaDescription, h1, breadcrumbs,
         <div className="mt-12 rounded-2xl bg-amber-50 border border-amber-200 p-8 text-center">
           <h2 className="text-2xl font-semibold tracking-tight text-stone-900">See your garage floor cost now</h2>
           <p className="mt-2 text-stone-600">No phone call required. Get your personalized range in about 60 seconds.</p>
-          <Link to={estimateLink} className="mt-5 inline-flex h-14 px-8 items-center justify-center rounded-xl bg-stone-950 hover:bg-stone-800 transition text-white font-bold tracking-wide">
+          <Link to={estimateLink} className="mt-5 inline-flex h-14 px-8 items-center justify-center rounded-xl bg-amber-500 hover:bg-amber-400 transition text-stone-950 font-bold tracking-wide">
             GET MY FREE ESTIMATE
           </Link>
         </div>
