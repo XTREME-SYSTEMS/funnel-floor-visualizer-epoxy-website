@@ -17,6 +17,9 @@
     "email": {
       "type": "string"
     },
+    "business_address": {
+      "type": "string"
+    },
     "service_area": {
       "type": "string"
     },

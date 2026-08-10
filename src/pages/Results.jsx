@@ -122,6 +122,7 @@ export default function Results() {
         <div className="max-w-3xl mx-auto">
           <div className="text-white font-semibold">{settings.company_name}</div>
           <div className="mt-1">{settings.phone} · {settings.email}</div>
+          <div className="mt-1">{settings.business_address}</div>
           <div className="mt-1">Serving {settings.service_area}</div>
         </div>
       </footer>

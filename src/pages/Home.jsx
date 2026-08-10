@@ -44,6 +44,7 @@ export default function Home() {
           <div>
             <div className="text-white font-semibold">{settings.company_name}</div>
             <div className="mt-1">{settings.phone} · {settings.email}</div>
+            <div className="mt-1">{settings.business_address}</div>
             <div className="mt-1">{settings.service_area}</div>
           </div>
           <div className="flex flex-col gap-1 sm:items-end">

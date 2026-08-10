@@ -2,8 +2,9 @@ export const DEFAULT_SETTINGS = {
   company_name: "EpoxyGarageFloorEstimate.com",
   public_business_name: "EpoxyGarageFloorEstimate.com",
   legal_business_name: "",
-  phone: "(754) 555-0142",
-  email: "hello@epoxygaragefloorestimate.com",
+  phone: "(877) 958-6408",
+  email: "jeremy@xtremepolishingsystems.com",
+  business_address: "2200 NW 32nd St #700, Pompano Beach, FL 33069",
   service_area: "Pompano Beach, FL and surrounding South Florida communities",
   primary_city: "Pompano Beach",
   primary_state: "FL",
@@ -41,11 +42,11 @@ export const DEFAULT_SETTINGS = {
     call_clicked: 15
   },
   salesperson: {
-    name: "Marcus Delaney",
+    name: "Jeremy Bensen",
     title: "Senior Floor Specialist",
-    bio: "Marcus has helped hundreds of South Florida homeowners choose the right garage floor finish for their space, budget, and timeline.",
-    phone: "(754) 555-0142",
-    photo_url: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400"
+    bio: "Jeremy has helped hundreds of South Florida homeowners choose the right garage floor finish for their space, budget, and timeline.",
+    phone: "(877) 958-6408",
+    photo_url: "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/9508dc51b_generated_image.png"
   },
   google_rating: 4.9,
   google_review_count: 214,
