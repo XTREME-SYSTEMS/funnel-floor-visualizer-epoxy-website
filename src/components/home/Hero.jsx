@@ -21,7 +21,6 @@ export default function Hero({ settings }) {
       <div className="absolute inset-0 flex items-center">
         <div className="w-full max-w-6xl mx-auto px-6">
           <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="max-w-2xl">
-            <span className="inline-block text-amber-400 text-xs font-bold tracking-[0.25em] uppercase drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">{settings.service_area}</span>
             <h1 className="mt-4 font-display text-4xl md:text-6xl font-extrabold tracking-tight text-white leading-[1.05] drop-shadow-[0_3px_12px_rgba(0,0,0,0.9)]">
               How Much Will Your Epoxy Garage Floor Cost?
             </h1>
@@ -38,6 +37,10 @@ export default function Hero({ settings }) {
             </p>
           </motion.div>
         </div>
+      </div>
+
+      <div className="absolute bottom-0 inset-x-0 pb-4 text-center">
+        <p className="text-white text-sm font-medium drop-shadow-[0_2px_6px_rgba(0,0,0,0.85)]">{settings.service_area}</p>
       </div>
     </section>
   );
