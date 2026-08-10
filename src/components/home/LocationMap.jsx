@@ -90,6 +90,19 @@ export default function LocationMap() {
       const lng = parseFloat(place.longitude);
       setUserPos({ lat, lng });
       const nearest = nearestLocation(lat, lng);
+      // Geocode the store's exact street address so the satellite view
+      // lands on the actual building, not just the city center.
+      try {
+        const q = encodeURIComponent(`${nearest.address}, ${nearest.city}, ${nearest.state}`);
+        const geoRes = await fetch(`https://nominatim.openstreetmap.org/search?q=${q}&format=json&limit=1&countrycodes=us`);
+        const geoData = await geoRes.json();
+        if (geoData?.[0]) {
+          nearest.preciseLat = parseFloat(geoData[0].lat);
+          nearest.preciseLng = parseFloat(geoData[0].lon);
+        }
+      } catch {
+        // fall back to city-center coordinates
+      }
       setResult(nearest);
     } catch {
       setError("We couldn't find that ZIP code. Please try another.");
@@ -138,7 +151,7 @@ export default function LocationMap() {
                 <Popup>You are here (ZIP {zip})</Popup>
               </Marker>
             )}
-            <Recenter center={result ? [result.lat, result.lng] : userPos ? [userPos.lat, userPos.lng] : null} zoom={result ? 18 : 6} resetKey={resetKey} />
+            <Recenter center={result ? [result.preciseLat || result.lat, result.preciseLng || result.lng] : userPos ? [userPos.lat, userPos.lng] : null} zoom={result ? 19 : 6} resetKey={resetKey} />
           </MapContainer>
         </div>
 
