@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Phone, Mail, Calendar, MapPin, GraduationCap, Building2, Award } from "lucide-react";
 import { Image } from "@/components/ui/image";
+import LocationMap from "@/components/home/LocationMap";
 
 const CHRIS_PHOTO = "https://nationalconcretepolishing.net/wp-content/uploads/2024/05/cropped-Chris-Lavin-768x768.png";
 const TRAINING_IMG = "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/636922eeb_generated_image.png";
@@ -76,6 +77,11 @@ export default function WhoWeAre({ settings }) {
               </div>
             </div>
           ))}
+        </div>
+
+        {/* Find your nearest XPS Xpress store */}
+        <div className="mb-20">
+          <LocationMap />
         </div>
 
         {/* Leadership: Chris + Jeremy */}
