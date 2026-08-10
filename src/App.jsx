@@ -35,6 +35,7 @@ import AboutPage from '@/pages/About';
 import ContactPage from '@/pages/Contact';
 import Competitors from '@/pages/admin/Competitors';
 import GoogleSeo from '@/pages/admin/GoogleSeo';
+import LocationSeoPage from '@/pages/seo/LocationSeoPage';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -86,6 +87,7 @@ const AuthenticatedApp = () => {
         <Route path="google" element={<GoogleSeo />} />
         <Route path="settings" element={<SettingsPage />} />
       </Route>
+      <Route path="/:state/:citySlug" element={<LocationSeoPage />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );

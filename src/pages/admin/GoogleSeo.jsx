@@ -10,7 +10,7 @@ import GoogleAutoVerifier from "@/components/admin/GoogleAutoVerifier";
 export default function GoogleSeo() {
   const [data, setData] = useState(null);
   const [content, setContent] = useState([]);
-  const [busy, setBusy] = useState({ refresh: false, seed: false, opt: false });
+  const [busy, setBusy] = useState({ refresh: false, seed: false, opt: false, index: false });
   const [error, setError] = useState("");
   const [msg, setMsg] = useState("");
 
@@ -32,6 +32,7 @@ export default function GoogleSeo() {
       if (key === "refresh") { setData(d); setMsg(d.siteUrl ? `Pulled data for ${d.siteUrl}` : "Done"); }
       if (key === "seed") setMsg("SEO content initialized from current config.");
       if (key === "opt") { setMsg(`AI optimized ${d.improved || 0} pages.`); bustSeoOverrides(); }
+      if (key === "index") setMsg(`Submitted ${d.urls || 0} URLs to Bing, Yandex & IndexNow.`);
       await loadContent();
     } catch (e) {
       setError(e.message || "Something went wrong");
@@ -87,6 +88,10 @@ export default function GoogleSeo() {
         <Button onClick={() => run("opt", "optimizeSeo")} disabled={busy.opt}>
           {busy.opt ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Sparkles className="h-4 w-4 mr-2" />}
           Run AI optimizer
+        </Button>
+        <Button variant="outline" onClick={() => run("index", "submitToIndexers")} disabled={busy.index}>
+          {busy.index ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Rocket className="h-4 w-4 mr-2" />}
+          Submit to indexers
         </Button>
       </div>
 

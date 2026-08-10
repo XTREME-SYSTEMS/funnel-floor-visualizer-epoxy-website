@@ -2,6 +2,8 @@
 // Route-aware: src/components/Seo.jsx reads useLocation() and applies the
 // matching entry here (title, description, canonical, OG/Twitter, JSON-LD).
 
+import { XPS_LOCATIONS } from "@/lib/xpsLocations";
+
 export const SITE_URL = "https://epoxygaragefloorestimate.com";
 
 export const BUSINESS = {
@@ -169,6 +171,74 @@ export function itemListLd(path, name, items) {
   };
 }
 
+// ── Programmatic location pages ─────────────────────────────────────────────
+export const STATE_NAMES = {
+  FL: "Florida", TX: "Texas", VA: "Virginia", DC: "District of Columbia",
+  NY: "New York", NJ: "New Jersey", PA: "Pennsylvania", SC: "South Carolina",
+  GA: "Georgia", NC: "North Carolina", OK: "Oklahoma", WI: "Wisconsin",
+  TN: "Tennessee", KY: "Kentucky", IA: "Iowa", IL: "Illinois", MI: "Michigan",
+  CO: "Colorado",
+};
+
+export function citySlug(city) {
+  return city.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+}
+
+export function locationPath(loc) {
+  return `/${loc.state.toLowerCase()}/${citySlug(loc.city)}`;
+}
+
+// All US XPS locations except Pompano Beach (which has a dedicated custom page).
+export const SEO_LOCATIONS = XPS_LOCATIONS.filter((l) => citySlug(l.city) !== "pompano-beach");
+
+export function locationSeoConfig(loc) {
+  const city = loc.city;
+  const st = loc.state;
+  const stateName = STATE_NAMES[st] || st;
+  return {
+    location: loc,
+    title: `Epoxy Garage Floors in ${city}, ${st} | Instant Cost Estimate`,
+    description: `Get an instant epoxy garage floor cost estimate in ${city}, ${st}. Serving ${city} and the ${stateName} area. Free, no obligation, personalized price range in 60 seconds.`,
+    image: BUSINESS.image,
+    faq: [
+      { q: `How much does an epoxy garage floor cost in ${city}, ${st}?`, a: `An epoxy garage floor in ${city} typically costs $4 to $12 per square foot installed, or about $2,400 to $7,200 for a standard 2-car garage, depending on the system and floor condition.` },
+      { q: `Do you serve ${city} and nearby areas?`, a: `Yes. We serve ${city}, ${st} and the surrounding ${stateName} communities. Enter your address in the estimator for a personalized range.` },
+      { q: `How long does installation take in ${city}?`, a: `Most residential garage floors in ${city} are completed in 1 to 2 days, with full cure in 24 to 72 hours depending on the system and temperature.` },
+      { q: `Is the estimate really free?`, a: `Yes. The online estimate is free with no obligation. A specialist follows up only if you choose to move forward.` },
+    ],
+    service: { name: `Garage Floor Coating in ${city}, ${st}`, priceRange: "$4-$12/sq ft" },
+  };
+}
+
+export function locationLocalBusinessLd(loc) {
+  const stateName = STATE_NAMES[loc.state] || loc.state;
+  return {
+    "@context": "https://schema.org",
+    "@type": "HomeAndConstructionBusiness",
+    "@id": `${SITE_URL}${locationPath(loc)}/#business`,
+    name: `${BUSINESS.name} — ${loc.city}, ${loc.state}`,
+    telephone: loc.phone || BUSINESS.phone,
+    email: BUSINESS.email,
+    url: `${SITE_URL}${locationPath(loc)}`,
+    image: BUSINESS.image,
+    priceRange: BUSINESS.priceRange,
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: loc.address,
+      addressLocality: loc.city,
+      addressRegion: loc.state,
+      addressCountry: loc.country || "US",
+    },
+    areaServed: `${loc.city}, ${loc.state} and surrounding ${stateName}`,
+    parentOrganization: { "@id": `${SITE_URL}/#business` },
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: BUSINESS.rating,
+      reviewCount: BUSINESS.reviewCount,
+    },
+  };
+}
+
 // ── Per-route SEO config ────────────────────────────────────────────────────
 export const DEFAULT_SEO = {
   title: "Epoxy Garage Floor Cost & Instant Estimate | Pompano Beach FL",
@@ -304,9 +374,14 @@ export const SEO_ROUTES = {
   },
 };
 
+// Inject programmatic location pages for every XPS store (except Pompano Beach).
+for (const loc of SEO_LOCATIONS) {
+  SEO_ROUTES[locationPath(loc)] = locationSeoConfig(loc);
+}
+
 // Build the full JSON-LD block list for a route.
 export function buildJsonLd(path, cfg) {
-  const blocks = [localBusinessLd()];
+  const blocks = [cfg.location ? locationLocalBusinessLd(cfg.location) : localBusinessLd()];
   const name = (cfg.title || DEFAULT_SEO.title).split("|")[0].trim();
   blocks.push(webPageLd(path, cfg.title || DEFAULT_SEO.title, cfg.description || DEFAULT_SEO.description));
   if (path !== "/") blocks.push(breadcrumbLd(path, name));
