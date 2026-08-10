@@ -53,7 +53,7 @@ export function followUpSubject(stage, lead) {
   return s.subject(lead);
 }
 
-export function buildFollowUp(stage, lead, settings, origin) {
+export function buildFollowUp(stage, lead, settings, origin, hasImage = false) {
   const s = STAGES[stage] || STAGES.reminder;
   const company = esc(settings.public_business_name || "EpoxyGarageFloorEstimate.com");
   const phone = esc(settings.phone || "");
@@ -83,6 +83,7 @@ export function buildFollowUp(stage, lead, settings, origin) {
       <div style="font-size:21px;font-weight:800;color:#0c0a09;">${esc(s.heading)}</div>
       <p style="color:#44403c;font-size:14px;line-height:1.6;margin:12px 0 8px;">${esc(s.intro({ firstName }))}</p>
       ${rangeCard}
+      ${hasImage ? `<div style="margin:16px 0;text-align:center;"><img src="cid:hero" alt="Epoxy garage floor transformation" style="width:100%;max-width:540px;border-radius:12px;border:1px solid #e7e5e4;"/></div>` : ""}
       <div style="margin:24px 0;text-align:center;">
         <a href="${esc(bookUrl)}" style="display:inline-block;background:#a3e635;color:#0c0a09;font-weight:800;font-size:15px;text-decoration:none;padding:14px 28px;border-radius:10px;">${esc(s.cta)}</a>
         <div style="margin-top:12px;font-size:13px;color:#44403c;">or call <a href="${phoneHref}" style="color:#0c0a09;font-weight:700;">${phone}</a></div>

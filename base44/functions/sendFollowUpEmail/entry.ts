@@ -1,6 +1,7 @@
 import { createClientFromRequest } from "npm:@base44/sdk@0.8.40";
 import { buildMime, base64Url } from "../../shared/gmailMime.ts";
 import { buildFollowUp, followUpSubject } from "../../shared/followUpEmails.ts";
+import { GALLERY_IMAGES } from "../../shared/companyContent.ts";
 
 // Leads in these statuses are already engaged or closed — skip the promo drip.
 const SKIP_STATUSES = [
@@ -36,7 +37,20 @@ export default async function (req: Request): Promise<Response> {
     const appOrigin = origin || "https://epoxygaragefloorestimate.com";
 
     const subject = followUpSubject(stage, lead);
-    const html = buildFollowUp(stage, lead, settings, appOrigin);
+
+    // Embed one real transformation photo inline
+    let inline = [];
+    try {
+      const g = GALLERY_IMAGES[0];
+      const r = await fetch(g.url, { headers: { "User-Agent": "Mozilla/5.0" } });
+      if (r.ok) {
+        const bytes = new Uint8Array(await r.arrayBuffer());
+        const type = r.headers.get("content-type") || "image/jpeg";
+        inline.push({ cid: "hero", type, bytes });
+      }
+    } catch {}
+
+    const html = buildFollowUp(stage, lead, settings, appOrigin, inline.length > 0);
 
     const { accessToken } = await base44.asServiceRole.connectors.getConnection("gmail");
 
@@ -51,7 +65,7 @@ export default async function (req: Request): Promise<Response> {
     const fromName = settings.public_business_name || "EpoxyGarageFloorEstimate.com";
     const from = `${fromName} <${fromEmail}>`;
 
-    const mimeBytes = buildMime({ from, to: recipient, subject, html });
+    const mimeBytes = buildMime({ from, to: recipient, subject, html, inline });
     const raw = base64Url(mimeBytes);
     const sendRes = await fetch("https://gmail.googleapis.com/gmail/v1/users/me/messages/send", {
       method: "POST",
