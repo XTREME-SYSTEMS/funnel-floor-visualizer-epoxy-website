@@ -14,6 +14,7 @@ import ColorPicker from "@/components/funnel/ColorPicker";
 import PhotoUpload from "@/components/funnel/PhotoUpload";
 import ResultVisualizer from "@/components/funnel/ResultVisualizer";
 import Logo from "@/components/Logo";
+import { generateBidPdf } from "@/lib/bidPdf";
 
 const CONDITIONS = [
   { key: "good", label: "Clean / bare concrete", desc: "No major issues" },
@@ -46,13 +47,24 @@ export default function Funnel() {
   useEffect(() => {
     if (step === 7 && leadId && floorImage !== null && !sentRef.current) {
       sentRef.current = true;
-      base44.functions.invoke("sendEstimateEmail", {
-        lead_id: leadId,
-        floor_image_url: floorImage || undefined,
-        origin: window.location.origin,
-      })
-        .then(() => trackEvent("estimate_email_sent", { lead_id: leadId }))
-        .catch(() => trackEvent("estimate_email_failed", { lead_id: leadId }));
+      (async () => {
+        try {
+          const lead = await base44.entities.Lead.get(leadId);
+          const pdfBytes = generateBidPdf(lead, settings, window.location.origin);
+          const { file_url } = await base44.integrations.Core.UploadFile({
+            file: new File([pdfBytes], "Garage-Floor-Estimate.pdf", { type: "application/pdf" }),
+          });
+          await base44.functions.invoke("sendEstimateEmail", {
+            lead_id: leadId,
+            floor_image_url: floorImage || undefined,
+            pdf_url: file_url,
+            origin: window.location.origin,
+          });
+          trackEvent("estimate_email_sent", { lead_id: leadId });
+        } catch {
+          trackEvent("estimate_email_failed", { lead_id: leadId });
+        }
+      })();
     }
   }, [step, leadId, floorImage]);
 

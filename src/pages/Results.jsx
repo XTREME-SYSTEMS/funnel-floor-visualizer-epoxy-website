@@ -12,6 +12,7 @@ import Reviews from "@/components/home/Reviews";
 import { Phone } from "lucide-react";
 import BackButton from "@/components/BackButton";
 import Logo from "@/components/Logo";
+import BidSections from "@/components/results/BidSections";
 
 const Row = ({ label, value }) => (
   <div className="py-3 border-b border-stone-200 flex justify-between gap-6 text-sm">
@@ -88,6 +89,8 @@ export default function Results() {
           <h2 className="text-2xl font-semibold tracking-tight text-stone-900 mb-4">Choose your level of finish</h2>
           <PackageCards packages={lead.package_options} />
         </div>
+
+        <BidSections lead={lead} />
 
         <TrustSection
           settings={settings}

@@ -33,6 +33,25 @@ export function estimateEmailHtml(lead, settings, origin, hasImage, gallery = []
   const bookUrl = `${origin}/book/${lead.id}`;
   const packages = Array.isArray(lead.package_options) ? lead.package_options : [];
   const scope = scopeForLead(lead.floor_condition);
+  const sp = settings.salesperson || {};
+  const calendarUrl = settings.calendar_url || "";
+
+  const salespersonBlock = (sp.name || sp.photo_url)
+    ? `<div style="margin:18px 0;display:flex;align-items:center;gap:14px;background:#fafaf9;border:1px solid #e7e5e4;border-radius:12px;padding:14px 16px;">
+         ${sp.photo_url ? `<img src="${esc(sp.photo_url)}" alt="${esc(sp.name || "")}" style="width:54px;height:54px;border-radius:50%;object-fit:cover;border:2px solid #a3e635;flex-shrink:0;"/>` : ""}
+         <div>
+           <div style="font-size:11px;color:#78716c;font-weight:700;letter-spacing:1px;">YOUR DEDICATED SPECIALIST</div>
+           <div style="font-size:15px;font-weight:800;color:#0c0a09;margin-top:2px;">${esc(sp.name || "")}</div>
+           ${sp.title ? `<div style="font-size:12px;color:#44403c;">${esc(sp.title)}</div>` : ""}
+           ${sp.phone ? `<div style="font-size:12px;color:#44403c;margin-top:2px;">Direct: <a href="tel:${esc(String(sp.phone).replace(/[^\d]/g, ""))}" style="color:#0c0a09;font-weight:700;">${esc(sp.phone)}</a></div>` : ""}
+           ${sp.bio ? `<div style="font-size:12px;color:#78716c;margin-top:4px;line-height:1.4;">${esc(sp.bio)}</div>` : ""}
+         </div>
+       </div>`
+    : "";
+
+  const calendarBlock = calendarUrl
+    ? `<a href="${esc(calendarUrl)}" style="display:inline-block;margin-top:12px;border:1px solid #0c0a09;color:#0c0a09;font-weight:700;font-size:13px;text-decoration:none;padding:10px 20px;border-radius:8px;">Pick a time that works for you &rarr;</a>`
+    : "";
 
   const pkgCards = packages
     .map(
@@ -99,6 +118,7 @@ export function estimateEmailHtml(lead, settings, origin, hasImage, gallery = []
     <div style="padding:28px 24px;">
       <div style="font-size:22px;font-weight:800;color:#0c0a09;">Hi ${firstName}, your estimate is ready.</div>
       <p style="color:#44403c;font-size:14px;line-height:1.6;margin:10px 0 20px;">Based on the details you entered, here's your preliminary garage floor coating estimate. Final pricing is confirmed at your free in-home consultation.</p>
+      ${salespersonBlock}
       <div style="background:#fafaf9;border:1px solid #e7e5e4;border-radius:12px;padding:20px;text-align:center;">
         <div style="font-size:12px;color:#78716c;font-weight:600;">ESTIMATE RANGE</div>
         <div style="font-size:30px;font-weight:800;color:#0c0a09;margin:6px 0;">$${low} &ndash; $${high}</div>
@@ -111,6 +131,7 @@ export function estimateEmailHtml(lead, settings, origin, hasImage, gallery = []
       <div style="margin:24px 0;text-align:center;">
         <a href="${esc(bookUrl)}" style="display:inline-block;background:#a3e635;color:#0c0a09;font-weight:800;font-size:15px;text-decoration:none;padding:14px 28px;border-radius:10px;">Book my free consultation</a>
         <div style="margin-top:12px;font-size:13px;color:#44403c;">or call <a href="${phoneHref}" style="color:#0c0a09;font-weight:700;">${phone}</a></div>
+        ${calendarBlock}
       </div>
       ${warrantyBlock}
       ${faqBlock}

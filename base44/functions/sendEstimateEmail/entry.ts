@@ -7,7 +7,7 @@ export default async function (req: Request): Promise<Response> {
   try {
     const base44 = createClientFromRequest(req);
     const body = await req.json();
-    const { lead_id, floor_image_url, origin, preview, to_email } = body;
+    const { lead_id, floor_image_url, pdf_url, origin, preview, to_email } = body;
 
     const settingsList = await base44.asServiceRole.entities.AppSettings.list(1);
     const settings = settingsList[0] || {};
@@ -95,7 +95,17 @@ export default async function (req: Request): Promise<Response> {
     const fromName = settings.public_business_name || "EpoxyGarageFloorEstimate.com";
     const from = `${fromName} <${fromEmail}>`;
 
-    const mimeBytes = buildMime({ from, to: recipient, subject, html, inline });
+    const attachments = [];
+    if (pdf_url) {
+      try {
+        const r = await fetch(pdf_url);
+        if (r.ok) {
+          const bytes = new Uint8Array(await r.arrayBuffer());
+          attachments.push({ filename: "Garage-Floor-Estimate.pdf", type: "application/pdf", bytes });
+        }
+      } catch {}
+    }
+    const mimeBytes = buildMime({ from, to: recipient, subject, html, inline, attachments });
     const raw = base64Url(mimeBytes);
     const sendRes = await fetch("https://gmail.googleapis.com/gmail/v1/users/me/messages/send", {
       method: "POST",

@@ -29,25 +29,57 @@ export function base64Std(bytes) {
   return btoa(bin);
 }
 
-// Build a MIME message with an HTML body and optional inline images.
+// Build a MIME message with an HTML body, optional inline (CID) images, and
+// optional file attachments.
 // inline: [{ cid, type, bytes }]
-export function buildMime({ from, to, subject, html, inline = [] }) {
+// attachments: [{ filename, type, bytes }]
+export function buildMime({ from, to, subject, html, inline = [], attachments = [] }) {
   const encSubject = rfc2047(subject);
   const head = `From: ${from}\r\nTo: ${to}\r\nSubject: ${encSubject}\r\nMIME-Version: 1.0\r\n`;
 
-  if (!inline.length) {
+  const hasInline = inline.length > 0;
+  const hasAttach = attachments.length > 0;
+
+  if (!hasInline && !hasAttach) {
     return new TextEncoder().encode(
       head + `Content-Type: text/html; charset=UTF-8\r\n\r\n${html}`
     );
   }
 
-  const rel = "rel_" + Math.random().toString(36).slice(2);
-  let msg = head + `Content-Type: multipart/related; boundary="${rel}"\r\n\r\n`;
-  msg += `--${rel}\r\nContent-Type: text/html; charset=UTF-8\r\n\r\n${html}\r\n`;
-  for (const img of inline) {
-    const b64 = base64Std(img.bytes);
-    msg += `--${rel}\r\nContent-Type: ${img.type}\r\nContent-Disposition: inline\r\nContent-ID: <${img.cid}>\r\nContent-Transfer-Encoding: base64\r\n\r\n${b64}\r\n`;
+  // No attachments: a single multipart/related part (html + inline images).
+  if (!hasAttach) {
+    const rel = "rel_" + Math.random().toString(36).slice(2);
+    let msg = head + `Content-Type: multipart/related; boundary="${rel}"\r\n\r\n`;
+    msg += `--${rel}\r\nContent-Type: text/html; charset=UTF-8\r\n\r\n${html}\r\n`;
+    for (const img of inline) {
+      const b64 = base64Std(img.bytes);
+      msg += `--${rel}\r\nContent-Type: ${img.type}\r\nContent-Disposition: inline\r\nContent-ID: <${img.cid}>\r\nContent-Transfer-Encoding: base64\r\n\r\n${b64}\r\n`;
+    }
+    msg += `--${rel}--`;
+    return new TextEncoder().encode(msg);
   }
-  msg += `--${rel}--`;
+
+  // Attachments present: multipart/mixed wrapping the related body + files.
+  const mixed = "mix_" + Math.random().toString(36).slice(2);
+  let msg = head + `Content-Type: multipart/mixed; boundary="${mixed}"\r\n\r\n`;
+
+  if (hasInline) {
+    const rel = "rel_" + Math.random().toString(36).slice(2);
+    msg += `--${mixed}\r\nContent-Type: multipart/related; boundary="${rel}"\r\n\r\n`;
+    msg += `--${rel}\r\nContent-Type: text/html; charset=UTF-8\r\n\r\n${html}\r\n`;
+    for (const img of inline) {
+      const b64 = base64Std(img.bytes);
+      msg += `--${rel}\r\nContent-Type: ${img.type}\r\nContent-Disposition: inline\r\nContent-ID: <${img.cid}>\r\nContent-Transfer-Encoding: base64\r\n\r\n${b64}\r\n`;
+    }
+    msg += `--${rel}--\r\n`;
+  } else {
+    msg += `--${mixed}\r\nContent-Type: text/html; charset=UTF-8\r\n\r\n${html}\r\n`;
+  }
+
+  for (const a of attachments) {
+    const b64 = base64Std(a.bytes);
+    msg += `--${mixed}\r\nContent-Type: ${a.type}\r\nContent-Disposition: attachment; filename="${a.filename}"\r\nContent-Transfer-Encoding: base64\r\n\r\n${b64}\r\n`;
+  }
+  msg += `--${mixed}--`;
   return new TextEncoder().encode(msg);
 }
