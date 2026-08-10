@@ -6,6 +6,7 @@ import LocationMap from "@/components/home/LocationMap";
 
 const TRAINING_IMG = "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/8bb317033_IMG_8152-min_c55bf5c4-40e1-4893-b5c7-699a395f36c6.jpg";
 const SHOWROOM_IMG = "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/74e7fe427_images1.jpg";
+const XPS_IMG = "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/106857dbd_images2.jpg";
 
 const stats = [
   { value: "30+", label: "Years in business" },
@@ -18,7 +19,7 @@ const pillars = [
   {
     icon: Building2,
     name: "Xtreme Polishing Systems",
-    img: SHOWROOM_IMG,
+    img: XPS_IMG,
     body: "Our parent company and the nation's premier decorative concrete solutions provider for nearly 30 years. Based in Pompano Beach, FL, XPS manufactures and distributes the equipment, epoxy coatings, and tooling that contractors across the country rely on every day."
   },
   {
