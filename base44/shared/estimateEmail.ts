@@ -22,6 +22,9 @@ export function estimateEmailHtml(lead, settings, origin, hasImage) {
   const phone = esc(settings.phone || "");
   const phoneHref = `tel:${(settings.phone || "").replace(/[^\d]/g, "")}`;
   const firstName = esc(lead.first_name || "there");
+  const rating = settings.google_rating ? Number(settings.google_rating).toFixed(1) : null;
+  const reviewCount = settings.google_review_count || null;
+  const locationsUrl = `${origin}/locations`;
   const low = money(lead.estimate_low);
   const high = money(lead.estimate_high);
   const mid = money(lead.estimate_mid);
@@ -73,6 +76,40 @@ export function estimateEmailHtml(lead, settings, origin, hasImage) {
       <div style="margin:24px 0;text-align:center;">
         <a href="${esc(bookUrl)}" style="display:inline-block;background:#a3e635;color:#0c0a09;font-weight:800;font-size:15px;text-decoration:none;padding:14px 28px;border-radius:10px;">Book my free consultation</a>
         <div style="margin-top:12px;font-size:13px;color:#44403c;">or call <a href="${phoneHref}" style="color:#0c0a09;font-weight:700;">${phone}</a></div>
+      </div>
+      <div style="margin:28px 0 8px;">
+        <div style="font-size:13px;font-weight:800;color:#0c0a09;letter-spacing:1px;text-align:center;margin-bottom:14px;">WHY HOMEOWNERS CHOOSE US</div>
+        <table style="width:100%;border-collapse:separate;border-spacing:6px;"><tr>
+          <td style="width:25%;background:#fafaf9;border:1px solid #e7e5e4;border-radius:10px;padding:14px 6px;text-align:center;"><div style="font-size:18px;font-weight:800;color:#0c0a09;">15+</div><div style="font-size:10px;color:#78716c;">Years in business</div></td>
+          <td style="width:25%;background:#fafaf9;border:1px solid #e7e5e4;border-radius:10px;padding:14px 6px;text-align:center;"><div style="font-size:18px;font-weight:800;color:#0c0a09;">2,400+</div><div style="font-size:10px;color:#78716c;">Projects completed</div></td>
+          <td style="width:25%;background:#fafaf9;border:1px solid #e7e5e4;border-radius:10px;padding:14px 6px;text-align:center;"><div style="font-size:18px;font-weight:800;color:#0c0a09;">47</div><div style="font-size:10px;color:#78716c;">States served</div></td>
+          <td style="width:25%;background:#fafaf9;border:1px solid #e7e5e4;border-radius:10px;padding:14px 6px;text-align:center;"><div style="font-size:18px;font-weight:800;color:#0c0a09;">98%</div><div style="font-size:10px;color:#78716c;">Client retention</div></td>
+        </tr></table>
+        ${rating ? `<div style="text-align:center;margin-top:10px;font-size:13px;color:#44403c;">Rated <strong style="color:#0c0a09;">${rating}&starf;</strong>${reviewCount ? ` by ${reviewCount}+ homeowners` : ""}</div>` : ""}
+      </div>
+      <div style="margin:20px 0;background:#fafaf9;border:1px solid #e7e5e4;border-radius:12px;padding:18px;">
+        <div style="font-size:13px;font-weight:800;color:#0c0a09;letter-spacing:1px;margin-bottom:10px;">OUR QUALIFICATIONS</div>
+        <table style="width:100%;font-size:13px;color:#44403c;line-height:1.6;">
+          <tr><td style="padding:2px 0;">&#10003;&nbsp; Certified, factory-trained installation crews</td></tr>
+          <tr><td style="padding:2px 0;">&#10003;&nbsp; Premium industrial-grade epoxy &amp; polyaspartic systems</td></tr>
+          <tr><td style="padding:2px 0;">&#10003;&nbsp; Backed by a nationwide workmanship warranty</td></tr>
+          <tr><td style="padding:2px 0;">&#10003;&nbsp; Part of the Xtreme Polishing Systems family &mdash; the industry's #1 source for epoxy &amp; polished concrete</td></tr>
+        </table>
+      </div>
+      <div style="margin:20px 0;border:1px solid #e7e5e4;border-radius:12px;overflow:hidden;">
+        <div style="background:#0c0a09;color:#ffffff;padding:16px 18px;">
+          <div style="font-size:11px;letter-spacing:1.5px;color:#a3e635;font-weight:700;">POLISHED CONCRETE UNIVERSITY</div>
+          <div style="font-size:15px;font-weight:700;margin-top:4px;">Train with the best in the business</div>
+        </div>
+        <div style="padding:16px 18px;font-size:13px;color:#44403c;line-height:1.5;">
+          The world's #1 hands-on trade school for epoxy &amp; polished concrete. 5-day certification classes run every month at our Pompano Beach HQ and select XPS Xpress locations.
+          <a href="${esc(locationsUrl)}" style="display:inline-block;margin-top:10px;color:#0c0a09;font-weight:700;text-decoration:none;">Learn about training &rarr;</a>
+        </div>
+      </div>
+      <div style="margin:20px 0;text-align:center;background:#fafaf9;border:1px solid #e7e5e4;border-radius:12px;padding:18px;">
+        <div style="font-size:13px;font-weight:800;color:#0c0a09;letter-spacing:1px;">FIND US NEAR YOU</div>
+        <div style="font-size:13px;color:#44403c;margin:6px 0 12px;">XPS Xpress stores across the U.S. &amp; Canada, plus residential crews and commercial teams serving 47 states.</div>
+        <a href="${esc(locationsUrl)}" style="display:inline-block;border:1px solid #0c0a09;color:#0c0a09;font-weight:700;font-size:13px;text-decoration:none;padding:10px 20px;border-radius:8px;">View all locations</a>
       </div>
       <div style="font-size:11px;color:#a8a29e;line-height:1.5;border-top:1px solid #e7e5e4;padding-top:16px;">${esc(settings.disclaimer || "")}</div>
     </div>

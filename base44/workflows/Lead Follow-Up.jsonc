@@ -1,0 +1,129 @@
+{
+  "name": "Lead Follow-Up",
+  "description": "Automated promotional drip: sends follow-up emails to new leads over 17 days (day 2, 5, 10, 17). Skips leads who have already booked or closed.",
+  "trigger": {
+    "config": {
+      "trigger_type": "entity",
+      "entity_name": "Lead",
+      "events": [
+        "create"
+      ]
+    },
+    "condition": "${ .trigger.data.email != \"\" and .trigger.data.email != null }"
+  },
+  "definition": {
+    "document": {
+      "dsl": "1.0.0",
+      "name": "lead_follow_up",
+      "version": "1.0",
+      "namespace": "base44"
+    },
+    "do": [
+      {
+        "wait_2d": {
+          "wait": "P2D",
+          "then": "send_reminder",
+          "x-base44": {
+            "title": "Wait 2 days",
+            "description": "Before first follow-up"
+          }
+        }
+      },
+      {
+        "send_reminder": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "sendFollowUpEmail",
+            "args": {
+              "lead_id": "${ .trigger.entity_id }",
+              "stage": "reminder"
+            }
+          },
+          "then": "wait_3d",
+          "x-base44": {
+            "title": "Send reminder",
+            "description": "Day 2 follow-up"
+          }
+        }
+      },
+      {
+        "wait_3d": {
+          "wait": "P3D",
+          "then": "send_gallery",
+          "x-base44": {
+            "title": "Wait 3 days"
+          }
+        }
+      },
+      {
+        "send_gallery": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "sendFollowUpEmail",
+            "args": {
+              "lead_id": "${ .trigger.entity_id }",
+              "stage": "gallery"
+            }
+          },
+          "then": "wait_5d",
+          "x-base44": {
+            "title": "Send gallery",
+            "description": "Day 5 follow-up"
+          }
+        }
+      },
+      {
+        "wait_5d": {
+          "wait": "P5D",
+          "then": "send_offer",
+          "x-base44": {
+            "title": "Wait 5 days"
+          }
+        }
+      },
+      {
+        "send_offer": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "sendFollowUpEmail",
+            "args": {
+              "lead_id": "${ .trigger.entity_id }",
+              "stage": "offer"
+            }
+          },
+          "then": "wait_7d",
+          "x-base44": {
+            "title": "Send offer",
+            "description": "Day 10 follow-up"
+          }
+        }
+      },
+      {
+        "wait_7d": {
+          "wait": "P7D",
+          "then": "send_final",
+          "x-base44": {
+            "title": "Wait 7 days"
+          }
+        }
+      },
+      {
+        "send_final": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "sendFollowUpEmail",
+            "args": {
+              "lead_id": "${ .trigger.entity_id }",
+              "stage": "final"
+            }
+          },
+          "then": "end",
+          "x-base44": {
+            "title": "Send final",
+            "description": "Day 17 follow-up"
+          }
+        }
+      }
+    ]
+  }
+}
