@@ -6,6 +6,7 @@ import { useSettings } from "@/lib/useSettings";
 import { money } from "@/lib/pricing";
 import { format, parseISO } from "date-fns";
 import { CheckCircle2 } from "lucide-react";
+import BackButton from "@/components/BackButton";
 
 const steps = [
   "We'll review the information you submitted.",
@@ -35,6 +36,11 @@ export default function Booked() {
 
   return (
     <div className="min-h-screen bg-stone-50">
+      <header className="bg-stone-950 text-white">
+        <div className="max-w-xl mx-auto px-6 py-4">
+          <BackButton className="text-stone-300 hover:text-white" />
+        </div>
+      </header>
       <div className="max-w-xl mx-auto px-6 py-14">
         <CheckCircle2 className="h-12 w-12 text-amber-500" />
         <h1 className="mt-5 text-4xl font-semibold tracking-tight text-stone-900">You're All Set.</h1>

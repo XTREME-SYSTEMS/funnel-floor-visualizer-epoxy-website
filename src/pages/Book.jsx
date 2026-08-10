@@ -7,6 +7,7 @@ import { trackEvent } from "@/lib/tracking";
 import { Button } from "@/components/ui/button";
 import { format, addDays } from "date-fns";
 import { Loader2 } from "lucide-react";
+import BackButton from "@/components/BackButton";
 
 const SLOTS = ["9:00 AM", "10:30 AM", "12:00 PM", "1:30 PM", "3:00 PM", "4:30 PM"];
 
@@ -39,6 +40,11 @@ export default function Book() {
   if (settings.calendar_url) {
     return (
       <div className="min-h-screen bg-stone-50">
+        <header className="bg-stone-950 text-white">
+          <div className="max-w-3xl mx-auto px-6 py-4">
+            <BackButton className="text-stone-300 hover:text-white" />
+          </div>
+        </header>
         <div className="max-w-3xl mx-auto px-6 py-10">
           <h1 className="text-3xl font-semibold tracking-tight text-stone-900">Free Garage Floor Consultation</h1>
           <iframe title="Scheduler" src={settings.calendar_url} className="mt-6 w-full h-[720px] rounded-2xl border border-stone-200 bg-white" />
@@ -49,6 +55,11 @@ export default function Book() {
 
   return (
     <div className="min-h-screen bg-stone-50">
+      <header className="bg-stone-950 text-white">
+        <div className="max-w-xl mx-auto px-6 py-4">
+          <BackButton className="text-stone-300 hover:text-white" />
+        </div>
+      </header>
       <div className="max-w-xl mx-auto px-6 py-12">
         <div className="text-xs font-bold tracking-[0.2em] text-amber-600">FREE GARAGE FLOOR CONSULTATION</div>
         <h1 className="mt-3 text-3xl font-semibold tracking-tight text-stone-900">Pick a time that works for you</h1>

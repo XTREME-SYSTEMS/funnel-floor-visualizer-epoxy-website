@@ -10,6 +10,7 @@ import TrustSection from "@/components/results/TrustSection";
 import Gallery from "@/components/home/Gallery";
 import Reviews from "@/components/home/Reviews";
 import { Phone } from "lucide-react";
+import BackButton from "@/components/BackButton";
 
 const Row = ({ label, value }) => (
   <div className="py-3 border-b border-stone-200 flex justify-between gap-6 text-sm">
@@ -44,7 +45,10 @@ export default function Results() {
     <div className="bg-stone-50 min-h-screen pb-24 md:pb-0">
       <div className="bg-stone-950 text-white">
         <div className="max-w-3xl mx-auto px-6 py-6 flex items-center justify-between">
-          <Link to="/" className="font-semibold tracking-tight">{settings.company_name}</Link>
+          <div className="flex items-center gap-3">
+            <BackButton className="text-stone-300 hover:text-white" showLabel={false} />
+            <Link to="/" className="font-semibold tracking-tight">{settings.company_name}</Link>
+          </div>
           <a href={`tel:${settings.phone}`} onClick={() => trackEvent("call_clicked", { lead_id: id, location: "header" })} className="text-sm text-stone-300">{settings.phone}</a>
         </div>
       </div>

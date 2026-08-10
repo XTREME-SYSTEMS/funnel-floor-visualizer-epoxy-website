@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useSettings } from "@/lib/useSettings";
 import { trackEvent } from "@/lib/tracking";
 import { ChevronRight } from "lucide-react";
+import BackButton from "@/components/BackButton";
 
 export default function SeoPage({ slug, title, metaDescription, h1, breadcrumbs, intro, sections, estimatorLabel = "GET MY FREE ESTIMATE", prefillSize }) {
   const { settings } = useSettings();
@@ -22,7 +23,10 @@ export default function SeoPage({ slug, title, metaDescription, h1, breadcrumbs,
     <div className="bg-white">
       <header className="bg-stone-950 text-white">
         <div className="max-w-4xl mx-auto px-6 py-5 flex items-center justify-between">
-          <Link to="/" className="font-semibold tracking-tight text-sm">{settings.company_name}</Link>
+          <div className="flex items-center gap-3">
+            <BackButton className="text-stone-300 hover:text-white" showLabel={false} />
+            <Link to="/" className="font-semibold tracking-tight text-sm">{settings.company_name}</Link>
+          </div>
           <a href={`tel:${settings.phone}`} className="text-sm text-stone-300">{settings.phone}</a>
         </div>
       </header>

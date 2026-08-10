@@ -4,6 +4,7 @@ import { ArrowRight, Search } from "lucide-react";
 import { COLOR_DATA } from "@/lib/colorData";
 import { Input } from "@/components/ui/input";
 import SwatchImg from "@/components/ui/SwatchImg";
+import BackButton from "@/components/BackButton";
 
 const SYSTEMS = [
   { key: "all", label: "All Finishes" },
@@ -40,7 +41,10 @@ export default function ColorCharts() {
       {/* Header */}
       <header className="bg-stone-950 text-white">
         <div className="max-w-6xl mx-auto px-6 py-6 flex items-center justify-between">
-          <Link to="/" className="font-semibold tracking-tight">FloorPrice Pro</Link>
+          <div className="flex items-center gap-3">
+            <BackButton className="text-stone-300 hover:text-white" showLabel={false} />
+            <Link to="/" className="font-semibold tracking-tight">FloorPrice Pro</Link>
+          </div>
           <Link to="/funnel" className="text-sm text-amber-400 hover:text-amber-300 font-semibold">
             Get my estimate
           </Link>

@@ -1,6 +1,7 @@
 import React from "react";
 import { NavLink, Outlet, Link } from "react-router-dom";
 import { LayoutDashboard, Users, KanbanSquare, Settings, ExternalLink } from "lucide-react";
+import BackButton from "@/components/BackButton";
 
 const links = [
   { to: "/admin", end: true, icon: LayoutDashboard, label: "Dashboard" },
@@ -14,6 +15,7 @@ export default function AdminLayout() {
     <div className="min-h-screen bg-stone-100">
       <div className="bg-stone-950 text-white">
         <div className="max-w-7xl mx-auto px-5 flex items-center gap-6 h-14 overflow-x-auto">
+          <BackButton className="text-stone-400 hover:text-white shrink-0" showLabel={false} />
           <span className="font-semibold tracking-tight shrink-0">Admin</span>
           <nav className="flex gap-1">
             {links.map((l) => (

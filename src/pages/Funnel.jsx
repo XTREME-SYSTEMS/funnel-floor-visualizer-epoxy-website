@@ -12,6 +12,7 @@ import ScrapeProgress from "@/components/funnel/ScrapeProgress";
 import FlakeColorChart from "@/components/funnel/FlakeColorChart";
 import BeforeAfter from "@/components/funnel/BeforeAfter";
 import FloorVisualizer from "@/components/funnel/FloorVisualizer";
+import BackButton from "@/components/BackButton";
 
 const BEFORE_URL = "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/2fa2f386d_generated_image.png";
 const AFTER_URL = "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/b2326e50a_generated_image.png";
@@ -158,7 +159,10 @@ export default function Funnel() {
       {/* Header */}
       <header className="bg-stone-950 text-white">
         <div className="max-w-2xl mx-auto px-6 py-5 flex items-center justify-between">
-          <button onClick={() => navigate("/")} className="font-semibold tracking-tight text-sm">{settings.company_name}</button>
+          <div className="flex items-center gap-3">
+            <BackButton className="text-stone-300 hover:text-white" showLabel={false} />
+            <button onClick={() => navigate("/")} className="font-semibold tracking-tight text-sm">{settings.company_name}</button>
+          </div>
           {step > 0 && step <= 4 && (
             <button onClick={back} className="flex items-center gap-1 text-sm text-stone-400 hover:text-white">
               <ArrowLeft className="h-4 w-4" /> Back
