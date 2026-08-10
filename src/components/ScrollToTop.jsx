@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useLocation, useNavigationType } from "react-router-dom";
+import { recordPush, recordPop } from "@/lib/navHistory";
 
 const getHashId = (hash) => {
   const rawId = hash.slice(1);
@@ -16,7 +17,11 @@ export default function ScrollToTop() {
   const navigationType = useNavigationType();
 
   useEffect(() => {
-    if (navigationType === "POP") return;
+    if (navigationType === "POP") {
+      recordPop();
+      return;
+    }
+    recordPush();
 
     if (hash) {
       const id = getHashId(hash);

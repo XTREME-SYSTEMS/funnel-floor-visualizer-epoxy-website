@@ -1,13 +1,15 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
+import { canGoBack } from "@/lib/navHistory";
 
-// Browser-style back button. Goes to the previous page in history; if there
-// is no history (direct entry), falls back to `to` (home by default).
+// Browser-style back button. Goes to the previous in-app page when there is
+// one; otherwise falls back to `to` (home by default). Uses our own navigation
+// depth tracker because `window.history.length` is unreliable in an iframe.
 export default function BackButton({ to = "/", showLabel = true, className = "" }) {
   const navigate = useNavigate();
   const handle = () => {
-    if (window.history.length > 1) navigate(-1);
+    if (canGoBack()) navigate(-1);
     else navigate(to);
   };
   return (
