@@ -125,14 +125,6 @@ async function bbFetch(apiKey, payload) {
   }
 }
 
-// Pull the first Zillow homedetails URL out of a markdown search-results page.
-function extractHomedetailsUrl(markdown) {
-  if (typeof markdown !== "string" || !markdown) return null;
-  const re = /https:\/\/www\.zillow\.com\/homedetails\/[^\s)"']+\/\d+_zpid\//g;
-  const match = re.exec(markdown);
-  return match ? match[0] : null;
-}
-
 // Parse a car count out of a free-text parking description, e.g.
 // "2 car garage", "one car carport", "1-car garage".
 function parseCarCount(desc) {
@@ -145,33 +137,41 @@ function parseCarCount(desc) {
   return null;
 }
 
-// Two-step Zillow scrape via Browserbase Fetch. Returns the extracted property
-// facts, or null when Browserbase is unconfigured, blocked, or no property found.
+// Build an Estately listing URL slug from a street address. Estately serves
+// property pages at https://www.estately.com/listings/info/{address-slug} with
+// server-rendered HTML (no JavaScript required), so Browserbase Fetch can read
+// interior sqft, beds, baths, and a parking description directly.
+function estatelySlug(address) {
+  return address.toLowerCase()
+    .replace(/,/g, "")
+    .replace(/\./g, "")
+    .replace(/#/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-");
+}
+
+// Scrape Estately via Browserbase Fetch with structured-JSON extraction.
+// Returns the extracted property facts, or null when unconfigured / not found.
 async function browserbasePropertyLookup(address) {
   const apiKey = secrets.get("BROWSERBASE_API_KEY");
   if (!apiKey) return null;
 
-  // Step 1: search results → homedetails URL
-  const searchUrl = `https://www.zillow.com/homes/${encodeURIComponent(address)}/`;
-  const searchData = await bbFetch(apiKey, { url: searchUrl, format: "markdown" });
-  const detailUrl = extractHomedetailsUrl(searchData?.content);
-  if (!detailUrl) return null;
-
-  // Step 2: homedetails page → structured facts
+  const url = `https://www.estately.com/listings/info/${estatelySlug(address)}`;
   const schema = {
     type: "object",
     properties: {
-      found: { type: "boolean", description: "True if a single matching property listing was found" },
-      garage_spaces: { type: "number", description: "Number of enclosed garage parking spaces (0 if none)" },
+      found: { type: "boolean", description: "True if a property listing matching this address was found on the page" },
       interior_sqft: { type: "number", description: "Interior living area in square feet" },
       beds: { type: "number", description: "Number of bedrooms" },
       baths: { type: "number", description: "Number of bathrooms" },
-      parking_desc: { type: "string", description: "Free-text parking/garage description if present" }
+      parking_desc: { type: "string", description: "Parking/garage description from the listing, e.g. 'one car carport', '2 car garage', or empty if none mentioned" },
+      garage_spaces: { type: "number", description: "Number of enclosed garage parking spaces (0 if carport only or none)" }
     },
     required: ["found"]
   };
-  const detailData = await bbFetch(apiKey, { url: detailUrl, format: "json", schema });
-  let content = detailData?.content;
+
+  const data = await bbFetch(apiKey, { url, format: "json", schema });
+  let content = data?.content;
   if (typeof content === "string") {
     try { content = JSON.parse(content); } catch { return null; }
   }
@@ -218,7 +218,7 @@ export default async function(req) {
       });
     }
 
-    // 2. Try Browserbase (Zillow) first — most accurate garage data
+    // 2. Try Browserbase (Estately) first — most accurate garage data
     const listing = await browserbasePropertyLookup(address);
     const listingSqft = garageSqftFromListing(listing);
     if (listingSqft) {
@@ -228,7 +228,7 @@ export default async function(req) {
         latitude: geo.lat,
         longitude: geo.lon,
         matched_address: geo.displayName,
-        source: "browserbase_zillow",
+        source: "browserbase_estately",
         garage_spaces: listing.garage_spaces ?? null,
         interior_sqft: listing.interior_sqft ?? null,
         parking_desc: listing.parking_desc ?? null
