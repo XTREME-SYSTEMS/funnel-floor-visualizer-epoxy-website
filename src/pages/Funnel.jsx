@@ -88,13 +88,23 @@ export default function Funnel() {
     return { sqft: 440, source: "fallback_size" };
   };
 
+  // Start the records lookup as soon as we have a full address (step 1) so it
+  // runs in the background while the user answers the remaining questions — by
+  // the time they reach the "looking up" screen the real data is usually back.
+  const startLookup = () => {
+    const fullAddress = `${data.address}, ${data.city}, ${data.state} ${data.zip}`;
+    lookupPromise.current = lookupGarageSqft(fullAddress);
+  };
+
   // Contact submit: kick off the real property lookup, then run the scrape
   // animation. The lead is NOT created here — we wait for the lookup so the
   // estimate uses the actual scraped square footage, not a guess.
   const submitContact = () => {
     setSubmitting(true);
-    const fullAddress = `${data.address}, ${data.city}, ${data.state} ${data.zip}`;
-    lookupPromise.current = lookupGarageSqft(fullAddress);
+    if (!lookupPromise.current) {
+      const fullAddress = `${data.address}, ${data.city}, ${data.state} ${data.zip}`;
+      lookupPromise.current = lookupGarageSqft(fullAddress);
+    }
     trackEvent("contact_entered", { step: 5 });
     setSubmitting(false);
     setStep(6);
@@ -219,7 +229,7 @@ export default function Funnel() {
                 <Input placeholder="ZIP code" value={data.zip || ""} onChange={(e) => update({ zip: e.target.value })} className="h-12" />
               </div>
               <Button
-                onClick={next}
+                onClick={() => { startLookup(); next(); }}
                 disabled={!data.address || !data.city || !data.state || !data.zip}
                 className="mt-6 h-14 w-full text-base font-bold bg-stone-950 hover:bg-stone-800"
               >

@@ -26,7 +26,7 @@ export default function ScrapeProgress({ address, lookup, onComplete }) {
       // Wait for the real records lookup to resolve before declaring done.
       let result = null;
       try {
-        result = lookup ? await withTimeout(lookup, 25000) : null;
+        result = lookup ? await withTimeout(lookup, 45000) : null;
       } catch {
         result = null;
       }
