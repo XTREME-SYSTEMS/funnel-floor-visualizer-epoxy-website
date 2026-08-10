@@ -21,6 +21,10 @@
     "status": {
       "type": "string",
       "default": "sent"
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 1000
     }
   },
   "required": [

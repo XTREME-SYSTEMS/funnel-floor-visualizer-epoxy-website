@@ -11,6 +11,8 @@ const LINKS = [
   { label: "Gallery", to: "/gallery" },
   { label: "Reviews", to: "/reviews" },
   { label: "Locations", to: "/locations" },
+  { label: "About", to: "/about" },
+  { label: "Contact", to: "/contact" },
 ];
 
 export default function PageNav() {

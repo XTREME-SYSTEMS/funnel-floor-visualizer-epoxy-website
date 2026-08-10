@@ -18,6 +18,8 @@ export default function Nav({ settings }) {
     { label: "Color charts", to: "/color-charts" },
     { label: "Gallery", to: "/gallery" },
     { label: "Reviews", to: "/reviews" },
+    { label: "About", to: "/about" },
+    { label: "Contact", to: "/contact" },
     { label: "FAQ", href: "#faq" }
   ];
 

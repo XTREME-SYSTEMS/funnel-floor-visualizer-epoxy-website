@@ -30,6 +30,8 @@ import Locations from '@/pages/Locations';
 import HowItWorksPage from '@/pages/HowItWorks';
 import GalleryPage from '@/pages/Gallery';
 import ReviewsPage from '@/pages/Reviews';
+import AboutPage from '@/pages/About';
+import ContactPage from '@/pages/Contact';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -69,6 +71,8 @@ const AuthenticatedApp = () => {
       <Route path="/how-it-works" element={<HowItWorksPage />} />
       <Route path="/gallery" element={<GalleryPage />} />
       <Route path="/reviews" element={<ReviewsPage />} />
+      <Route path="/about" element={<AboutPage />} />
+      <Route path="/contact" element={<ContactPage />} />
       <Route path="/admin" element={<AdminLayout />}>
         <Route index element={<Dashboard />} />
         <Route path="leads" element={<Leads />} />
