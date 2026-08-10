@@ -41,6 +41,18 @@ const userIcon = L.divIcon({
   iconAnchor: [10, 10]
 });
 
+// Compass bearing (degrees) from point 1 to point 2 — used to aim Street
+// View at the building facade.
+function bearing(lat1, lng1, lat2, lng2) {
+  const toRad = (d) => (d * Math.PI) / 180;
+  const toDeg = (r) => (r * 180) / Math.PI;
+  const φ1 = toRad(lat1), φ2 = toRad(lat2);
+  const Δλ = toRad(lng2 - lng1);
+  const y = Math.sin(Δλ) * Math.cos(φ2);
+  const x = Math.cos(φ1) * Math.sin(φ2) - Math.sin(φ1) * Math.cos(φ2) * Math.cos(Δλ);
+  return (toDeg(Math.atan2(y, x)) + 360) % 360;
+}
+
 // Recenter the map when a target is set
 function Recenter({ center, zoom, resetKey }) {
   const map = useMap();
@@ -121,6 +133,19 @@ export default function LocationMap() {
         nearest.preciseLat = nearest.lat;
         nearest.preciseLng = nearest.lng;
       }
+      // Find the nearest Street View panorama and aim the camera at the
+      // building facade by computing the bearing from the panorama toward
+      // the geocoded building location.
+      if (mapsKey && nearest.preciseLat) {
+        try {
+          const metaRes = await fetch(`https://maps.googleapis.com/maps/api/streetview/metadata?location=${nearest.preciseLat},${nearest.preciseLng}&key=${mapsKey}`);
+          const meta = await metaRes.json();
+          if (meta?.status === "OK" && meta.location) {
+            nearest.panoId = meta.pano_id;
+            nearest.heading = Math.round(bearing(meta.location.lat, meta.location.lng, nearest.preciseLat, nearest.preciseLng));
+          }
+        } catch {}
+      }
       setResult(nearest);
     } catch {
       setError("We couldn't find that ZIP code. Please try another.");
@@ -137,7 +162,7 @@ export default function LocationMap() {
           {result && result.preciseLat && mapsKey ? (
             <iframe
               title="XPS Xpress storefront"
-              src={`https://www.google.com/maps/embed/v1/streetview?key=${mapsKey}&location=${result.preciseLat},${result.preciseLng}`}
+              src={`https://www.google.com/maps/embed/v1/streetview?key=${mapsKey}${result.panoId ? `&pano=${result.panoId}` : `&location=${result.preciseLat},${result.preciseLng}`}&heading=${result.heading ?? 0}&pitch=0`}
               className="w-full h-full border-0"
               loading="lazy"
               allowFullScreen
