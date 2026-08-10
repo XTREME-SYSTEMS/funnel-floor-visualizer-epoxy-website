@@ -9,13 +9,26 @@ let overridesPromise = null;
 async function loadOverrides() {
   if (overridesCache) return overridesCache;
   if (!overridesPromise) {
-    overridesPromise = base44.entities.SeoContent.list(200)
-      .then((rows) => {
-        overridesCache = {};
-        for (const r of rows) overridesCache[r.route] = r;
-        return overridesCache;
-      })
-      .catch(() => (overridesCache = {}));
+    overridesPromise = Promise.all([
+      base44.entities.SeoContent.list(200).catch(() => []),
+      base44.entities.GeneratedPage.list(200).catch(() => []),
+    ]).then(([seoRows, genRows]) => {
+      overridesCache = {};
+      for (const r of seoRows) overridesCache[r.route] = r;
+      // AI-generated pages act as SEO overrides keyed by their slug route.
+      for (const g of genRows) {
+        const path = "/" + g.slug;
+        if (!overridesCache[path]) {
+          overridesCache[path] = {
+            route: path,
+            title: g.title,
+            description: g.meta_description,
+            faq: g.faq,
+          };
+        }
+      }
+      return overridesCache;
+    });
   }
   return overridesPromise;
 }

@@ -1,0 +1,76 @@
+{
+  "name": "GeneratedPage",
+  "type": "object",
+  "properties": {
+    "slug": {
+      "type": "string",
+      "description": "URL slug (kebab-case, no leading slash)"
+    },
+    "keyword": {
+      "type": "string",
+      "description": "Primary keyword/topic the page targets"
+    },
+    "title": {
+      "type": "string"
+    },
+    "meta_description": {
+      "type": "string",
+      "maxLength": 500
+    },
+    "h1": {
+      "type": "string"
+    },
+    "intro": {
+      "type": "string"
+    },
+    "sections": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "h2": {
+            "type": "string"
+          },
+          "body": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "list": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "faq": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "q": {
+            "type": "string"
+          },
+          "a": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "published"
+      ],
+      "default": "published"
+    }
+  },
+  "required": [
+    "slug",
+    "title"
+  ]
+}

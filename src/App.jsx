@@ -36,6 +36,9 @@ import ContactPage from '@/pages/Contact';
 import Competitors from '@/pages/admin/Competitors';
 import GoogleSeo from '@/pages/admin/GoogleSeo';
 import LocationSeoPage from '@/pages/seo/LocationSeoPage';
+import GeneratedPageView from '@/pages/seo/GeneratedPageView';
+import Guides from '@/pages/seo/Guides';
+import SeoFactory from '@/pages/admin/SeoFactory';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -77,6 +80,7 @@ const AuthenticatedApp = () => {
       <Route path="/reviews" element={<ReviewsPage />} />
       <Route path="/about" element={<AboutPage />} />
       <Route path="/contact" element={<ContactPage />} />
+      <Route path="/guides" element={<Guides />} />
       <Route path="/admin" element={<AdminLayout />}>
         <Route index element={<Dashboard />} />
         <Route path="leads" element={<Leads />} />
@@ -85,9 +89,11 @@ const AuthenticatedApp = () => {
         <Route path="emails" element={<Emails />} />
         <Route path="competitors" element={<Competitors />} />
         <Route path="google" element={<GoogleSeo />} />
+        <Route path="factory" element={<SeoFactory />} />
         <Route path="settings" element={<SettingsPage />} />
       </Route>
       <Route path="/:state/:citySlug" element={<LocationSeoPage />} />
+      <Route path="/:slug" element={<GeneratedPageView />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );

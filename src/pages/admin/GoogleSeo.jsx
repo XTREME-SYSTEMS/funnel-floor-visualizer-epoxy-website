@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { SEO_ROUTES } from "@/lib/seoConfig";
-import { RefreshCw, Sparkles, Rocket, CheckCircle2, AlertTriangle, Loader2, Globe } from "lucide-react";
+import { RefreshCw, Sparkles, Rocket, CheckCircle2, AlertTriangle, Loader2, Globe, Factory } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { bustSeoOverrides } from "@/components/Seo";
 import GoogleSetupWizard from "@/components/admin/GoogleSetupWizard";
@@ -70,6 +71,12 @@ export default function GoogleSeo() {
         <p className="text-stone-500 mt-1 text-sm">
           Connect live Google data, let AI persistently optimize titles, descriptions & FAQ, and track your climb to page one.
         </p>
+      </div>
+
+      <div className="flex justify-end -mt-4">
+        <Link to="/admin/factory" className="inline-flex items-center gap-1.5 text-sm font-semibold text-amber-700 hover:text-amber-800">
+          <Factory className="h-4 w-4" /> Open SEO & Content Factory →
+        </Link>
       </div>
 
       <GoogleAutoVerifier onVerified={() => run("refresh", "pullSearchConsoleData")} />

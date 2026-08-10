@@ -16,6 +16,7 @@ const URLS = [
   `${SITE}/contact`,
   `${SITE}/locations`,
   `${SITE}/color-charts`,
+  `${SITE}/guides`,
   `${SITE}/epoxy-garage-floor-cost`,
   `${SITE}/2-car-garage-epoxy-cost`,
   `${SITE}/3-car-garage-epoxy-cost`,
