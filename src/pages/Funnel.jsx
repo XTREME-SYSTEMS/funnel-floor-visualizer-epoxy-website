@@ -12,10 +12,7 @@ import BackButton from "@/components/BackButton";
 import ScrapeProgress from "@/components/funnel/ScrapeProgress";
 import ColorPicker from "@/components/funnel/ColorPicker";
 import PhotoUpload from "@/components/funnel/PhotoUpload";
-import BeforeAfter from "@/components/funnel/BeforeAfter";
-
-const BEFORE_URL = "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/2fa2f386d_generated_image.png";
-const AFTER_URL = "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/b2326e50a_generated_image.png";
+import ResultVisualizer from "@/components/funnel/ResultVisualizer";
 
 const CONDITIONS = [
   { key: "good", label: "Clean / bare concrete", desc: "No major issues" },
@@ -54,16 +51,50 @@ export default function Funnel() {
     update({ floor_condition: arr.includes(key) ? arr.filter((k) => k !== key) : [...arr, key] });
   };
 
+  // Pull the garage's real square footage from public property records via web
+  // search (Zillow, Realtor, county appraiser). Falls back to a default only if
+  // no property data can be found for the address at all.
+  const lookupGarageSqft = async (fullAddress) => {
+    try {
+      const res = await base44.integrations.Core.InvokeLLM({
+        prompt: `Look up the residential property at "${fullAddress}" using public property records and real estate listings such as Zillow, Realtor.com, Redfin, and the county property appraiser. I need the GARAGE square footage. If the garage square footage is not directly stated, estimate it from the number of garage spaces (1 car ≈ 220 sqft, 2 car ≈ 440 sqft, 3 car ≈ 660 sqft, 4 car ≈ 880 sqft) or from the interior living area (garage ≈ 20% of interior sqft). Return the best garage square footage estimate, the number of garage spaces, the interior living sqft, and your confidence level.`,
+        add_context_from_internet: true,
+        model: "gemini_3_flash",
+        response_json_schema: {
+          type: "object",
+          properties: {
+            found: { type: "boolean", description: "True if property data was found for this address" },
+            garage_sqft: { type: "number", description: "Estimated garage square footage" },
+            garage_spaces: { type: "number", description: "Number of enclosed garage parking spaces" },
+            interior_sqft: { type: "number", description: "Interior living area square footage" },
+            confidence: { type: "string", description: "high, medium, or low" },
+            source: { type: "string", description: "Where the data came from" }
+          },
+          required: ["found"]
+        }
+      });
+      const sqft = Number(res?.garage_sqft);
+      if (res?.found && sqft > 0) {
+        return {
+          sqft: Math.min(Math.max(Math.round(sqft), 200), 1200),
+          source: "property_records",
+          garage_spaces: res.garage_spaces ?? null,
+          interior_sqft: res.interior_sqft ?? null
+        };
+      }
+    } catch {
+      // fall through to default
+    }
+    return { sqft: 440, source: "fallback_size" };
+  };
+
   // Contact submit: kick off the real property lookup, then run the scrape
   // animation. The lead is NOT created here — we wait for the lookup so the
   // estimate uses the actual scraped square footage, not a guess.
   const submitContact = () => {
     setSubmitting(true);
     const fullAddress = `${data.address}, ${data.city}, ${data.state} ${data.zip}`;
-    lookupPromise.current = base44.functions
-      .invoke("propertyLookup", { address: fullAddress, fallback_sqft: 440 })
-      .then((res) => res.data)
-      .catch(() => ({ sqft: 440, source: "fallback_size", address_valid: false }));
+    lookupPromise.current = lookupGarageSqft(fullAddress);
     trackEvent("contact_entered", { step: 5 });
     setSubmitting(false);
     setStep(6);
@@ -81,7 +112,7 @@ export default function Funnel() {
     const sqft = Number(result.sqft) || fallback;
     setDetectedSqft(sqft);
 
-    const est = calcEstimate(settings, { ...data, square_footage: sqft, desired_system: "flake" });
+    const est = calcEstimate(settings, { ...data, square_footage: sqft, desired_system: data.desired_system || "flake" });
     const score = calcLeadScore(settings, data);
     const lead = await base44.entities.Lead.create({
       first_name: data.first_name,
@@ -108,8 +139,6 @@ export default function Funnel() {
       notes: data.flake_color
         ? `Selected color: ${data.flake_color}${data.flake_color_name ? ` (${data.flake_color_name})` : ""}`
         : "",
-      latitude: result.latitude || null,
-      longitude: result.longitude || null,
       ...captureAttribution()
     });
     setLeadId(lead.id);
@@ -241,7 +270,7 @@ export default function Funnel() {
               <div className="mt-6">
                 <ColorPicker
                   selected={data.flake_color}
-                  onSelect={(c) => update({ flake_color: c.code, flake_color_name: c.name, desired_system: c.system })}
+                  onSelect={(c) => update({ flake_color: c.code, flake_color_name: c.color_name, flake_color_hex: c.hex, desired_system: c.system })}
                 />
               </div>
               <Button
@@ -318,11 +347,13 @@ export default function Funnel() {
                 </div>
               </div>
 
-              {/* Before / After */}
+              {/* Your floor, visualized with your chosen color */}
               <div>
-                <h3 className="text-xl font-semibold text-stone-900 mb-3">See the transformation</h3>
-                <p className="text-sm text-stone-500 mb-4">Drag the slider to see what your garage could look like before and after a professional epoxy flake floor.</p>
-                <BeforeAfter beforeUrl={BEFORE_URL} afterUrl={AFTER_URL} />
+                <h3 className="text-xl font-semibold text-stone-900 mb-3">See your garage transformed</h3>
+                <ResultVisualizer
+                  photoUrl={(data.photos || [])[0]}
+                  color={{ code: data.flake_color, name: data.flake_color_name, system: data.desired_system, hex: data.flake_color_hex }}
+                />
               </div>
 
               {/* Selected color confirmation */}
