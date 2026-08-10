@@ -8,7 +8,6 @@ import MarketingSection from "@/components/home/MarketingSection";
 import BeforeAfterShowcase from "@/components/home/BeforeAfterShowcase";
 import FlakeShowcase from "@/components/home/FlakeShowcase";
 import FloorTypeGallery from "@/components/home/FloorTypeGallery";
-import LeadCapture from "@/components/home/LeadCapture";
 import MobileSection from "@/components/home/MobileSection";
 import Gallery from "@/components/home/Gallery";
 import WhoWeAre from "@/components/home/WhoWeAre";
@@ -33,7 +32,6 @@ export default function Home() {
       <BeforeAfterShowcase />
       <FloorTypeGallery />
       <FlakeShowcase />
-      <LeadCapture />
       <MobileSection />
       <WhoWeAre settings={settings} />
       <Gallery items={settings.gallery} />
