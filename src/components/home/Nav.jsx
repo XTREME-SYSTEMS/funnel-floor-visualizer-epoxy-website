@@ -14,10 +14,10 @@ export default function Nav({ settings }) {
   }, []);
 
   const links = [
-    { label: "How it works", href: "#how-it-works" },
+    { label: "How it works", to: "/how-it-works" },
     { label: "Color charts", to: "/color-charts" },
-    { label: "Gallery", href: "#gallery" },
-    { label: "Reviews", href: "#reviews" },
+    { label: "Gallery", to: "/gallery" },
+    { label: "Reviews", to: "/reviews" },
     { label: "FAQ", href: "#faq" }
   ];
 

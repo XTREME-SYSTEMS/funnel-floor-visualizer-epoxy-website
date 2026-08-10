@@ -27,6 +27,9 @@ import ThreeCarGarageEpoxyCost from '@/pages/seo/ThreeCarGarageEpoxyCost';
 import GarageFloorCoatingCost from '@/pages/seo/GarageFloorCoatingCost';
 import ColorCharts from '@/pages/ColorCharts';
 import Locations from '@/pages/Locations';
+import HowItWorksPage from '@/pages/HowItWorks';
+import GalleryPage from '@/pages/Gallery';
+import ReviewsPage from '@/pages/Reviews';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -63,6 +66,9 @@ const AuthenticatedApp = () => {
       <Route path="/garage-floor-coating-cost" element={<GarageFloorCoatingCost />} />
       <Route path="/color-charts" element={<ColorCharts />} />
       <Route path="/locations" element={<Locations />} />
+      <Route path="/how-it-works" element={<HowItWorksPage />} />
+      <Route path="/gallery" element={<GalleryPage />} />
+      <Route path="/reviews" element={<ReviewsPage />} />
       <Route path="/admin" element={<AdminLayout />}>
         <Route index element={<Dashboard />} />
         <Route path="leads" element={<Leads />} />
