@@ -105,33 +105,35 @@ export default function LocationMap() {
       const lng = parseFloat(place.longitude);
       setUserPos({ lat, lng });
       const nearest = nearestLocation(lat, lng);
-      // Geocode the store's street address so Street View lands on the
-      // actual building. Strip suite/unit details (they confuse geocoders).
-      const street = nearest.address.replace(/,?\s*(Suite|Ste|Unit|Apt|#)\s*.*/i, "");
-      const fullAddr = `${street}, ${nearest.city}, ${nearest.state}`;
-      try {
-        let geoLat = null, geoLng = null;
-        // 1) Google Geocoding API — most accurate for US addresses
-        if (mapsKey) {
-          try {
-            const gRes = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(fullAddr)}&key=${mapsKey}`);
-            const gData = await gRes.json();
-            const loc = gData?.results?.[0]?.geometry?.location;
-            if (gData?.status === "OK" && loc) { geoLat = loc.lat; geoLng = loc.lng; }
-          } catch {}
-        }
-        // 2) Nominatim fallback
-        if (geoLat === null) {
-          const oRes = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(fullAddr)}&format=json&limit=1&countrycodes=us`);
-          const oData = await oRes.json();
-          if (oData?.[0]) { geoLat = parseFloat(oData[0].lat); geoLng = parseFloat(oData[0].lon); }
-        }
-        // 3) Store coordinates fallback
-        nearest.preciseLat = geoLat ?? nearest.lat;
-        nearest.preciseLng = geoLng ?? nearest.lng;
-      } catch {
+      // Use the store's precise geocoded coordinates when available; otherwise
+      // runtime-geocode the address so Street View lands on the building.
+      if (nearest.geocoded) {
         nearest.preciseLat = nearest.lat;
         nearest.preciseLng = nearest.lng;
+      } else {
+        const street = nearest.address.replace(/,?\s*(Suite|Ste|Unit|Apt|#)\s*.*/i, "");
+        const fullAddr = `${street}, ${nearest.city}, ${nearest.state}`;
+        try {
+          let geoLat = null, geoLng = null;
+          if (mapsKey) {
+            try {
+              const gRes = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(fullAddr)}&key=${mapsKey}`);
+              const gData = await gRes.json();
+              const loc = gData?.results?.[0]?.geometry?.location;
+              if (gData?.status === "OK" && loc) { geoLat = loc.lat; geoLng = loc.lng; }
+            } catch {}
+          }
+          if (geoLat === null) {
+            const oRes = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(fullAddr)}&format=json&limit=1&countrycodes=us`);
+            const oData = await oRes.json();
+            if (oData?.[0]) { geoLat = parseFloat(oData[0].lat); geoLng = parseFloat(oData[0].lon); }
+          }
+          nearest.preciseLat = geoLat ?? nearest.lat;
+          nearest.preciseLng = geoLng ?? nearest.lng;
+        } catch {
+          nearest.preciseLat = nearest.lat;
+          nearest.preciseLng = nearest.lng;
+        }
       }
       // Find the nearest Street View panorama and aim the camera at the
       // building facade by computing the bearing from the panorama toward
