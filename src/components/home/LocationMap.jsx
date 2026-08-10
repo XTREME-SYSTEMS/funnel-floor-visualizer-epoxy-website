@@ -119,7 +119,7 @@ export default function LocationMap() {
           {result && result.preciseLat ? (
             <iframe
               title="XPS Xpress storefront"
-              src={`https://maps.google.com/maps?q=&layer=c&cbll=${result.preciseLat},${result.preciseLng}&z=17&output=svembed`}
+              src={`https://maps.google.com/maps?q=${encodeURIComponent(`${result.address}, ${result.city}, ${result.state}`)}&layer=c&output=svembed`}
               className="w-full h-full border-0"
               loading="lazy"
               allowFullScreen
