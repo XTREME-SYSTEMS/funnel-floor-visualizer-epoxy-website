@@ -13,6 +13,7 @@ import ScrapeProgress from "@/components/funnel/ScrapeProgress";
 import ColorPicker from "@/components/funnel/ColorPicker";
 import PhotoUpload from "@/components/funnel/PhotoUpload";
 import ResultVisualizer from "@/components/funnel/ResultVisualizer";
+import Logo from "@/components/Logo";
 
 const CONDITIONS = [
   { key: "good", label: "Clean / bare concrete", desc: "No major issues" },
@@ -174,7 +175,7 @@ export default function Funnel() {
         <div className="max-w-2xl mx-auto px-6 py-5 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <BackButton className="text-stone-300 hover:text-white" showLabel={false} />
-            <button onClick={() => navigate("/")} className="font-semibold tracking-tight text-sm">{settings.company_name}</button>
+            <Logo />
           </div>
           {step > 0 && step <= 5 && (
             <button onClick={back} className="flex items-center gap-1 text-sm text-stone-400 hover:text-white">

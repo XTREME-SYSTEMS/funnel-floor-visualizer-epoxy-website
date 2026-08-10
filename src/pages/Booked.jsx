@@ -7,6 +7,7 @@ import { money } from "@/lib/pricing";
 import { format, parseISO } from "date-fns";
 import { CheckCircle2 } from "lucide-react";
 import BackButton from "@/components/BackButton";
+import Logo from "@/components/Logo";
 
 const steps = [
   "We'll review the information you submitted.",
@@ -38,7 +39,7 @@ export default function Booked() {
     <div className="min-h-screen bg-stone-50">
       <header className="bg-stone-950 text-white">
         <div className="max-w-xl mx-auto px-6 py-4">
-          <BackButton className="text-stone-300 hover:text-white" />
+          <div className="flex items-center gap-3"><BackButton className="text-stone-300 hover:text-white" /><Logo /></div>
         </div>
       </header>
       <div className="max-w-xl mx-auto px-6 py-14">

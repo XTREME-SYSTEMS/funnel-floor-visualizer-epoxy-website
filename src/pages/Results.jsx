@@ -11,6 +11,7 @@ import Gallery from "@/components/home/Gallery";
 import Reviews from "@/components/home/Reviews";
 import { Phone } from "lucide-react";
 import BackButton from "@/components/BackButton";
+import Logo from "@/components/Logo";
 
 const Row = ({ label, value }) => (
   <div className="py-3 border-b border-stone-200 flex justify-between gap-6 text-sm">
@@ -47,7 +48,7 @@ export default function Results() {
         <div className="max-w-3xl mx-auto px-6 py-6 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <BackButton className="text-stone-300 hover:text-white" showLabel={false} />
-            <Link to="/" className="font-semibold tracking-tight">{settings.company_name}</Link>
+            <Logo />
           </div>
           <a href={`tel:${settings.phone}`} onClick={() => trackEvent("call_clicked", { lead_id: id, location: "header" })} className="text-sm text-stone-300">{settings.phone}</a>
         </div>

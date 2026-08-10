@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { format, addDays } from "date-fns";
 import { Loader2 } from "lucide-react";
 import BackButton from "@/components/BackButton";
+import Logo from "@/components/Logo";
 
 const SLOTS = ["9:00 AM", "10:30 AM", "12:00 PM", "1:30 PM", "3:00 PM", "4:30 PM"];
 
@@ -42,7 +43,7 @@ export default function Book() {
       <div className="min-h-screen bg-stone-50">
         <header className="bg-stone-950 text-white">
           <div className="max-w-3xl mx-auto px-6 py-4">
-            <BackButton className="text-stone-300 hover:text-white" />
+            <div className="flex items-center gap-3"><BackButton className="text-stone-300 hover:text-white" /><Logo /></div>
           </div>
         </header>
         <div className="max-w-3xl mx-auto px-6 py-10">
@@ -57,7 +58,7 @@ export default function Book() {
     <div className="min-h-screen bg-stone-50">
       <header className="bg-stone-950 text-white">
         <div className="max-w-xl mx-auto px-6 py-4">
-          <BackButton className="text-stone-300 hover:text-white" />
+          <div className="flex items-center gap-3"><BackButton className="text-stone-300 hover:text-white" /><Logo /></div>
         </div>
       </header>
       <div className="max-w-xl mx-auto px-6 py-12">

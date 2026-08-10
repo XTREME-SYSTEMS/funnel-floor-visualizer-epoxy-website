@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Menu, X, Phone } from "lucide-react";
+import Logo from "@/components/Logo";
 
 export default function Nav({ settings }) {
   const [scrolled, setScrolled] = useState(false);
@@ -23,9 +24,7 @@ export default function Nav({ settings }) {
   return (
     <header className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${scrolled ? "bg-white/95 backdrop-blur shadow-sm" : "bg-transparent"}`}>
       <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-        <Link to="/" className={`font-semibold tracking-tight text-base ${scrolled ? "text-stone-900" : "text-white"}`}>
-          {settings.company_name}
-        </Link>
+        <Logo />
 
         <nav className="hidden md:flex items-center gap-7">
           {links.map((l) => (
