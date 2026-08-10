@@ -43,7 +43,7 @@ export default function Nav({ settings }) {
             ))}
           </nav>
 
-          <div className="hidden md:flex flex-col items-end gap-0.5">
+          <div className="hidden md:flex flex-col items-start gap-0.5 mt-1">
             <Link to="/funnel" className="h-9 px-5 inline-flex items-center rounded-lg bg-amber-500 hover:bg-amber-400 text-stone-950 text-sm font-semibold transition">
               Get Free Estimate
             </Link>
