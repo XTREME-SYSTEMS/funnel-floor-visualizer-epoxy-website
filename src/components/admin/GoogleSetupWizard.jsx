@@ -26,6 +26,18 @@ export default function GoogleSetupWizard({ onVerified }) {
     setLoading(false);
   };
 
+  const [adding, setAdding] = useState(false);
+  const addProperty = async () => {
+    setAdding(true); setMsg("");
+    try {
+      const res = await base44.functions.invoke("addSearchConsoleProperty", {});
+      const d = res.data || res;
+      if (d.ok) { setMsg("Added! Your site is now in Search Console (unverified). Continue to step 2 to verify."); check(); }
+      else setMsg("Could not add: " + JSON.stringify(d.data || d.error));
+    } catch (e) { setMsg("Error: " + e.message); }
+    setAdding(false);
+  };
+
   useEffect(() => { check(); }, []);
 
   const saveTag = async () => {
@@ -66,8 +78,16 @@ export default function GoogleSetupWizard({ onVerified }) {
       )}
 
       <ol className="space-y-3 text-sm">
-        <Step n={1} done={false}>
-          Open <a className="text-blue-600 underline inline-flex items-center" href="https://search.google.com/search-console" target="_blank" rel="noreferrer">Search Console <ExternalLink className="h-3 w-3" /></a>, click <b>Add property</b> → <b>URL prefix</b> → paste <code className="bg-stone-100 px-1 rounded">https://epoxygaragefloorestimate.com</code> → Continue.
+        <Step n={1} done={status?.propertyFound}>
+          {status?.propertyFound
+            ? <>Your site is added to Search Console.</>
+            : <div className="space-y-2">
+              <div>Add your site to Search Console automatically — no need to open the console:</div>
+              <Button size="sm" onClick={addProperty} disabled={adding}>
+                {adding ? <Loader2 className="h-4 w-4 mr-1 animate-spin" /> : <Globe className="h-4 w-4 mr-1" />}
+                Auto-add my site to Google
+              </Button>
+            </div>}
         </Step>
         <Step n={2} done={false}>
           Choose <b>HTML tag</b> verification. Copy the full <code className="bg-stone-100 px-1 rounded">&lt;meta name="google-site-verification" ...&gt;</code> tag and paste it below.
