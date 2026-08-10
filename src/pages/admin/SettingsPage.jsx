@@ -58,6 +58,7 @@ export default function SettingsPage() {
         <Field label="Primary state"><Input value={form.primary_state || ""} onChange={(e) => set({ primary_state: e.target.value })} /></Field>
         <Field label="Hero image URL"><Input value={form.hero_image_url || ""} onChange={(e) => set({ hero_image_url: e.target.value })} /></Field>
         <Field label="Calendar / scheduler URL (optional embed)"><Input value={form.calendar_url || ""} onChange={(e) => set({ calendar_url: e.target.value })} /></Field>
+        <Field label="Google Maps Embed API key (for store Street View)"><Input value={form.google_maps_api_key || ""} onChange={(e) => set({ google_maps_api_key: e.target.value })} placeholder="AIza..." /></Field>
         <div className="sm:col-span-2 flex items-center gap-3 pt-2">
           <Switch checked={!!form.is_test_pricing} onCheckedChange={(v) => set({ is_test_pricing: v })} />
           <span className="text-sm text-stone-600">Show "TEST DATA — DEMO PRICING" badge on estimates</span>

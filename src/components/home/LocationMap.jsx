@@ -4,6 +4,7 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { Search, Loader2, MapPin, Phone, Navigation } from "lucide-react";
 import { XPS_LOCATIONS, nearestLocation } from "@/lib/xpsLocations";
+import { useSettings } from "@/lib/useSettings";
 
 // Fix default marker icons in react-leaflet (webpack/CDN path issues)
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
@@ -54,6 +55,8 @@ function Recenter({ center, zoom, resetKey }) {
 }
 
 export default function LocationMap() {
+  const { settings } = useSettings();
+  const mapsKey = settings.google_maps_api_key;
   const [zip, setZip] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -116,10 +119,10 @@ export default function LocationMap() {
       <div>
         {/* Map — full width so the entire USA is visible */}
         <div className="h-[380px] md:h-[460px] relative bg-stone-100">
-          {result && result.preciseLat ? (
+          {result && result.preciseLat && mapsKey ? (
             <iframe
               title="XPS Xpress storefront"
-              src={`https://maps.google.com/maps?q=${encodeURIComponent(`${result.address}, ${result.city}, ${result.state}`)}&layer=c&output=svembed`}
+              src={`https://www.google.com/maps/embed/v1/streetview?key=${mapsKey}&location=${result.preciseLat},${result.preciseLng}`}
               className="w-full h-full border-0"
               loading="lazy"
               allowFullScreen

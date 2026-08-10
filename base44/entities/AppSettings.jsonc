@@ -29,6 +29,9 @@
     "primary_state": {
       "type": "string"
     },
+    "google_maps_api_key": {
+      "type": "string"
+    },
     "is_test_pricing": {
       "type": "boolean",
       "default": true

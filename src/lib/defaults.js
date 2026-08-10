@@ -8,6 +8,7 @@ export const DEFAULT_SETTINGS = {
   service_area: "Pompano Beach, FL and surrounding South Florida communities",
   primary_city: "Pompano Beach",
   primary_state: "FL",
+  google_maps_api_key: "",
   is_test_pricing: true,
   size_defaults: { one_car: 240, two_car: 440, three_car: 660, four_car: 880, not_sure: 440 },
   systems: [
