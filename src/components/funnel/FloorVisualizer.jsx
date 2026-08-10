@@ -127,7 +127,7 @@ export default function FloorVisualizer({ onColorSelected }) {
                     : "border-stone-200 bg-white hover:border-stone-300"
                 }`}
               >
-                <SwatchImg hex={c.hex} alt={c.color_name} wrapperClassName="h-12 w-full rounded-lg" />
+                <img src={c.image_url} alt={c.color_name} loading="lazy" className="h-12 w-full object-cover object-top rounded-lg" />
                 <span className="text-[11px] font-medium text-stone-700 truncate w-full text-center">{c.color_name}</span>
                 <span className="text-[10px] text-stone-400">{c.code}</span>
               </button>

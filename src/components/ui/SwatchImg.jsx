@@ -1,21 +1,23 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 
-// Renders a clean color swatch from the exact manufacturer hex value — no
-// remote image, so there is no "IN STOCK" tag. A subtle gloss overlay gives
-// it the look of a finish sample without changing the color.
-export default function SwatchImg({ hex, alt, wrapperClassName = "" }) {
+// Renders the real manufacturer swatch image but zooms it ~38% and anchors to
+// the top so the bottom edge (where the "IN STOCK" tag sits) is clipped out.
+// Uses background-image (not an <img> transform) so the crop always renders
+// and the image keeps its aspect ratio (no vertical stretch). For square
+// swatch containers.
+export default function SwatchImg({ src, alt, wrapperClassName = "" }) {
   return (
     <div
-      className={cn("relative", wrapperClassName)}
-      style={{ backgroundColor: hex }}
+      className={cn("overflow-hidden bg-stone-100", wrapperClassName)}
+      style={{
+        backgroundImage: `url(${src})`,
+        backgroundSize: "auto 138%",
+        backgroundPosition: "top center",
+        backgroundRepeat: "no-repeat",
+      }}
       role="img"
       aria-label={alt}
-    >
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{ background: "radial-gradient(circle at 50% 30%, rgba(255,255,255,0.20), transparent 60%)" }}
-      />
-    </div>
+    />
   );
 }
