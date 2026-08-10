@@ -96,8 +96,7 @@ export default function ColorCharts() {
                 <SwatchImg
                   src={c.image_url}
                   alt={`${c.color_name} (${c.code})`}
-                  wrapperClassName="h-full w-full"
-                  imgClassName="group-hover:scale-105 transition duration-500"
+                  wrapperClassName="h-full w-full group-hover:scale-105 transition duration-500"
                 />
                 <span className="absolute top-2 right-2 text-[10px] font-bold tracking-widest bg-stone-950/80 text-white px-2 py-1 rounded">
                   {c.code}
