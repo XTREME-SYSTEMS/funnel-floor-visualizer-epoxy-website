@@ -52,6 +52,7 @@ export default function Home() {
             <Link to="/3-car-garage-epoxy-cost/" className="hover:text-white">3-Car Garage Epoxy Cost</Link>
             <Link to="/garage-floor-coating-cost/" className="hover:text-white">Garage Floor Coating Cost</Link>
             <Link to="/color-charts" className="hover:text-white">Color Charts</Link>
+            <Link to="/locations" className="hover:text-white">All Locations</Link>
             <Link to="/fl/pompano-beach/" className="hover:text-white">Pompano Beach, FL</Link>
             <Link to="/admin" className="hover:text-white mt-2">Team login</Link>
           </div>
