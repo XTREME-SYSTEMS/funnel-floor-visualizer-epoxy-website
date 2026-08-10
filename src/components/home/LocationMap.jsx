@@ -3,7 +3,7 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { Search, Loader2, MapPin, Phone, Navigation } from "lucide-react";
-import { XPS_LOCATIONS, nearestLocation } from "@/lib/xpsLocations";
+import { ALL_XPS_LOCATIONS, nearestLocation } from "@/lib/xpsLocations";
 import { useSettings } from "@/lib/useSettings";
 
 // Fix default marker icons in react-leaflet (webpack/CDN path issues)
@@ -191,7 +191,7 @@ export default function LocationMap() {
                 maxZoom={18}
               />
             )}
-            {XPS_LOCATIONS.map((loc, i) => (
+            {ALL_XPS_LOCATIONS.map((loc, i) => (
               <Marker key={i} position={[loc.lat, loc.lng]} icon={loc.hq ? hqIcon : xpsIcon}>
                 <Popup>
                   <div className="text-sm">
@@ -276,7 +276,7 @@ export default function LocationMap() {
 
           {!result && !loading && (
             <p className="mt-5 text-xs text-stone-400">
-              {XPS_LOCATIONS.length} stores shown on the map. Tap any pin for store details.
+              {ALL_XPS_LOCATIONS.length} stores shown on the map. Tap any pin for store details.
             </p>
           )}
         </div>

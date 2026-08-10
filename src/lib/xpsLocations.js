@@ -58,6 +58,20 @@ export const XPS_LOCATIONS = [
   { city: "Denver (Englewood)", state: "CO", address: "3601 Natches Ct", phone: "(720) 753-4068", lat: 39.651483, lng: -105.00458, geocoded: true }
 ];
 
+// Xtreme Polishing Systems Canada — retail/contractor locations.
+// Coordinates are city-center level until exact storefront addresses are
+// confirmed; refine lat/lng when street addresses are available.
+export const XPS_CANADA_LOCATIONS = [
+  { city: "Toronto (Markham)", state: "ON", country: "CA", address: "Markham, ON", phone: "+1 416-453-0707", lat: 43.8599076, lng: -79.3349945, geocoded: true, type: "contractor" },
+  { city: "Coquitlam", state: "BC", country: "CA", address: "Coquitlam, BC", phone: "+1 778-941-3199", lat: 49.2837626, lng: -122.7932065, geocoded: true },
+  { city: "Edmonton", state: "AB", country: "CA", address: "Edmonton, AB", phone: "+1 780-465-1601", lat: 53.5461663, lng: -113.4937355, geocoded: true },
+  { city: "Calgary", state: "AB", country: "CA", address: "Calgary, AB", phone: "+1 587-295-3625", lat: 51.0447331, lng: -114.0718831, geocoded: true }
+];
+
+// All XPS retail stores (US + Canada) — use this for map markers and
+// nearest-store lookups so the locator covers both countries.
+export const ALL_XPS_LOCATIONS = [...XPS_LOCATIONS, ...XPS_CANADA_LOCATIONS];
+
 // Haversine distance in miles between two lat/lng points.
 export function distanceMiles(lat1, lng1, lat2, lng2) {
   const toRad = (d) => (d * Math.PI) / 180;
@@ -73,7 +87,7 @@ export function distanceMiles(lat1, lng1, lat2, lng2) {
 export function nearestLocation(lat, lng) {
   let best = null;
   let bestDist = Infinity;
-  for (const loc of XPS_LOCATIONS) {
+  for (const loc of ALL_XPS_LOCATIONS) {
     const d = distanceMiles(lat, lng, loc.lat, loc.lng);
     if (d < bestDist) {
       bestDist = d;

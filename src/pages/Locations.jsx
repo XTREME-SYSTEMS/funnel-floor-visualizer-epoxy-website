@@ -11,7 +11,7 @@ import {
   ArrowRight,
   Calendar
 } from "lucide-react";
-import { XPS_LOCATIONS } from "@/lib/xpsLocations";
+import { XPS_LOCATIONS, XPS_CANADA_LOCATIONS, ALL_XPS_LOCATIONS } from "@/lib/xpsLocations";
 import {
   PCU_LOCATIONS,
   NCP_INFO,
@@ -37,7 +37,10 @@ const STATE_NAMES = {
   NY: "New York", NJ: "New Jersey", PA: "Pennsylvania", SC: "South Carolina",
   GA: "Georgia", NC: "North Carolina", OK: "Oklahoma", WI: "Wisconsin",
   TN: "Tennessee", KY: "Kentucky", IA: "Iowa", IL: "Illinois", MI: "Michigan",
-  CO: "Colorado"
+  CO: "Colorado",
+  ON: "Ontario",
+  BC: "British Columbia",
+  AB: "Alberta"
 };
 
 function SectionHeader({ icon: Icon, kicker, title, subtitle }) {
@@ -62,6 +65,7 @@ export default function Locations() {
   }, []);
 
   const grouped = groupByState(XPS_LOCATIONS);
+  const canadaGrouped = groupByState(XPS_CANADA_LOCATIONS);
 
   return (
     <div className="bg-white min-h-screen">
@@ -82,7 +86,7 @@ export default function Locations() {
           </p>
           <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-3 max-w-3xl">
             <div className="rounded-xl bg-white/5 border border-white/10 px-4 py-3">
-              <div className="text-2xl font-bold text-amber-400">{XPS_LOCATIONS.length}</div>
+              <div className="text-2xl font-bold text-amber-400">{ALL_XPS_LOCATIONS.length}</div>
               <div className="text-xs text-stone-400">XPS Xpress stores</div>
             </div>
             <div className="rounded-xl bg-white/5 border border-white/10 px-4 py-3">
@@ -144,6 +148,24 @@ export default function Locations() {
                 </div>
               </div>
             ))}
+          </div>
+
+          {/* Canada */}
+          <div className="pt-6">
+            <h3 className="text-sm font-bold tracking-[0.15em] text-stone-500 uppercase mb-3 pb-2 border-b border-stone-200">
+              Canada
+            </h3>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              {XPS_CANADA_LOCATIONS.map((s) => (
+                <div key={`ca-${s.city}`} className="rounded-xl border border-stone-200 bg-stone-50/60 p-4 flex flex-col">
+                  <div className="font-semibold text-stone-900 leading-snug">{s.city}</div>
+                  <div className="mt-1 text-xs text-stone-600">{s.address}</div>
+                  <a href={`tel:${s.phone.replace(/[^\d+]/g, "")}`} className="mt-2 inline-flex items-center gap-1.5 text-xs font-semibold text-amber-700 hover:text-amber-800">
+                    <Phone className="h-3.5 w-3.5" /> {s.phone}
+                  </a>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
