@@ -4,7 +4,6 @@ import { Phone, Mail, Calendar, MapPin, GraduationCap, Building2, Award } from "
 import { Image } from "@/components/ui/image";
 import LocationMap from "@/components/home/LocationMap";
 
-const CHRIS_PHOTO = "https://nationalconcretepolishing.net/wp-content/uploads/2024/05/cropped-Chris-Lavin-768x768.png";
 const TRAINING_IMG = "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/636922eeb_generated_image.png";
 const SHOWROOM_IMG = "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/71624c83f_generated_image.png";
 
@@ -88,32 +87,22 @@ export default function WhoWeAre({ settings }) {
         <div className="grid md:grid-cols-3 gap-6 items-start">
           {/* Chris Lavin — owner */}
           <div className="md:col-span-2 rounded-3xl border border-stone-200 overflow-hidden bg-white shadow-sm">
-            <div className="grid sm:grid-cols-3">
-              <div className="h-56 sm:h-full bg-stone-100">
-                <img src={CHRIS_PHOTO} alt="Chris Lavin, Owner & Founder" className="h-full w-full object-cover object-top" />
+            <div className="p-6">
+              <div className="inline-flex items-center gap-2 text-xs font-bold tracking-[0.15em] text-amber-600">
+                <Award className="h-4 w-4" /> OWNER & FOUNDER
               </div>
-              <div className="sm:col-span-2 p-6">
-                <div className="inline-flex items-center gap-2 text-xs font-bold tracking-[0.15em] text-amber-600">
-                  <Award className="h-4 w-4" /> OWNER & FOUNDER
-                </div>
-                <h3 className="mt-2 text-2xl font-semibold text-stone-900">Chris Lavin</h3>
-                <p className="mt-3 text-sm text-stone-600 leading-relaxed">
-                  Chris built Xtreme Polishing Systems from the ground up over a 20+ year career, growing it into a multi-location national brand. He's renowned for polishing and epoxy coating more floors than anyone globally — and for training the next generation of pros through Polished Concrete University.
-                </p>
-                <p className="mt-3 text-sm text-stone-500 italic">
-                  "If you want to be something you've never been before, you've got to do something you've never done before."
-                </p>
-              </div>
+              <h3 className="mt-2 text-2xl font-semibold text-stone-900">Chris Lavin</h3>
+              <p className="mt-3 text-sm text-stone-600 leading-relaxed">
+                Chris built Xtreme Polishing Systems from the ground up over a 20+ year career, growing it into a multi-location national brand. He's renowned for polishing and epoxy coating more floors than anyone globally — and for training the next generation of pros through Polished Concrete University.
+              </p>
+              <p className="mt-3 text-sm text-stone-500 italic">
+                "If you want to be something you've never been before, you've got to do something you've never done before."
+              </p>
             </div>
           </div>
 
           {/* Jeremy — smaller card */}
           <div className="rounded-3xl border border-stone-200 overflow-hidden bg-white shadow-sm">
-            {sp.photo_url && (
-              <div className="h-44 bg-stone-100">
-                <Image src={sp.photo_url} alt={sp.name} fittingType="fill" focalPointX={0.5} focalPointY={0} className="h-full w-full" />
-              </div>
-            )}
             <div className="p-5">
               <h3 className="text-lg font-semibold text-stone-900">{sp.name}</h3>
               <p className="text-xs text-amber-600 font-semibold leading-snug mt-1">
