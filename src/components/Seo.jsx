@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import { SEO_ROUTES, DEFAULT_SEO, buildJsonLd, SITE_URL } from "@/lib/seoConfig";
 import { base44 } from "@/api/base44Client";
 
-// Module-level cache so we fetch AI-optimized overrides once per session.
+// Module-level caches so we fetch once per session.
 let overridesCache = null;
 let overridesPromise = null;
 async function loadOverrides() {
@@ -20,10 +20,23 @@ async function loadOverrides() {
   return overridesPromise;
 }
 
-// Allow the admin dashboard to bust the cache after running the optimizer.
+let settingsCache = null;
+let settingsPromise = null;
+async function loadSettings() {
+  if (settingsCache) return settingsCache;
+  if (!settingsPromise) {
+    settingsPromise = base44.entities.AppSettings.list(1)
+      .then((rows) => { settingsCache = rows[0] || null; return settingsCache; })
+      .catch(() => (settingsCache = null));
+  }
+  return settingsPromise;
+}
+
 export function bustSeoOverrides() {
   overridesCache = null;
   overridesPromise = null;
+  settingsCache = null;
+  settingsPromise = null;
 }
 
 function setMeta(attr, key, content) {
@@ -52,12 +65,15 @@ function clearJsonLd() {
 
 // Route-aware SEO: applies matching meta tags + JSON-LD, with AI-optimized
 // overrides from the SeoContent entity layered on top of the static config.
+// Also injects the Google Search Console verification tag from AppSettings.
 export default function RouteSeo() {
   const location = useLocation();
   const [overrides, setOverrides] = useState(null);
+  const [settings, setSettings] = useState(null);
 
   useEffect(() => {
     loadOverrides().then(setOverrides);
+    loadSettings().then(setSettings);
   }, []);
 
   useEffect(() => {
@@ -71,7 +87,6 @@ export default function RouteSeo() {
       cfg = dynKey ? SEO_ROUTES[dynKey] : DEFAULT_SEO;
     }
 
-    // Layer AI-optimized overrides on top of the static config.
     const ov = overrides[path];
     const title = (ov && ov.title) || cfg.title || DEFAULT_SEO.title;
     const desc = (ov && ov.description) || cfg.description || DEFAULT_SEO.description;
@@ -84,6 +99,11 @@ export default function RouteSeo() {
     setMeta("name", "description", desc);
     setMeta("name", "robots", "index, follow");
     setCanonical(url);
+
+    // Google Search Console verification tag (injected from AppSettings)
+    if (settings?.google_site_verification) {
+      setMeta("name", "google-site-verification", settings.google_site_verification);
+    }
 
     setMeta("property", "og:type", cfg.service ? "article" : "website");
     setMeta("property", "og:site_name", "EpoxyGarageFloorEstimate.com");
@@ -106,7 +126,7 @@ export default function RouteSeo() {
       s.textContent = JSON.stringify(obj);
       document.head.appendChild(s);
     });
-  }, [location.pathname, overrides]);
+  }, [location.pathname, overrides, settings]);
 
   return null;
 }

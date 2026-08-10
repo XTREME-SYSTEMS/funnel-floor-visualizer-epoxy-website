@@ -32,6 +32,10 @@
     "google_maps_api_key": {
       "type": "string"
     },
+    "google_site_verification": {
+      "type": "string",
+      "description": "Google Search Console HTML verification meta tag content value"
+    },
     "is_test_pricing": {
       "type": "boolean",
       "default": true

@@ -4,6 +4,7 @@ import { SEO_ROUTES } from "@/lib/seoConfig";
 import { RefreshCw, Sparkles, Rocket, CheckCircle2, AlertTriangle, Loader2, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { bustSeoOverrides } from "@/components/Seo";
+import GoogleSetupWizard from "@/components/admin/GoogleSetupWizard";
 
 export default function GoogleSeo() {
   const [data, setData] = useState(null);
@@ -68,6 +69,8 @@ export default function GoogleSeo() {
           Connect live Google data, let AI persistently optimize titles, descriptions & FAQ, and track your climb to page one.
         </p>
       </div>
+
+      <GoogleSetupWizard onVerified={() => run("refresh", "pullSearchConsoleData")} />
 
       {/* Action bar */}
       <div className="flex flex-wrap gap-2">
