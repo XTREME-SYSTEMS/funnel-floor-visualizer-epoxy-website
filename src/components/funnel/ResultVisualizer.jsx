@@ -9,15 +9,19 @@ const FALLBACK_AFTER = "https://media.base44.com/images/public/6a77f4491f0bf92de
 // Renders the user's own garage with their chosen color applied. Auto-
 // generates the "after" image from the uploaded photo + selected color on
 // mount. Falls back to a generic before/after when no photo was uploaded.
-export default function ResultVisualizer({ photoUrl, color }) {
+export default function ResultVisualizer({ photoUrl, color, onAfterReady }) {
   const [afterUrl, setAfterUrl] = useState("");
   const [generating, setGenerating] = useState(false);
   const [failed, setFailed] = useState(false);
 
   useEffect(() => {
+    if (!photoUrl) {
+      onAfterReady?.(FALLBACK_AFTER);
+      return;
+    }
     let cancelled = false;
     const run = async () => {
-      if (!photoUrl || !color?.code) return;
+      if (!color?.code) return;
       setGenerating(true);
       try {
         const prompt = `Photorealistic transformation of this residential garage floor. Apply a professional ${color.system || "flake"} epoxy coating in the color "${color.name}" (${color.code}${color.hex ? `, hex ${color.hex}` : ""}). Keep the same garage walls, doors, lighting, and camera angle as the original photo. Only the floor surface changes — it now has a clean, glossy, professionally installed ${color.system || "flake"} finish in ${color.name}. Ultra-lifelike, high detail, natural lighting.`;
@@ -25,9 +29,9 @@ export default function ResultVisualizer({ photoUrl, color }) {
           prompt,
           existing_image_urls: [photoUrl]
         });
-        if (!cancelled) setAfterUrl(url);
+        if (!cancelled) { setAfterUrl(url); onAfterReady?.(url); }
       } catch {
-        if (!cancelled) setFailed(true);
+        if (!cancelled) { setFailed(true); onAfterReady?.(""); }
       } finally {
         if (!cancelled) setGenerating(false);
       }

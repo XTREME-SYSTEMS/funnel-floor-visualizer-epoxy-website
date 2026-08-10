@@ -35,9 +35,26 @@ export default function Funnel() {
   const [leadId, setLeadId] = useState(null);
   const [detectedSqft, setDetectedSqft] = useState(null);
   const [submitting, setSubmitting] = useState(false);
+  const [floorImage, setFloorImage] = useState(null);
+  const sentRef = React.useRef(false);
   const lookupPromise = React.useRef(null);
 
   useEffect(() => { trackEvent("funnel_started"); }, []);
+
+  // Once the visualizer has produced the floor image (step 7), email the
+  // branded estimate to the customer from the connected Gmail account.
+  useEffect(() => {
+    if (step === 7 && leadId && floorImage !== null && !sentRef.current) {
+      sentRef.current = true;
+      base44.functions.invoke("sendEstimateEmail", {
+        lead_id: leadId,
+        floor_image_url: floorImage || undefined,
+        origin: window.location.origin,
+      })
+        .then(() => trackEvent("estimate_email_sent", { lead_id: leadId }))
+        .catch(() => trackEvent("estimate_email_failed", { lead_id: leadId }));
+    }
+  }, [step, leadId, floorImage]);
 
   const update = (patch) => setData({ ...data, ...patch });
   const next = () => {
@@ -151,6 +168,8 @@ export default function Funnel() {
     });
     setLeadId(lead.id);
     await trackEvent("lead_created", { lead_id: lead.id });
+    // Push to HubSpot CRM immediately (does not block the funnel).
+    base44.functions.invoke("pushLeadToHubspot", { lead_id: lead.id }).catch(() => {});
     trackEvent("scrape_complete", { lead_id: lead.id, sqft, source: result.source });
     setStep(7);
     window.scrollTo(0, 0);
@@ -361,6 +380,7 @@ export default function Funnel() {
                 <ResultVisualizer
                   photoUrl={(data.photos || [])[0]}
                   color={{ code: data.flake_color, name: data.flake_color_name, system: data.desired_system, hex: data.flake_color_hex }}
+                  onAfterReady={setFloorImage}
                 />
               </div>
 
