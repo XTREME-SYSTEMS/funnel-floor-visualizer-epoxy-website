@@ -49,6 +49,7 @@ export const XPS_LOCATIONS = [
   { city: "Milwaukee", state: "WI", address: "16232 W Lincoln Ave", phone: "(414) 928-8610", lat: 43.003005, lng: -88.114483, geocoded: true },
   { city: "Nashville", state: "TN", address: "475 Metroplex Dr, Suite 106", phone: "(615) 722-4498", lat: 36.0885714, lng: -86.7004457, geocoded: true },
   { city: "Chattanooga", state: "TN", address: "4295 Cromwell Rd, Suite 205", phone: "(423) 872-2672", lat: 35.0661109, lng: -85.1968985, geocoded: true },
+  { city: "Louisville", state: "KY", address: "1733 Mellwood Ave", phone: "(502) 806-2599", lat: 38.2587259, lng: -85.7185366, geocoded: true },
   { city: "Cedar Rapids", state: "IA", address: "1720 Robins Rd, #500", phone: "(319) 727-8582", lat: 42.099378, lng: -91.6978, geocoded: true },
   { city: "Chicago", state: "IL", address: "33W480 E Fabyan Pkwy, Suite 102", phone: "(312) 313-7561", lat: 41.8699472, lng: -88.2716323, geocoded: true },
   { city: "Rockford", state: "IL", address: "7303 Edwards Dr.", phone: "(815) 605-6738", lat: 42.2489602, lng: -88.9772855, geocoded: true },
