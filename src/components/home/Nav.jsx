@@ -47,8 +47,8 @@ export default function Nav({ settings }) {
             <Link to="/funnel" className="h-9 px-5 inline-flex items-center rounded-lg bg-amber-500 hover:bg-amber-400 text-stone-950 text-sm font-semibold transition">
               Get Free Estimate
             </Link>
-            <a href={`tel:${settings.phone}`} className={`flex items-center gap-1.5 text-xs font-medium transition ${scrolled ? "text-stone-700 hover:text-amber-500" : "text-white hover:text-amber-500"}`}>
-              <Phone className="h-3.5 w-3.5" /> {settings.phone}
+            <a href={`tel:${settings.phone}`} className={`flex items-center gap-1.5 text-sm font-semibold transition ${scrolled ? "text-stone-700 hover:text-amber-500" : "text-white hover:text-amber-500"}`}>
+              <Phone className="h-4 w-4" /> {settings.phone}
             </a>
           </div>
 
