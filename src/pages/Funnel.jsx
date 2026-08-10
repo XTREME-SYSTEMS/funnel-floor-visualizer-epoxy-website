@@ -11,6 +11,7 @@ import { ArrowRight, ArrowLeft, CheckCircle2, Phone, Clock, ShieldCheck } from "
 import ScrapeProgress from "@/components/funnel/ScrapeProgress";
 import FlakeColorChart from "@/components/funnel/FlakeColorChart";
 import BeforeAfter from "@/components/funnel/BeforeAfter";
+import FloorVisualizer from "@/components/funnel/FloorVisualizer";
 
 const BEFORE_URL = "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/2fa2f386d_generated_image.png";
 const AFTER_URL = "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/b2326e50a_generated_image.png";
@@ -42,7 +43,9 @@ export default function Funnel() {
   const [leadId, setLeadId] = useState(null);
   const [detectedSqft, setDetectedSqft] = useState(null);
   const [selectedFlake, setSelectedFlake] = useState(null);
+  const [visualizerColor, setVisualizerColor] = useState(null);
   const [submitting, setSubmitting] = useState(false);
+  const lookupPromise = React.useRef(null);
 
   useEffect(() => { trackEvent("funnel_started"); }, []);
 
@@ -90,14 +93,34 @@ export default function Funnel() {
     });
     setLeadId(lead.id);
     await trackEvent("lead_created", { lead_id: lead.id });
+    // Kick off the real property lookup in parallel with the scrape animation
+    const fallback = calcSquareFootage(settings, data);
+    const fullAddress = `${data.address}, ${data.city}, ${data.state} ${data.zip}`;
+    lookupPromise.current = base44.functions
+      .invoke("propertyLookup", { address: fullAddress, garage_size: data.garage_size, fallback_sqft: fallback })
+      .then((res) => res.data)
+      .catch(() => ({ sqft: fallback, source: "fallback_size", address_valid: false }));
     setSubmitting(false);
     next();
   };
 
-  const onScrapeComplete = () => {
-    const sqft = calcSquareFootage(settings, data);
+  const onScrapeComplete = async () => {
+    const fallback = calcSquareFootage(settings, data);
+    let result = { sqft: fallback };
+    if (lookupPromise.current) {
+      try { result = await lookupPromise.current; } catch (e) { result = { sqft: fallback }; }
+    }
+    const sqft = Number(result.sqft) || fallback;
     setDetectedSqft(sqft);
-    trackEvent("scrape_complete", { lead_id: leadId, sqft });
+    // Persist the verified sqft + coordinates back to the lead
+    if (leadId) {
+      base44.entities.Lead.update(leadId, {
+        square_footage: sqft,
+        latitude: result.latitude || null,
+        longitude: result.longitude || null
+      }).catch(() => {});
+    }
+    trackEvent("scrape_complete", { lead_id: leadId, sqft, source: result.source });
     next();
   };
 
@@ -106,6 +129,15 @@ export default function Funnel() {
     if (leadId) {
       await base44.entities.Lead.update(leadId, { notes: `Selected flake color: ${code}` });
       trackEvent("flake_selected", { lead_id: leadId, flake: code });
+    }
+  };
+
+  const saveVisualizerColor = async (color) => {
+    setVisualizerColor(color);
+    if (leadId) {
+      const note = `Visualizer selection: ${color.color_name} (${color.code}, ${color.system})`;
+      await base44.entities.Lead.update(leadId, { desired_system: color.system, notes: note });
+      trackEvent("visualizer_color_selected", { lead_id: leadId, color: color.code, system: color.system });
     }
   };
 
@@ -301,6 +333,11 @@ export default function Funnel() {
                 <h3 className="text-xl font-semibold text-stone-900 mb-1">Choose your flake color</h3>
                 <p className="text-sm text-stone-500 mb-4">Top 12 popular epoxy flake blends from Xtreme Polishing Systems.</p>
                 <FlakeColorChart selected={selectedFlake} onSelect={saveFlake} />
+              </div>
+
+              {/* Floor visualizer */}
+              <div className="rounded-2xl border border-stone-200 bg-white p-6">
+                <FloorVisualizer onColorSelected={saveVisualizerColor} />
               </div>
 
               {/* Xtreme Polishing Systems message */}

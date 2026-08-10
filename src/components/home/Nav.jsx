@@ -14,6 +14,7 @@ export default function Nav({ settings }) {
 
   const links = [
     { label: "How it works", href: "#how-it-works" },
+    { label: "Color charts", to: "/color-charts" },
     { label: "Gallery", href: "#gallery" },
     { label: "Reviews", href: "#reviews" },
     { label: "FAQ", href: "#faq" }
@@ -28,9 +29,9 @@ export default function Nav({ settings }) {
 
         <nav className="hidden md:flex items-center gap-7">
           {links.map((l) => (
-            <a key={l.label} href={l.href} className={`text-sm font-medium transition ${scrolled ? "text-stone-600 hover:text-stone-900" : "text-white/80 hover:text-white"}`}>
-              {l.label}
-            </a>
+            l.to
+              ? <Link key={l.label} to={l.to} className={`text-sm font-medium transition ${scrolled ? "text-stone-600 hover:text-stone-900" : "text-white/80 hover:text-white"}`}>{l.label}</Link>
+              : <a key={l.label} href={l.href} className={`text-sm font-medium transition ${scrolled ? "text-stone-600 hover:text-stone-900" : "text-white/80 hover:text-white"}`}>{l.label}</a>
           ))}
         </nav>
 
@@ -51,9 +52,9 @@ export default function Nav({ settings }) {
       {open && (
         <div className="md:hidden bg-white border-t border-stone-100 px-6 py-4 space-y-3">
           {links.map((l) => (
-            <a key={l.label} href={l.href} onClick={() => setOpen(false)} className="block text-sm font-medium text-stone-700">
-              {l.label}
-            </a>
+            l.to
+              ? <Link key={l.label} to={l.to} onClick={() => setOpen(false)} className="block text-sm font-medium text-stone-700">{l.label}</Link>
+              : <a key={l.label} href={l.href} onClick={() => setOpen(false)} className="block text-sm font-medium text-stone-700">{l.label}</a>
           ))}
           <a href={`tel:${settings.phone}`} className="block text-sm font-medium text-stone-700">{settings.phone}</a>
           <Link to="/funnel" onClick={() => setOpen(false)} className="block h-10 text-center leading-10 rounded-lg bg-amber-500 text-stone-950 text-sm font-semibold">
