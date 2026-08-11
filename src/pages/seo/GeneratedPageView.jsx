@@ -12,6 +12,7 @@ export default function GeneratedPageView() {
   const { slug } = useParams();
   const { settings } = useSettings();
   const [page, setPage] = useState(null);
+  const [relatedPages, setRelatedPages] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -24,6 +25,13 @@ export default function GeneratedPageView() {
       })
       .catch(() => setPage(null))
       .finally(() => setLoading(false));
+
+    // Fetch related guides for internal linking (excludes current page, max 4)
+    base44.entities.GeneratedPage.list(20)
+      .then((rows) => {
+        setRelatedPages(rows.filter((g) => g.slug !== slug && g.status !== "draft").slice(0, 4));
+      })
+      .catch(() => setRelatedPages([]));
   }, [slug]);
 
   if (loading) {
@@ -101,6 +109,20 @@ export default function GeneratedPageView() {
                   <div className="font-semibold text-stone-900">{f.q}</div>
                   <div className="mt-1 text-sm text-stone-500 leading-relaxed">{f.a}</div>
                 </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {relatedPages.length > 0 && (
+          <section className="mt-12">
+            <h2 className="text-2xl font-semibold tracking-tight text-stone-900">Related guides</h2>
+            <div className="mt-5 grid gap-4 sm:grid-cols-2">
+              {relatedPages.map((g) => (
+                <Link key={g.id} to={`/${g.slug}`} className="group rounded-xl border border-stone-200 p-5 hover:border-amber-300 hover:bg-amber-50/40 transition">
+                  <div className="font-semibold text-stone-900 group-hover:text-amber-700">{g.title}</div>
+                  {g.meta_description && <div className="mt-1 text-sm text-stone-500 line-clamp-2">{g.meta_description}</div>}
+                </Link>
               ))}
             </div>
           </section>

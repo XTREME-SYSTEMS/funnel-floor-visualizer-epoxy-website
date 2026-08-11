@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import StatCard from "@/components/admin/StatCard";
 import FunnelDropoff from "@/components/admin/FunnelDropoff";
+import CwvWidget from "@/components/admin/CwvWidget";
 import { money } from "@/lib/pricing";
 import { Link } from "react-router-dom";
 import { Bell } from "lucide-react";
@@ -68,6 +69,7 @@ export default function Dashboard() {
       </div>
 
       <FunnelDropoff />
+      <CwvWidget />
     </div>
   );
 }

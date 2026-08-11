@@ -25,7 +25,7 @@ export default function SeoFactory() {
   const [faqBusy, setFaqBusy] = useState(false);
 
   // Quick actions
-  const [actionBusy, setActionBusy] = useState({ opt: false, index: false, pull: false });
+  const [actionBusy, setActionBusy] = useState({ opt: false, index: false, pull: false, sitemap: false, rss: false, gaps: false });
 
   const [msg, setMsg] = useState("");
   const [error, setError] = useState("");
@@ -103,6 +103,9 @@ export default function SeoFactory() {
       if (key === "opt") setMsg(`AI optimized ${d.improved || 0} pages.`);
       if (key === "index") setMsg(`Submitted ${d.urls || 0} URLs to indexers (IndexNow: ${d.indexNow?.status}, Yandex: ${d.yandex?.status}).`);
       if (key === "pull") setMsg(`Pulled Search Console data for ${d.siteUrl || "site"}.`);
+      if (key === "sitemap") setMsg(`Dynamic sitemap generated — ${typeof d === "string" ? d.match(/<url>/g)?.length || "?" : "many"} URLs. View the function output to copy the XML.`);
+      if (key === "rss") setMsg(`RSS feed generated — ${typeof d === "string" ? d.match(/<item>/g)?.length || 0 : 0} items.`);
+      if (key === "gaps") setMsg(`Content gap auto-fill: found ${d.found || 0} topics, generated ${d.generated || 0} new pages.`);
     } catch (e) { setError(e.message); }
     setActionBusy((b) => ({ ...b, [key]: false }));
   };
@@ -143,6 +146,15 @@ export default function SeoFactory() {
           </Button>
           <Button variant="outline" onClick={() => runAction("index", "submitToIndexers")} disabled={actionBusy.index}>
             {actionBusy.index ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Globe className="h-4 w-4 mr-2" />} Submit all URLs to indexers
+          </Button>
+          <Button variant="outline" onClick={() => runAction("sitemap", "generateSitemap")} disabled={actionBusy.sitemap}>
+            {actionBusy.sitemap ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <FileText className="h-4 w-4 mr-2" />} Generate dynamic sitemap
+          </Button>
+          <Button variant="outline" onClick={() => runAction("rss", "generateRss")} disabled={actionBusy.rss}>
+            {actionBusy.rss ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <FileText className="h-4 w-4 mr-2" />} Generate RSS feed
+          </Button>
+          <Button variant="outline" onClick={() => runAction("gaps", "fillContentGaps")} disabled={actionBusy.gaps}>
+            {actionBusy.gaps ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Sparkles className="h-4 w-4 mr-2" />} Auto-fill content gaps
           </Button>
         </div>
       </div>

@@ -26,7 +26,25 @@ export const BUSINESS = {
     { name: "National Concrete Polishing", url: "https://nationalconcretepolishing.com", role: "National polished concrete service network" },
     { name: "National Epoxy Pros", url: "https://nationalepoxypros.com", role: "National epoxy coating contractor network" },
   ],
+  sameAs: [
+    "https://xtremepolishingsystems.com",
+    "https://nationalconcretepolishing.com",
+    "https://nationalepoxypros.com",
+    "https://www.facebook.com/xtremepolishingsystems",
+    "https://www.instagram.com/xtremepolishingsystems",
+    "https://www.youtube.com/@xtremepolishingsystems",
+    "https://www.linkedin.com/company/xtreme-polishing-systems",
+  ],
 };
+
+// ── Individual reviews (Review schema for rich results) ─────────────────────
+export const REVIEWS = [
+  { name: "Michael R.", rating: 5, text: "The online estimate was spot-on and the visualizer sold me instantly. My garage looks incredible — the flake finish is exactly what they showed.", location: "Pompano Beach, FL" },
+  { name: "Sarah K.", rating: 5, text: "I loved being able to see my floor with different colors before committing. The whole process took 60 seconds and the price was exactly what they quoted.", location: "Tampa, FL" },
+  { name: "David L.", rating: 5, text: "Best garage floor company I've worked with. The estimate tool pulled my garage size from public records — no measuring required. Highly recommend.", location: "Austin, TX" },
+  { name: "Jennifer M.", rating: 5, text: "From the instant estimate to the finished floor, everything was professional and on time. The metallic finish is stunning.", location: "Nashville, TN" },
+  { name: "Robert P.", rating: 5, text: "The color chart visualizer made it so easy to choose. They showed up on time, finished in one day, and the floor looks amazing a year later.", location: "Charlotte, NC" },
+];
 
 // ── FAQ content blocks (AEO — FAQPage JSON-LD) ──────────────────────────────
 export const FAQ_GENERAL = [
@@ -171,6 +189,84 @@ export function itemListLd(path, name, items) {
   };
 }
 
+// Top-level Organization with sameAs links — feeds Google's Knowledge Graph
+// (the info panel on the right side of search results).
+export function organizationLd() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "@id": `${SITE_URL}/#organization`,
+    name: BUSINESS.name,
+    legalName: BUSINESS.legalName,
+    url: SITE_URL,
+    logo: BUSINESS.image,
+    telephone: BUSINESS.phone,
+    email: BUSINESS.email,
+    foundingDate: "2003",
+    sameAs: BUSINESS.sameAs,
+    parentOrganization: BUSINESS.parentCompanies.map((p) => ({
+      "@type": "Organization",
+      name: p.name,
+      url: p.url,
+    })),
+  };
+}
+
+// Individual Review items — Google rich results for reviews boost CTR.
+export function reviewLd(reviews) {
+  return reviews.map((r) => ({
+    "@context": "https://schema.org",
+    "@type": "Review",
+    reviewRating: { "@type": "Rating", ratingValue: r.rating, bestRating: 5 },
+    author: { "@type": "Person", name: r.name },
+    reviewBody: r.text,
+    itemReviewed: { "@type": "Service", name: "Garage Floor Coating" },
+  }));
+}
+
+// SoftwareApplication schema for the estimator tool — ranks for "epoxy calculator" queries.
+export function softwareApplicationLd(name, path) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name,
+    applicationCategory: "BusinessApplication",
+    operatingSystem: "Web",
+    url: `${SITE_URL}${path}`,
+    offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+    provider: { "@id": `${SITE_URL}/#business` },
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: BUSINESS.rating,
+      reviewCount: BUSINESS.reviewCount,
+    },
+  };
+}
+
+// ImageObject schema — boosts image search rankings for visualizer/gallery images.
+export function imageObjectLd(url, caption) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "ImageObject",
+    contentUrl: url,
+    caption,
+    creator: { "@id": `${SITE_URL}/#organization` },
+  };
+}
+
+// VideoObject schema — for rich results when demo videos are embedded.
+export function videoObjectLd(name, url, thumbnail, uploadDate) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "VideoObject",
+    name,
+    contentUrl: url,
+    thumbnailUrl: thumbnail,
+    uploadDate: uploadDate || new Date().toISOString().split("T")[0],
+    publisher: { "@id": `${SITE_URL}/#organization` },
+  };
+}
+
 // ── Programmatic location pages ─────────────────────────────────────────────
 export const STATE_NAMES = {
   FL: "Florida", TX: "Texas", VA: "Virginia", DC: "District of Columbia",
@@ -260,6 +356,7 @@ export const SEO_ROUTES = {
       "Get your free, instant epoxy garage floor estimate. Enter your address, choose your color, and see your personalized price range in 60 seconds.",
     image: BUSINESS.image,
     faq: FAQ_GENERAL,
+    software: { name: "Epoxy Garage Floor Cost Estimator" },
   },
   "/funnel": {
     title: "Get Your Garage Floor Estimate | Epoxy Garage Floors",
@@ -381,12 +478,22 @@ for (const loc of SEO_LOCATIONS) {
 
 // Build the full JSON-LD block list for a route.
 export function buildJsonLd(path, cfg) {
-  const blocks = [cfg.location ? locationLocalBusinessLd(cfg.location) : localBusinessLd()];
+  const blocks = [
+    organizationLd(),
+    cfg.location ? locationLocalBusinessLd(cfg.location) : localBusinessLd(),
+  ];
   const name = (cfg.title || DEFAULT_SEO.title).split("|")[0].trim();
   blocks.push(webPageLd(path, cfg.title || DEFAULT_SEO.title, cfg.description || DEFAULT_SEO.description));
   if (path !== "/") blocks.push(breadcrumbLd(path, name));
   if (cfg.faq) blocks.push(faqLd(cfg.faq));
   if (cfg.service) blocks.push(serviceLd(cfg.service.name, cfg.description, path, cfg.service.priceRange));
   if (cfg.howTo) blocks.push(howToLd(cfg.howTo));
+  if (cfg.software) blocks.push(softwareApplicationLd(cfg.software.name, path));
+  // Individual reviews on homepage and reviews page for rich results
+  if (path === "/" || path === "/reviews") blocks.push(...reviewLd(REVIEWS));
+  // ImageObject for gallery and color-charts pages
+  if (cfg.imageObjects) blocks.push(...(cfg.imageObjects || []).map((img) => imageObjectLd(img.url, img.caption)));
+  // VideoObject when video data is present
+  if (cfg.video) blocks.push(videoObjectLd(cfg.video.name, cfg.video.url, cfg.video.thumbnail, cfg.video.uploadDate));
   return blocks;
 }
