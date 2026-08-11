@@ -40,6 +40,7 @@ import GeneratedPageView from '@/pages/seo/GeneratedPageView';
 import Guides from '@/pages/seo/Guides';
 import SeoFactory from '@/pages/admin/SeoFactory';
 import SopSystem from '@/pages/admin/SopSystem';
+import Reviews from '@/pages/admin/Reviews';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -88,6 +89,7 @@ const AuthenticatedApp = () => {
         <Route path="leads/:id" element={<LeadDetail />} />
         <Route path="pipeline" element={<Pipeline />} />
         <Route path="emails" element={<Emails />} />
+        <Route path="reviews" element={<Reviews />} />
         <Route path="competitors" element={<Competitors />} />
         <Route path="google" element={<GoogleSeo />} />
         <Route path="factory" element={<SeoFactory />} />

@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink, Outlet, Link } from "react-router-dom";
-import { LayoutDashboard, Users, KanbanSquare, Settings, ExternalLink, Mail, Radar, Globe, ScrollText } from "lucide-react";
+import { LayoutDashboard, Users, KanbanSquare, Settings, ExternalLink, Mail, Radar, Globe, ScrollText, Star } from "lucide-react";
 import BackButton from "@/components/BackButton";
 import Logo from "@/components/Logo";
 
@@ -9,6 +9,7 @@ const links = [
   { to: "/admin/leads", icon: Users, label: "Leads" },
   { to: "/admin/pipeline", icon: KanbanSquare, label: "Pipeline" },
   { to: "/admin/emails", icon: Mail, label: "Emails" },
+  { to: "/admin/reviews", icon: Star, label: "Reviews" },
   { to: "/admin/competitors", icon: Radar, label: "Competitors" },
   { to: "/admin/google", icon: Globe, label: "Google SEO" },
   { to: "/admin/sop", icon: ScrollText, label: "SOP & Memory" },

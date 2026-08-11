@@ -1,0 +1,77 @@
+{
+  "name": "Review Request",
+  "description": "When a lead is marked WON, waits 3 days for the job to settle, sends a Google review request email, then waits 5 more days and sends a follow-up reminder if no review yet.",
+  "trigger": {
+    "config": {
+      "trigger_type": "entity",
+      "entity_name": "Lead",
+      "events": [
+        "update"
+      ]
+    },
+    "condition": "${ .trigger.data.status == \"WON\" and .trigger.old_data.status != \"WON\" }"
+  },
+  "definition": {
+    "document": {
+      "dsl": "1.0.0",
+      "name": "review_request",
+      "version": "1.0",
+      "namespace": "base44"
+    },
+    "do": [
+      {
+        "wait_3d": {
+          "wait": "P3D",
+          "then": "send_review_request",
+          "x-base44": {
+            "title": "Wait 3 days",
+            "description": "Let the job settle before asking"
+          }
+        }
+      },
+      {
+        "send_review_request": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "sendReviewRequest",
+            "args": {
+              "lead_id": "${ .trigger.entity_id }",
+              "stage": "initial"
+            }
+          },
+          "then": "wait_5d",
+          "x-base44": {
+            "title": "Send review request",
+            "description": "Day 3 \u2014 initial ask"
+          }
+        }
+      },
+      {
+        "wait_5d": {
+          "wait": "P5D",
+          "then": "send_followup",
+          "x-base44": {
+            "title": "Wait 5 days"
+          }
+        }
+      },
+      {
+        "send_followup": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "sendReviewRequest",
+            "args": {
+              "lead_id": "${ .trigger.entity_id }",
+              "stage": "followup"
+            }
+          },
+          "then": "end",
+          "x-base44": {
+            "title": "Send follow-up",
+            "description": "Day 8 \u2014 reminder"
+          }
+        }
+      }
+    ]
+  }
+}
