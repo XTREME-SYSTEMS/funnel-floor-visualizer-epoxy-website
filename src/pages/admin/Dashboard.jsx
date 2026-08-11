@@ -2,6 +2,7 @@ import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import StatCard from "@/components/admin/StatCard";
+import FunnelDropoff from "@/components/admin/FunnelDropoff";
 import { money } from "@/lib/pricing";
 import { Link } from "react-router-dom";
 import { Bell } from "lucide-react";
@@ -66,24 +67,7 @@ export default function Dashboard() {
         <StatCard label="Conversion rate" value={`${convRate}%`} sub="Leads → won" />
       </div>
 
-      <div className="rounded-2xl bg-white border border-stone-200 p-6">
-        <h2 className="font-semibold text-stone-900">MVP success funnel</h2>
-        <div className="mt-4 space-y-2">
-          {funnel.map(([label, value]) => (
-            <div key={label} className="flex items-center gap-4">
-              <div className="w-56 text-sm text-stone-600 shrink-0">{label}</div>
-              <div className="flex-1 h-3 bg-stone-100 rounded-full overflow-hidden">
-                <div className="h-full bg-stone-900" style={{ width: `${Math.min(100, (value / Math.max(1, funnel[0][1] || value || 1)) * 100)}%` }} />
-              </div>
-              <div className="w-12 text-right text-sm font-semibold tabular-nums">{value}</div>
-            </div>
-          ))}
-        </div>
-        <p className="mt-4 text-xs text-stone-500">
-          Estimator start → lead: {starts ? Math.round((leads.length / starts) * 100) : 0}% · Lead → phone consultation:{" "}
-          {leads.length ? Math.round((phone / leads.length) * 100) : 0}% · Lead → won: {convRate}%
-        </p>
-      </div>
+      <FunnelDropoff />
     </div>
   );
 }
