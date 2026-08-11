@@ -1,14 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
+import { COLOR_DATA } from "@/lib/colorData";
+import { compositeFloorImage } from "@/lib/floorComposite";
 import BeforeAfter from "@/components/funnel/BeforeAfter";
 
 const FALLBACK_BEFORE = "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/2fa2f386d_generated_image.png";
 const FALLBACK_AFTER = "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/b2326e50a_generated_image.png";
 
-// Renders the user's own garage with their chosen color applied. Auto-
-// generates the "after" image from the uploaded photo + selected color on
-// mount. Falls back to a generic before/after when no photo was uploaded.
+// Renders the user's EXACT uploaded garage photo with their chosen color
+// applied via canvas compositing. Uses the exact color chart hex + swatch
+// image — no AI generation, so the original photo is preserved and the
+// color matches the system's color chart exactly. The composite is
+// uploaded so the email gets a real URL. Falls back to a generic
+// before/when no photo was uploaded.
 export default function ResultVisualizer({ photoUrl, color, onAfterReady }) {
   const [afterUrl, setAfterUrl] = useState("");
   const [generating, setGenerating] = useState(false);
@@ -23,15 +28,33 @@ export default function ResultVisualizer({ photoUrl, color, onAfterReady }) {
     const run = async () => {
       if (!color?.code) return;
       setGenerating(true);
+      setFailed(false);
       try {
-        const prompt = `Photorealistic transformation of this residential garage floor. Apply a professional ${color.system || "flake"} epoxy coating in the color "${color.name}" (${color.code}${color.hex ? `, hex ${color.hex}` : ""}). Keep the same garage walls, doors, lighting, and camera angle as the original photo. Only the floor surface changes — it now has a clean, glossy, professionally installed ${color.system || "flake"} finish in ${color.name}. Ultra-lifelike, high detail, natural lighting.`;
-        const { url } = await base44.integrations.Core.GenerateImage({
-          prompt,
-          existing_image_urls: [photoUrl]
-        });
-        if (!cancelled) { setAfterUrl(url); onAfterReady?.(url); }
+        // Look up the full color chart entry (includes image_url for texture)
+        const chartColor = COLOR_DATA.find((c) => c.code === color.code) || {};
+        const fullColor = { ...chartColor, ...color };
+
+        // Composite the exact uploaded photo with the exact color chart color
+        const dataUrl = await compositeFloorImage(photoUrl, fullColor);
+        if (cancelled) return;
+        setAfterUrl(dataUrl);
+
+        // Upload the composite so the email gets a real URL (not a data URL)
+        try {
+          const blob = await (await fetch(dataUrl)).blob();
+          const { file_url } = await base44.integrations.Core.UploadFile({
+            file: new File([blob], "floor-preview.jpg", { type: "image/jpeg" }),
+          });
+          if (!cancelled) onAfterReady?.(file_url);
+        } catch {
+          // Upload failed — still show the composite, just without a URL for email
+          if (!cancelled) onAfterReady?.(dataUrl);
+        }
       } catch {
-        if (!cancelled) { setFailed(true); onAfterReady?.(""); }
+        if (!cancelled) {
+          setFailed(true);
+          onAfterReady?.("");
+        }
       } finally {
         if (!cancelled) setGenerating(false);
       }

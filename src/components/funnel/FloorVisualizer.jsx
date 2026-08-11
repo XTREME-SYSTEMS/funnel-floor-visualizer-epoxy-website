@@ -2,6 +2,7 @@ import React, { useState, useMemo } from "react";
 import { Upload, Loader2, Wand2, ImageIcon } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { COLOR_DATA } from "@/lib/colorData";
+import { compositeFloorImage } from "@/lib/floorComposite";
 import BeforeAfter from "@/components/funnel/BeforeAfter";
 import SwatchImg from "@/components/ui/SwatchImg";
 
@@ -51,12 +52,9 @@ export default function FloorVisualizer({ onColorSelected }) {
     setGenerating(true);
     setAfterUrl("");
     try {
-      const prompt = `Photorealistic transformation of this residential garage floor. Apply a professional ${selectedColor.system} epoxy coating in the color "${selectedColor.color_name}" (${selectedColor.code}, hex ${selectedColor.hex}). Keep the same garage walls, doors, lighting, and camera angle as the original photo. Only the floor surface changes — it now has a clean, glossy, professionally installed ${selectedColor.system} finish in ${selectedColor.color_name}. Ultra-lifelike, high detail, natural lighting.`;
-      const { url } = await base44.integrations.Core.GenerateImage({
-        prompt,
-        existing_image_urls: [photoUrl]
-      });
-      setAfterUrl(url);
+      // Canvas composite: exact uploaded photo + exact color chart color/texture
+      const dataUrl = await compositeFloorImage(photoUrl, selectedColor);
+      setAfterUrl(dataUrl);
       onColorSelected?.(selectedColor);
     } catch (err) {
       console.error(err);
