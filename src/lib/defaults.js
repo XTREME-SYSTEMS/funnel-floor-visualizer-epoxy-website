@@ -49,7 +49,7 @@ export const DEFAULT_SETTINGS = {
     phone: "(877) 958-6408",
     photo_url: "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/9508dc51b_generated_image.png"
   },
-  google_rating: 4.9,
+  google_rating: 4.4,
   google_review_count: 214,
   testimonials: [
     { name: "Dana R.", location: "Pompano Beach, FL", quote: "The estimate was close to the final number and the crew finished in a weekend.", rating: 5 },
