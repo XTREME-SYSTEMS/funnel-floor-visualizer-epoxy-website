@@ -1,7 +1,7 @@
 export const DEFAULT_SETTINGS = {
-  company_name: "EpoxyGarageFloorEstimate.com",
-  public_business_name: "EpoxyGarageFloorEstimate.com",
-  legal_business_name: "",
+  company_name: "Xtreme Polishing Systems",
+  public_business_name: "Xtreme Polishing Systems",
+  legal_business_name: "Xtreme Polishing Systems",
   phone: "(877) 958-6408",
   email: "jeremy@xtremepolishingsystems.com",
   business_address: "2200 NW 32nd St #700, Pompano Beach, FL 33069",
@@ -66,9 +66,9 @@ export const DEFAULT_SETTINGS = {
   consent_language: "By submitting this form you agree to be contacted by phone, text, and email about your garage floor estimate. Message and data rates may apply. You can opt out at any time.",
   hero_image_url: "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/37f839d5d_generated_image.png",
   seo: {
-    site_name: "EpoxyGarageFloorEstimate.com",
-    default_title: "Epoxy Garage Floor Cost & Instant Estimate | Pompano Beach FL",
-    default_description: "Get an instant epoxy garage floor cost estimate in about 60 seconds. Serving Pompano Beach and South Florida. Free, no obligation, personalized price range.",
+    site_name: "Xtreme Polishing Systems",
+    default_title: "Xtreme Polishing Systems | Garage Floor Coating Estimates in Pompano Beach, FL",
+    default_description: "Xtreme Polishing Systems provides professional garage floor coating installation in Pompano Beach, FL and South Florida. Get an instant epoxy garage floor cost estimate in about 60 seconds.",
     business_hours: "Mon–Sat 7:00am–7:00pm",
     business_category: "Garage Floor Coating Contractor",
     gbp_url: "",
