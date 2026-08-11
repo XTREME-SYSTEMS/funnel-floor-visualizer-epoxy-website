@@ -42,10 +42,8 @@ function urlEntry(path, lastmod, priority, changefreq) {
 export default async function (req: Request): Promise<Response> {
   try {
     const base44 = createClientFromRequest(req);
-    const user = await base44.auth.me();
-    if (!user || user.role !== "admin") {
-      return Response.json({ error: "Admin access required" }, { status: 403 });
-    }
+    // No admin gate — sitemap data is all public (published pages).
+    // Allows both admin dashboard calls and workflow service-role calls.
 
     const now = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
 

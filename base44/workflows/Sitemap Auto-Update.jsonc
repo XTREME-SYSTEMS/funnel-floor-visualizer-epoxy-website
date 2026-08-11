@@ -1,0 +1,54 @@
+{
+  "name": "Sitemap Auto-Update",
+  "description": "When a new GeneratedPage is created, pings IndexNow so search engines discover the new page immediately, then regenerates the dynamic sitemap.",
+  "trigger": {
+    "config": {
+      "trigger_type": "entity",
+      "entity_name": "GeneratedPage",
+      "events": [
+        "create"
+      ]
+    },
+    "condition": "${ .trigger.data.status != \"draft\" }"
+  },
+  "definition": {
+    "document": {
+      "dsl": "1.0.0",
+      "name": "sitemap_auto_update",
+      "version": "1.0",
+      "namespace": "base44"
+    },
+    "do": [
+      {
+        "ping_new_page": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "pingIndexNow",
+            "args": {
+              "url": "https://epoxygaragefloorestimate.com/${ .trigger.data.slug }"
+            }
+          },
+          "then": "regenerate_sitemap",
+          "x-base44": {
+            "title": "Ping IndexNow",
+            "description": "Notify Bing, Yandex, Seznam of the new URL"
+          }
+        }
+      },
+      {
+        "regenerate_sitemap": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "generateSitemap",
+            "args": {}
+          },
+          "then": "end",
+          "x-base44": {
+            "title": "Regenerate sitemap",
+            "description": "Rebuild dynamic sitemap with the new page"
+          }
+        }
+      }
+    ]
+  }
+}
