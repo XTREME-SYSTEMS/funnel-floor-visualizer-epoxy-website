@@ -81,6 +81,18 @@
     "desired_system": {
       "type": "string"
     },
+    "flake_color": {
+      "type": "string",
+      "description": "Selected color chart code (e.g. FB-807)"
+    },
+    "flake_color_name": {
+      "type": "string",
+      "description": "Human-readable color name (e.g. Tidal Wave)"
+    },
+    "flake_color_hex": {
+      "type": "string",
+      "description": "Hex value of the selected color for the visualizer"
+    },
     "timeline": {
       "type": "string"
     },

@@ -19,6 +19,8 @@ export default function ResultVisualizer({ photoUrl, color, onAfterReady }) {
   const [generating, setGenerating] = useState(false);
   const [failed, setFailed] = useState(false);
 
+  const colorName = color?.name || color?.color_name || color?.code || "";
+
   useEffect(() => {
     if (!photoUrl) {
       onAfterReady?.(FALLBACK_AFTER);
@@ -30,7 +32,7 @@ export default function ResultVisualizer({ photoUrl, color, onAfterReady }) {
       setGenerating(true);
       setFailed(false);
       try {
-        // Look up the full color chart entry (includes image_url for texture)
+        // Look up the full color chart entry (includes hex + system for texture)
         const chartColor = COLOR_DATA.find((c) => c.code === color.code) || {};
         const fullColor = { ...chartColor, ...color };
 
@@ -72,7 +74,7 @@ export default function ResultVisualizer({ photoUrl, color, onAfterReady }) {
     return (
       <div className="flex flex-col items-center justify-center gap-3 py-12 text-stone-500">
         <Loader2 className="h-8 w-8 text-amber-500 animate-spin" />
-        <p className="text-sm">Rendering your garage with {color?.name}…</p>
+        <p className="text-sm">Rendering your garage with {colorName}…</p>
       </div>
     );
   }
@@ -80,14 +82,14 @@ export default function ResultVisualizer({ photoUrl, color, onAfterReady }) {
   if (failed || !afterUrl) {
     return (
       <div className="text-center py-8 text-sm text-stone-500">
-        We couldn't generate your preview right now, but your <strong>{color?.name}</strong> selection is saved with your estimate.
+        We couldn't generate your preview right now, but your <strong>{colorName}</strong> selection is saved with your estimate.
       </div>
     );
   }
 
   return (
     <div>
-      <p className="text-sm text-stone-500 mb-4">Drag the slider to see your garage transformed with {color?.name}.</p>
+      <p className="text-sm text-stone-500 mb-4">Drag the slider to see your garage transformed with {colorName}.</p>
       <BeforeAfter beforeUrl={photoUrl} afterUrl={afterUrl} />
     </div>
   );

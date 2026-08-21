@@ -13,6 +13,41 @@ import { Phone } from "lucide-react";
 import BackButton from "@/components/BackButton";
 import Logo from "@/components/Logo";
 import BidSections from "@/components/results/BidSections";
+import ResultVisualizer from "@/components/funnel/ResultVisualizer";
+import { COLOR_DATA } from "@/lib/colorData";
+
+// Reconstructs the chosen color chart entry from the lead. Prefers the
+// dedicated flake_color fields; falls back to parsing the notes string
+// ("Selected color: FB-807 (Tidal Wave)") for leads created before the
+// color fields existed. Returns null if no color can be recovered.
+function getLeadColor(lead) {
+  if (!lead) return null;
+  const code = lead.flake_color || "";
+  if (code) {
+    const chart = COLOR_DATA.find((c) => c.code === code) || {};
+    return {
+      code,
+      name: lead.flake_color_name || chart.color_name || code,
+      hex: lead.flake_color_hex || chart.hex || "#777777",
+      system: lead.desired_system || chart.system || "flake",
+      ...chart,
+    };
+  }
+  // Fallback: parse "Selected color: <code> (<name>)" from notes
+  const m = (lead.notes || "").match(/Selected color:\s*([^\s(]+)\s*(?:\(([^)]+)\))?/);
+  if (m) {
+    const parsedCode = m[1];
+    const chart = COLOR_DATA.find((c) => c.code === parsedCode) || {};
+    return {
+      code: parsedCode,
+      name: m[2] || chart.color_name || parsedCode,
+      hex: chart.hex || "#777777",
+      system: lead.desired_system || chart.system || "flake",
+      ...chart,
+    };
+  }
+  return null;
+}
 
 const Row = ({ label, value }) => (
   <div className="py-3 border-b border-stone-200 flex justify-between gap-6 text-sm">
@@ -42,6 +77,8 @@ export default function Results() {
   if (!lead) return <div className="min-h-screen flex items-center justify-center text-stone-500">Estimate not found.</div>;
 
   const system = (settings.systems || []).find((s) => s.key === lead.desired_system);
+  const leadColor = getLeadColor(lead);
+  const leadPhoto = (lead.photos || [])[0];
 
   return (
     <div className="bg-stone-50 min-h-screen pb-24 md:pb-0">
@@ -84,6 +121,13 @@ export default function Results() {
             </p>
           </div>
         </div>
+
+        {leadPhoto && leadColor && (
+          <div>
+            <h2 className="text-2xl font-semibold tracking-tight text-stone-900 mb-4">See your garage transformed</h2>
+            <ResultVisualizer photoUrl={leadPhoto} color={leadColor} />
+          </div>
+        )}
 
         <div>
           <h2 className="text-2xl font-semibold tracking-tight text-stone-900 mb-4">Choose your level of finish</h2>

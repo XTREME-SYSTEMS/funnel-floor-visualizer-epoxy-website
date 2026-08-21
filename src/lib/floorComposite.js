@@ -5,14 +5,38 @@
 // overlaid with a realistic flake/metallic/solid texture derived from
 // the selected color chart entry's hex code.
 
-function loadImage(src) {
+function loadImage(src, useCors) {
   return new Promise((resolve, reject) => {
     const img = new Image();
-    img.crossOrigin = "anonymous";
+    if (useCors) img.crossOrigin = "anonymous";
     img.onload = () => resolve(img);
     img.onerror = reject;
     img.src = src;
   });
+}
+
+// Robust image loader: fetches the image as a blob and converts to an
+// object URL so the canvas is never tainted (object URLs are same-origin).
+// Falls back to a direct crossOrigin load if fetch is blocked.
+async function loadPhotoImage(src) {
+  // Strategy 1: fetch → blob → objectURL (avoids canvas tainting entirely)
+  try {
+    const res = await fetch(src, { mode: "cors" });
+    if (res.ok) {
+      const blob = await res.blob();
+      if (blob.size > 0) {
+        const objUrl = URL.createObjectURL(blob);
+        try {
+          return await loadImage(objUrl, false);
+        } catch (e) {
+          URL.revokeObjectURL(objUrl);
+          throw e;
+        }
+      }
+    }
+  } catch {}
+  // Strategy 2: direct load with crossOrigin (works if CDN sends CORS headers)
+  return await loadImage(src, true);
 }
 
 function hexToRgb(hex) {
@@ -115,7 +139,7 @@ function drawSolid(ctx, x, y, w, h, baseHex) {
 
 // ── Main compositing function ──────────────────────────────────────────────
 export async function compositeFloorImage(photoUrl, color) {
-  const photoImg = await loadImage(photoUrl);
+  const photoImg = await loadPhotoImage(photoUrl);
 
   const w = photoImg.naturalWidth;
   const h = photoImg.naturalHeight;
