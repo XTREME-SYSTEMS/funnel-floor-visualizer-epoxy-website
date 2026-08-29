@@ -68,7 +68,7 @@ export default function MarketingSection() {
 
       {/* Benefits band */}
       <div className="py-8 px-6 border-b border-stone-800">
-        <div className="max-w-6xl mx-auto flex flex-wrap items-center justify-center gap-x-8 gap-y-4">
+        <div className="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-x-6 gap-y-4">
           {highlights.map((h) => (
             <div key={h.label} className="flex items-center gap-2.5">
               <h.icon className="h-5 w-5 text-amber-400 shrink-0" />
