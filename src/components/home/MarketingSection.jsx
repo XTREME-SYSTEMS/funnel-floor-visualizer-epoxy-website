@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { Droplets, ShieldCheck, Flame, Clock, Sparkles, Award } from "lucide-react";
+import { Droplets, ShieldCheck, Flame, Clock, Sparkles, Award, MapPin, Store } from "lucide-react";
 
 const highlights = [
+  { icon: MapPin, label: "70+ locations" },
   { icon: Droplets, label: "Stain & oil resistant" },
   { icon: ShieldCheck, label: "Crack & moisture sealed" },
   { icon: Flame, label: "Hot-tire proof" },
   { icon: Clock, label: "1-day installation" },
-  { icon: Sparkles, label: "Easy to clean" }
+  { icon: Sparkles, label: "Easy to clean" },
+  { icon: Store, label: "Trust national retailers" }
 ];
 
 const POWER_TEXT = "Powered by America's #1 Epoxy Superstore";
