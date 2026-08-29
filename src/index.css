@@ -204,4 +204,53 @@
   /* === Inputs === */
   .xa-input { width: 100%; height: 44px; border-radius: 11px; border: 1px solid var(--vx-border); background: var(--vx-panel); color: var(--vx-text); padding: 0 14px; font-size: 14px; outline: none; transition: border-color .12s; }
   .xa-input:focus { border-color: var(--vx-accent); }
+
+  /* === Desktop responsive shell === */
+  .vx-main-col { display: flex; flex-direction: column; flex: 1; min-height: 0; min-width: 0; }
+  .vx-desktop-sidebar { display: none; }
+
+  @media (min-width: 768px) {
+    .vx-device-shell { max-width: none; flex-direction: row; }
+    .vx-desktop-sidebar {
+      display: flex;
+      flex-direction: column;
+      width: 248px;
+      flex-shrink: 0;
+      border-right: 1px solid var(--vx-border);
+      background: var(--vx-panel);
+      padding: 14px 12px;
+      gap: 2px;
+      overflow-y: auto;
+    }
+    .vx-bottom-nav { display: none; }
+    .vx-main { padding-bottom: 0 !important; }
+    .xa-band-inner { max-width: 960px; margin-left: auto; margin-right: auto; }
+
+    .vx-desktop-brand { display: flex; align-items: center; gap: 10px; padding: 6px 8px 14px; border-bottom: 1px solid var(--vx-border-soft); margin-bottom: 10px; }
+    .vx-desktop-brand img { width: 32px; height: 32px; object-fit: contain; flex-shrink: 0; }
+    .vx-desktop-brand-text { display: flex; flex-direction: column; min-width: 0; }
+    .vx-desktop-brand-text small { font-size: 9px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; color: var(--vx-accent); line-height: 1; }
+    .vx-desktop-brand-text span { font-size: 14px; font-weight: 800; color: var(--vx-text); line-height: 1.1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    .vx-desktop-nav-item { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 12px; color: var(--vx-text); font-size: 14px; font-weight: 600; background: transparent; border: 0; cursor: pointer; transition: background .12s; text-align: left; width: 100%; text-decoration: none; }
+    .vx-desktop-nav-item:hover { background: var(--vx-panel-2); }
+    .vx-desktop-nav-item.active { background: rgba(255,215,0,.12); color: var(--vx-accent-2); }
+    .vx-desktop-nav-item.active .vx-desktop-nav-ico { background: linear-gradient(180deg, #FFE25A, var(--vx-accent)); border-color: #C8A300; color: #1a1a1a; }
+    .vx-desktop-nav-ico { width: 32px; height: 32px; border-radius: 9px; display: grid; place-items: center; border: 1px solid var(--vx-border); color: var(--vx-muted); flex-shrink: 0; }
+
+    .vx-desktop-section-label { font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--vx-faint); padding: 14px 12px 6px; }
+    .vx-desktop-footer { margin-top: auto; padding-top: 12px; border-top: 1px solid var(--vx-border-soft); display: flex; flex-direction: column; gap: 2px; }
+  }
+
+  /* === Dark mode content support (scoped to app shell) === */
+  .dark .vx-app-shell .bg-white { background-color: var(--vx-panel); }
+  .dark .vx-app-shell .xa-band-light { background: linear-gradient(180deg, var(--vx-panel) 0%, var(--vx-panel-3) 100%); }
+  .dark .vx-app-shell .text-stone-900 { color: var(--vx-text); }
+  .dark .vx-app-shell .text-stone-800 { color: var(--vx-text); }
+  .dark .vx-app-shell .text-stone-700 { color: var(--vx-muted); }
+  .dark .vx-app-shell .text-stone-600 { color: var(--vx-muted); }
+  .dark .vx-app-shell .text-stone-500 { color: var(--vx-faint); }
+  .dark .vx-app-shell .text-stone-400 { color: var(--vx-faint); }
+  .dark .vx-app-shell .border-stone-200 { border-color: var(--vx-border); }
+  .dark .vx-app-shell .border-stone-300 { border-color: var(--vx-border); }
 }

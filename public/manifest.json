@@ -1,32 +1,19 @@
 {
-  "name": "Epoxy Pro Guide",
+  "name": "Epoxy Pro App",
   "short_name": "Epoxy Pro",
-  "description": "Your complete garage floor toolkit — visualize, estimate, and book in one place.",
+  "description": "Visualize, estimate, and book your epoxy garage floor — all in one place.",
   "start_url": "/epoxy-pro-guide",
   "scope": "/epoxy-pro-guide",
   "display": "standalone",
-  "orientation": "portrait",
-  "background_color": "#0c0a09",
-  "theme_color": "#D9B835",
-  "categories": ["business", "productivity", "lifestyle"],
+  "background_color": "#ffffff",
+  "theme_color": "#FFD700",
+  "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/20999222a_Logo_XPS_Color_12-20-24.webp/v1/fill/w_192,h_192,al_c,q_90/Logo_192.webp",
-      "sizes": "192x192",
-      "type": "image/webp",
-      "purpose": "any"
-    },
-    {
-      "src": "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/20999222a_Logo_XPS_Color_12-20-24.webp/v1/fill/w_512,h_512,al_c,q_90/Logo_512.webp",
+      "src": "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/20999222a_Logo_XPS_Color_12-20-24.webp",
       "sizes": "512x512",
       "type": "image/webp",
-      "purpose": "any"
-    },
-    {
-      "src": "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/20999222a_Logo_XPS_Color_12-20-24.webp/v1/fill/w_512,h_512,al_c,q_90/Logo_512.webp",
-      "sizes": "512x512",
-      "type": "image/webp",
-      "purpose": "maskable"
+      "purpose": "any maskable"
     }
   ]
 }

@@ -36,7 +36,7 @@ export default function AppHome({ appData, onNavigate }) {
           <div className="relative">
             <img src={LOGO_URL} alt="Xtreme Polishing Systems" className="xa-crest" />
             <p className="xa-crest-sub">Xtreme Polishing Systems</p>
-            <h1 className="xa-crest-title">Xtreme Project Tracker</h1>
+            <h1 className="xa-crest-title">Epoxy Pro App</h1>
             <p style={{ margin: "4px 0 18px", fontSize: 14, color: "#555", lineHeight: 1.45, textAlign: "center" }}>
               Visualize, estimate, and book — all in one place.
             </p>

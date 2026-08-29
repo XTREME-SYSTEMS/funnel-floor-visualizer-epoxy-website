@@ -106,7 +106,7 @@ export default function Nav({ settings }) {
               Get Free Estimate <ArrowRight className="h-4 w-4" />
             </Link>
             <Link to="/epoxy-pro-guide" onClick={() => setOpen(false)} className="flex h-11 items-center justify-end gap-2 rounded-xl bg-white/10 hover:bg-white/20 text-sm font-bold transition pr-4" style={{ border: '2px solid #FFD700', color: '#FFD700' }}>
-              Download Epoxy Pro Guide App <Smartphone className="h-4 w-4" />
+              Open Epoxy Pro App <Smartphone className="h-4 w-4" />
             </Link>
             <Link to="/epoxy-pro-guide" onClick={() => setOpen(false)} className="flex h-11 items-center justify-end gap-2 rounded-xl bg-white/10 hover:bg-white/20 text-sm font-bold transition pr-4" style={{ border: '2px solid #D9B835', color: '#D9B835' }}>
               Use Floor Visualizer <Palette className="h-4 w-4" />

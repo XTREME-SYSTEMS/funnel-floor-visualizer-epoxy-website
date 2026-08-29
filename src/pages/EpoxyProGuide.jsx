@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Home, Image as ImageIcon, Calculator, Grid, MoreHorizontal, ArrowLeft, X, Phone, MessageSquare, Palette, MapPin, Star, Wrench, Calendar, Download, Lock } from "lucide-react";
+import { Home, Image as ImageIcon, Calculator, Grid, MoreHorizontal, ArrowLeft, X, Phone, MessageSquare, Palette, MapPin, Star, Wrench, Calendar, Download, Lock, Sun, Moon } from "lucide-react";
 import { useAppData } from "@/lib/useAppData";
 import { useSettings } from "@/lib/useSettings";
+import { useTheme } from "@/lib/useTheme";
 import AppHome from "@/components/app/AppHome";
 import AppVisualizer from "@/components/app/AppVisualizer";
 import AppEstimate from "@/components/app/AppEstimate";
@@ -30,7 +31,7 @@ const TABS = [
 ];
 
 const TITLES = {
-  home: { eyebrow: "EPOXY PRO", title: "Xtreme Project Tracker" },
+  home: { eyebrow: "EPOXY PRO", title: "Epoxy Pro App" },
   visualizer: { eyebrow: "EPOXY PRO · TOOLS", title: "Floor Visualizer" },
   estimate: { eyebrow: "EPOXY PRO · TOOLS", title: "Instant Bid" },
   gallery: { eyebrow: "EPOXY PRO · GALLERY", title: "Project Gallery" },
@@ -56,10 +57,27 @@ const MORE_ITEMS = [
   { key: "chat", label: "Ask AI", icon: MessageSquare, desc: "Get instant answers" }
 ];
 
+const SIDEBAR_MAIN = [
+  { key: "home", label: "Home", icon: Home, tab: "home" },
+  { key: "visualizer", label: "Floor Visualizer", icon: ImageIcon, tab: "visualizer" },
+  { key: "estimate", label: "Instant Bid", icon: Calculator, tab: "estimate" },
+  { key: "gallery", label: "Gallery", icon: Grid, tab: "gallery" },
+];
+
+const SIDEBAR_MORE = [
+  { key: "colors", label: "Color Charts", icon: Palette, sub: "colors" },
+  { key: "locations", label: "Find a Store", icon: MapPin, sub: "locations" },
+  { key: "services", label: "Our Services", icon: Wrench, sub: "services" },
+  { key: "reviews", label: "Reviews", icon: Star, sub: "reviews" },
+  { key: "schedule", label: "Track Proposal", icon: Calendar, sub: "schedule" },
+  { key: "chat", label: "Ask AI", icon: MessageSquare, sub: "chat" },
+];
+
 export default function EpoxyProGuide() {
   const appData = useAppData();
   const { settings } = useSettings();
   const navigate = useNavigate();
+  const { isDark, toggle } = useTheme();
   const [tab, setTab] = useState("home");
   const [sub, setSub] = useState(null);
   const [chatOpen, setChatOpen] = useState(false);
@@ -142,87 +160,160 @@ export default function EpoxyProGuide() {
     }
   };
 
+  const isSidebarItemActive = (item) => {
+    if (item.tab) return !sub && tab === item.tab;
+    if (item.sub) return sub === item.sub;
+    return false;
+  };
+
+  const handleSidebarClick = (item) => {
+    if (item.key === "chat") { setChatOpen(true); return; }
+    if (item.tab) { setTab(item.tab); setSub(null); }
+    else if (item.sub) { setSub(item.sub); }
+  };
+
   return (
     <div className="vx-app-shell">
       <div className="vx-device-shell">
-        {/* Promo bar */}
-        {!sub && (
-          <Link to="/funnel" className="block bg-white text-center py-0.5 px-4 shrink-0 border-b border-amber-500">
-            <span className="text-[10px] font-extrabold uppercase tracking-[0.14em] text-stone-900">
-              10% Off Your Garage Floor Estimate With This App Download
-            </span>
-          </Link>
-        )}
-
-        {/* Header — crest / eyebrow+title / actions */}
-        <header className="vx-header">
-          {sub ? (
-            <button onClick={handleBack} className="vx-icon-btn" aria-label="Back">
-              <ArrowLeft className="w-5 h-5" />
-            </button>
-          ) : tab !== "home" ? (
-            <button onClick={() => setTab("home")} className="vx-icon-btn" aria-label="Back">
-              <ArrowLeft className="w-5 h-5" />
-            </button>
-          ) : (
-            <button onClick={() => navigate("/")} className="vx-icon-btn" aria-label="Close">
-              <X className="w-5 h-5" />
-            </button>
-          )}
-          <div className="xa-header-center">
-            <img src={LOGO_URL} alt="XPS" className="xa-header-crest" />
-            <span className="xa-header-brand">Xtreme Polishing Systems</span>
+        {/* Desktop sidebar */}
+        <aside className="vx-desktop-sidebar">
+          <div className="vx-desktop-brand">
+            <img src={LOGO_URL} alt="XPS" />
+            <div className="vx-desktop-brand-text">
+              <small>EPOXY PRO</small>
+              <span>Epoxy Pro App</span>
+            </div>
           </div>
-          <div className="vx-header__actions">
-            <a href={`tel:${(settings.phone || "").replace(/[^\d+]/g, "")}`} className="xa-cta-gold" style={{ width: 'auto', minHeight: 40, padding: '0 14px', fontSize: 12, borderRadius: 10 }}>
-              <Phone className="w-4 h-4" /> Call
-            </a>
-          </div>
-        </header>
 
-        {/* Content */}
-        <main className="vx-main flex-1" style={{ paddingBottom: 80 }}>
-          {sub ? renderSubScreen() : renderTab()}
-        </main>
-
-        {/* Chat overlay */}
-        {chatOpen && <AppChat onClose={() => setChatOpen(false)} />}
-
-        {/* Bottom nav — 4 tabs + center FAB */}
-        {!sub && !chatOpen && (
-          <nav className="vx-bottom-nav" aria-label="Primary navigation">
-            {TABS.slice(0, 2).map((t) => (
-              <button
-                key={t.key}
-                className={tab === t.key ? "active" : undefined}
-                onClick={() => setTab(t.key)}
-              >
-                <t.icon className="w-5 h-5" strokeWidth={tab === t.key ? 2.2 : 1.8} />
-                <span>{t.label}</span>
-              </button>
-            ))}
+          {SIDEBAR_MAIN.map((item) => (
             <button
-              className="xa-nav-center"
-              onClick={() => { setTab("estimate"); setSub(null); }}
-              aria-label="Instant Bid"
+              key={item.key}
+              className={"vx-desktop-nav-item" + (isSidebarItemActive(item) ? " active" : "")}
+              onClick={() => handleSidebarClick(item)}
             >
-              <span className="xa-nav-center-btn">
-                <Calculator className="w-6 h-6" strokeWidth={2.5} />
-              </span>
-              <span className="xa-nav-center-label">Bid</span>
+              <span className="vx-desktop-nav-ico"><item.icon className="w-4 h-4" strokeWidth={2} /></span>
+              {item.label}
             </button>
-            {TABS.slice(2).map((t) => (
-              <button
-                key={t.key}
-                className={tab === t.key ? "active" : undefined}
-                onClick={() => setTab(t.key)}
-              >
-                <t.icon className="w-5 h-5" strokeWidth={tab === t.key ? 2.2 : 1.8} />
-                <span>{t.label}</span>
+          ))}
+
+          <div className="vx-desktop-section-label">More</div>
+          {SIDEBAR_MORE.map((item) => (
+            <button
+              key={item.key}
+              className={"vx-desktop-nav-item" + (isSidebarItemActive(item) ? " active" : "")}
+              onClick={() => handleSidebarClick(item)}
+            >
+              <span className="vx-desktop-nav-ico"><item.icon className="w-4 h-4" strokeWidth={2} /></span>
+              {item.label}
+            </button>
+          ))}
+
+          <div className="vx-desktop-footer">
+            {canInstall && !isInstalled && (
+              <button onClick={promptInstall} className="vx-desktop-nav-item">
+                <span className="vx-desktop-nav-ico"><Download className="w-4 h-4" strokeWidth={2} /></span>
+                Install App
               </button>
-            ))}
-          </nav>
-        )}
+            )}
+            <a href={`tel:${(settings.phone || "").replace(/[^\d+]/g, "")}`} className="vx-desktop-nav-item">
+              <span className="vx-desktop-nav-ico"><Phone className="w-4 h-4" strokeWidth={2} /></span>
+              Call Now
+            </a>
+            <button onClick={toggle} className="vx-desktop-nav-item">
+              <span className="vx-desktop-nav-ico">{isDark ? <Sun className="w-4 h-4" strokeWidth={2} /> : <Moon className="w-4 h-4" strokeWidth={2} />}</span>
+              {isDark ? "Light Mode" : "Dark Mode"}
+            </button>
+            <button onClick={() => navigate("/")} className="vx-desktop-nav-item">
+              <span className="vx-desktop-nav-ico"><ArrowLeft className="w-4 h-4" strokeWidth={2} /></span>
+              Back to Website
+            </button>
+          </div>
+        </aside>
+
+        {/* Main column */}
+        <div className="vx-main-col">
+          {/* Promo bar */}
+          {!sub && (
+            <Link to="/funnel" className="block bg-white text-center py-0.5 px-4 shrink-0 border-b border-amber-500">
+              <span className="text-[10px] font-extrabold uppercase tracking-[0.14em] text-stone-900">
+                10% Off Your Garage Floor Estimate With This App Download
+              </span>
+            </Link>
+          )}
+
+          {/* Header — crest / eyebrow+title / actions */}
+          <header className="vx-header">
+            {sub ? (
+              <button onClick={handleBack} className="vx-icon-btn" aria-label="Back">
+                <ArrowLeft className="w-5 h-5" />
+              </button>
+            ) : tab !== "home" ? (
+              <button onClick={() => setTab("home")} className="vx-icon-btn" aria-label="Back">
+                <ArrowLeft className="w-5 h-5" />
+              </button>
+            ) : (
+              <button onClick={() => navigate("/")} className="vx-icon-btn" aria-label="Close">
+                <X className="w-5 h-5" />
+              </button>
+            )}
+            <div className="xa-header-center">
+              <img src={LOGO_URL} alt="XPS" className="xa-header-crest" />
+              <span className="xa-header-brand">Xtreme Polishing Systems</span>
+            </div>
+            <div className="vx-header__actions">
+              <button onClick={toggle} className="vx-icon-btn md:hidden" aria-label="Toggle theme">
+                {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+              </button>
+              <a href={`tel:${(settings.phone || "").replace(/[^\d+]/g, "")}`} className="xa-cta-gold" style={{ width: 'auto', minHeight: 40, padding: '0 14px', fontSize: 12, borderRadius: 10 }}>
+                <Phone className="w-4 h-4" /> Call
+              </a>
+            </div>
+          </header>
+
+          {/* Content */}
+          <main className="vx-main flex-1" style={{ paddingBottom: 80 }}>
+            {sub ? renderSubScreen() : renderTab()}
+          </main>
+
+          {/* Chat overlay */}
+          {chatOpen && <AppChat onClose={() => setChatOpen(false)} />}
+
+          {/* Bottom nav — mobile only */}
+          {!sub && !chatOpen && (
+            <nav className="vx-bottom-nav" aria-label="Primary navigation">
+              {TABS.slice(0, 2).map((t) => (
+                <button
+                  key={t.key}
+                  className={tab === t.key ? "active" : undefined}
+                  onClick={() => setTab(t.key)}
+                >
+                  <t.icon className="w-5 h-5" strokeWidth={tab === t.key ? 2.2 : 1.8} />
+                  <span>{t.label}</span>
+                </button>
+              ))}
+              <button
+                className="xa-nav-center"
+                onClick={() => { setTab("estimate"); setSub(null); }}
+                aria-label="Instant Bid"
+              >
+                <span className="xa-nav-center-btn">
+                  <Calculator className="w-6 h-6" strokeWidth={2.5} />
+                </span>
+                <span className="xa-nav-center-label">Bid</span>
+              </button>
+              {TABS.slice(2).map((t) => (
+                <button
+                  key={t.key}
+                  className={tab === t.key ? "active" : undefined}
+                  onClick={() => setTab(t.key)}
+                >
+                  <t.icon className="w-5 h-5" strokeWidth={tab === t.key ? 2.2 : 1.8} />
+                  <span>{t.label}</span>
+                </button>
+              ))}
+            </nav>
+          )}
+        </div>
       </div>
     </div>
   );
