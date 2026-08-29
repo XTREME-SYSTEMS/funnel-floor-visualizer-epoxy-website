@@ -132,8 +132,14 @@ export default function EpoxyProGuide() {
       <div className="vx-device-shell">
         {/* Promo bar */}
         {!sub && (
-          <Link to="/funnel" className="block bg-amber-500 text-stone-950 text-center text-[11px] font-bold tracking-wide py-1.5 shrink-0">
-            🎉 10% OFF YOUR GARAGE FLOOR COATING — TAP TO GET YOUR FREE ESTIMATE
+          <Link to="/funnel" className="block bg-stone-950 text-center py-1.5 px-4 shrink-0 border-b border-amber-600/40">
+            <span className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-amber-400">
+              10% Off Your Garage Floor Coating
+            </span>
+            <span className="mx-2 text-amber-600/60">|</span>
+            <span className="text-[10px] font-semibold uppercase tracking-[0.12em] text-stone-300">
+              Tap For Free Estimate
+            </span>
           </Link>
         )}
 
