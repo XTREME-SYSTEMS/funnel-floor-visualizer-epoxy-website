@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Home, Image as ImageIcon, Calculator, Grid, MoreHorizontal, ArrowLeft, MessageSquare, Palette, MapPin, Star, Wrench, Calendar, Download, Lock } from "lucide-react";
+import { Home, Image as ImageIcon, Calculator, Grid, MoreHorizontal, ArrowLeft, X, Bell, MessageSquare, Palette, MapPin, Star, Wrench, Calendar, Download, Lock } from "lucide-react";
 import { useAppData } from "@/lib/useAppData";
 import { useSettings } from "@/lib/useSettings";
 import AppHome from "@/components/app/AppHome";
@@ -20,7 +20,6 @@ import { usePwaInstall } from "@/lib/usePwaInstall";
 const TABS = [
   { key: "home", label: "Home", icon: Home },
   { key: "visualizer", label: "Visualizer", icon: ImageIcon },
-  { key: "estimate", label: "Estimate", icon: Calculator },
   { key: "gallery", label: "Gallery", icon: Grid },
   { key: "more", label: "More", icon: MoreHorizontal }
 ];
@@ -119,7 +118,7 @@ export default function EpoxyProGuide() {
   };
 
   return (
-    <div className="min-h-screen bg-stone-50 flex flex-col max-w-md mx-auto relative shadow-2xl">
+    <div className="min-h-screen bg-white flex flex-col max-w-md mx-auto relative shadow-2xl">
       {/* Promo bar — matches main site */}
       {!sub && (
         <Link to="/funnel" className="block bg-amber-500 text-stone-950 text-center text-[11px] font-bold tracking-wide py-1.5 shrink-0">
@@ -127,24 +126,29 @@ export default function EpoxyProGuide() {
         </Link>
       )}
 
-      {/* Top bar */}
-      <header className="sticky top-0 z-30 bg-white border-b border-stone-200 px-4 h-16 flex items-center justify-between shrink-0">
+      {/* Top bar — X / centered brand / bell */}
+      <header className="sticky top-0 z-30 bg-white px-4 h-16 flex items-center justify-between shrink-0">
         {sub ? (
-          <button onClick={handleBack} className="flex items-center gap-1.5 text-sm font-semibold text-stone-700">
-            <ArrowLeft className="h-5 w-5" /> Back
+          <button onClick={handleBack} className="flex items-center justify-center h-10 w-10 -ml-2 text-stone-900">
+            <ArrowLeft className="h-5 w-5" />
           </button>
         ) : tab !== "home" ? (
-          <button onClick={() => setTab("home")} className="flex items-center gap-1.5 text-sm font-semibold text-stone-700">
-            <ArrowLeft className="h-5 w-5" /> Back
+          <button onClick={() => setTab("home")} className="flex items-center justify-center h-10 w-10 -ml-2 text-stone-900">
+            <ArrowLeft className="h-5 w-5" />
           </button>
         ) : (
-          <button onClick={() => navigate("/")} className="flex items-center gap-1.5 text-sm font-semibold text-stone-700">
-            <ArrowLeft className="h-5 w-5" /> Back
+          <button onClick={() => navigate("/")} className="flex items-center justify-center h-10 w-10 -ml-2 text-stone-900">
+            <X className="h-5 w-5" />
           </button>
         )}
-        <a href={`tel:${settings.phone || "(877) 958-6408"}`} className="text-xs font-semibold text-amber-600">
-          {settings.phone || "(877) 958-6408"}
-        </a>
+        <div className="font-display font-extrabold text-lg tracking-tight select-none">
+          <span className="text-stone-900">EPOXY </span>
+          <span className="text-amber-500">PRO</span>
+        </div>
+        <button onClick={() => setSub("schedule")} className="flex items-center justify-center h-10 w-10 -mr-2 text-stone-900 relative">
+          <Bell className="h-5 w-5" />
+          {appData.appointment && <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-amber-500 ring-2 ring-white" />}
+        </button>
       </header>
 
       {/* Content */}
@@ -156,24 +160,44 @@ export default function EpoxyProGuide() {
       {!chatOpen && !sub && (
         <button
           onClick={() => setChatOpen(true)}
-          className="fixed bottom-20 h-14 w-14 rounded-full bg-amber-500 shadow-lg shadow-amber-500/40 flex items-center justify-center z-40 animate-pop-bounce"
+          className="fixed bottom-24 h-12 w-12 rounded-full bg-stone-950 shadow-lg shadow-stone-900/20 flex items-center justify-center z-40"
           style={{ right: "max(1rem, calc((100% - 28rem) / 2 + 1rem))" }}
         >
-          <MessageSquare className="h-6 w-6 text-stone-950" />
+          <MessageSquare className="h-5 w-5 text-white" />
         </button>
       )}
 
       {/* Chat overlay */}
       {chatOpen && <AppChat onClose={() => setChatOpen(false)} />}
 
-      {/* Bottom tab bar — dark to match site footer/hero aesthetic */}
+      {/* Bottom tab bar — white with center FAB */}
       {!sub && !chatOpen && (
-        <nav className="fixed bottom-0 left-0 right-0 z-30 max-w-md mx-auto bg-stone-950 border-t-2 border-amber-500 flex">
-          {TABS.map((t) => (
+        <nav className="fixed bottom-0 left-0 right-0 z-30 max-w-md mx-auto bg-white border-t border-stone-200 flex">
+          {TABS.slice(0, 2).map((t) => (
             <button
               key={t.key}
               onClick={() => setTab(t.key)}
-              className={`flex-1 flex flex-col items-center gap-0.5 py-2.5 transition ${tab === t.key ? "text-amber-500" : "text-stone-500"}`}
+              className={`flex-1 flex flex-col items-center gap-0.5 py-2.5 transition ${tab === t.key ? "text-amber-500" : "text-stone-400"}`}
+            >
+              <t.icon className="h-5 w-5" strokeWidth={tab === t.key ? 2.2 : 1.8} />
+              <span className="text-[10px] font-semibold">{t.label}</span>
+            </button>
+          ))}
+          {/* Center FAB — Instant Bid */}
+          <button
+            onClick={() => { setTab("estimate"); setSub(null); }}
+            className="flex-1 flex flex-col items-center -mt-6"
+          >
+            <div className="h-14 w-14 rounded-full bg-amber-500 flex items-center justify-center border-4 border-white shadow-lg shadow-amber-500/40">
+              <Calculator className="h-6 w-6 text-stone-950" strokeWidth={2.5} />
+            </div>
+            <span className={`text-[10px] font-semibold mt-0.5 ${tab === "estimate" ? "text-amber-600" : "text-stone-500"}`}>Bid</span>
+          </button>
+          {TABS.slice(2).map((t) => (
+            <button
+              key={t.key}
+              onClick={() => setTab(t.key)}
+              className={`flex-1 flex flex-col items-center gap-0.5 py-2.5 transition ${tab === t.key ? "text-amber-500" : "text-stone-400"}`}
             >
               <t.icon className="h-5 w-5" strokeWidth={tab === t.key ? 2.2 : 1.8} />
               <span className="text-[10px] font-semibold">{t.label}</span>

@@ -24,17 +24,36 @@ export default function AppHome({ appData, onNavigate }) {
 
   return (
     <div className="pb-6">
-      {/* Hero banner — matches main site hero aesthetic */}
-      <div className="relative overflow-hidden bg-stone-950 px-5 pt-8 pb-6 border-b-2 border-amber-500">
-        <div className="absolute inset-0 opacity-20" style={{ background: "radial-gradient(circle at 30% 20%, #D9B835, transparent 60%)" }} />
-        <div className="relative flex items-center gap-3 mb-3">
-          <img src={LOGO_URL} alt="Xtreme Polishing Systems" className="h-11 w-11 object-contain" />
-          <span className="font-display font-bold text-white text-lg">Epoxy Garage Floors</span>
+      {/* Hero — clean white with confetti, matching reference aesthetic */}
+      <div className="relative overflow-hidden bg-white px-5 pt-10 pb-8">
+        {/* Confetti decoration */}
+        <div className="absolute top-3 left-8 h-3 w-3 rounded-sm bg-amber-400 rotate-12 opacity-80" />
+        <div className="absolute top-7 left-20 h-2 w-2 rounded-full bg-blue-300 opacity-70" />
+        <div className="absolute top-5 right-10 h-3 w-3 rounded-sm bg-pink-300 rotate-45 opacity-80" />
+        <div className="absolute top-10 right-24 h-2 w-2 rounded-full bg-amber-400 opacity-70" />
+        <div className="absolute top-14 left-12 h-2 w-2 rounded-sm bg-blue-300 rotate-12 opacity-60" />
+        <div className="absolute top-2 right-16 h-2.5 w-2.5 rounded-full bg-pink-200 opacity-70" />
+
+        {/* Logo centered */}
+        <div className="relative flex justify-center mb-4">
+          <img src={LOGO_URL} alt="Xtreme Polishing Systems" className="h-20 w-20 object-contain" />
         </div>
-        <div className="relative">
-          <h1 className="text-2xl font-display font-extrabold text-white tracking-tight">Your Garage Floor Toolkit</h1>
-          <p className="text-sm text-stone-400 mt-1">Visualize, estimate, and book — all in one place.</p>
+
+        {/* Headline */}
+        <div className="relative text-center">
+          <h1 className="text-2xl font-display font-extrabold text-stone-900 tracking-tight leading-tight">
+            Your Garage Floor <span className="text-amber-500">Toolkit</span>
+          </h1>
+          <p className="text-sm text-stone-500 mt-2">Visualize, estimate, and book — all in one place.</p>
         </div>
+
+        {/* CTA — black pill like reference */}
+        <button
+          onClick={() => onNavigate({ tab: "estimate" })}
+          className="relative mt-5 w-full py-3.5 rounded-full bg-stone-950 text-white font-bold text-sm flex items-center justify-center gap-2 hover:bg-stone-800 transition"
+        >
+          Get My Free Estimate <ArrowRight className="h-4 w-4" />
+        </button>
       </div>
 
       {/* PWA install button */}
