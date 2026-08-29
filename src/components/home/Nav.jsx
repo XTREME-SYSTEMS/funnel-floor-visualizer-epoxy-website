@@ -80,7 +80,7 @@ export default function Nav({ settings }) {
       </div>
 
       {open && (
-        <div className="md:hidden bg-white border-t border-stone-100 px-6 py-4 space-y-3">
+        <div className="md:hidden bg-white border-t border-stone-100 px-6 py-4 space-y-3 text-right">
           {links.map((l) => (
             l.to
               ? <Link key={l.label} to={l.to} onClick={() => setOpen(false)} className="block text-sm font-medium text-stone-700">{l.label}</Link>
