@@ -142,7 +142,7 @@
   /* === Xtreme AI design system — shell === */
   .vx-app-shell { min-height: 100vh; background: var(--vx-canvas); }
   .vx-device-shell { max-width: 28rem; margin: 0 auto; height: 100vh; height: 100dvh; position: relative; background: var(--vx-canvas); box-shadow: 0 0 60px rgba(0,0,0,.06); display: flex; flex-direction: column; overflow: hidden; }
-  .vx-header { min-height: 64px; padding: 10px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; border-bottom: 1px solid var(--vx-border); background: var(--vx-canvas); position: sticky; top: 0; z-index: 30; backdrop-filter: blur(18px); }
+  .vx-header { min-height: 64px; padding: 10px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; border-bottom: 1px solid var(--vx-border); background: #FFFFFF; position: sticky; top: 0; z-index: 30; }
   .vx-icon-btn { display: grid; place-items: center; width: 40px; height: 40px; border: 1px solid var(--vx-border); border-radius: 10px; background: var(--vx-panel); color: var(--vx-text); cursor: pointer; transition: border-color .12s; }
   .vx-icon-btn:hover { border-color: var(--vx-accent); }
   .xa-header-center { display: flex; align-items: center; gap: 10px; min-width: 0; flex: 1; justify-content: center; }
