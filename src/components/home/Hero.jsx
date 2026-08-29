@@ -39,7 +39,7 @@ export default function Hero({ settings }) {
         </div>
       </div>
 
-      <div className="hidden md:block absolute bottom-0 inset-x-0 pb-4 text-center">
+      <div className="hidden md:block absolute bottom-0 inset-x-0 pb-10 text-center">
         <p className="text-white text-sm font-medium drop-shadow-[0_2px_6px_rgba(0,0,0,0.85)]">{settings.service_area}</p>
       </div>
     </section>
