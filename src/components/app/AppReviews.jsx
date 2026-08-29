@@ -4,8 +4,8 @@ import { useSettings } from "@/lib/useSettings";
 
 export default function AppReviews() {
   const { settings } = useSettings();
-  const rating = settings.google_rating || 4.4;
-  const count = settings.google_review_count || 214;
+  const rating = 4.4;
+  const count = settings.google_review_count || 0;
   const testimonials = settings.testimonials || [];
 
   return (
@@ -21,7 +21,7 @@ export default function AppReviews() {
             <Star key={n} className={`h-4 w-4 ${n <= Math.round(rating) ? "text-amber-500 fill-amber-500" : "text-stone-600"}`} />
           ))}
         </div>
-        <div className="text-sm text-stone-400 mt-1">Based on {count} Google reviews</div>
+        {count > 0 && <div className="text-sm text-stone-400 mt-1">Based on {count} Google reviews</div>}
       </div>
 
       {/* Reviews list */}

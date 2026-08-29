@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Home, Image as ImageIcon, Calculator, Grid, MoreHorizontal, ArrowLeft, X, Bell, MessageSquare, Palette, MapPin, Star, Wrench, Calendar, Download, Lock } from "lucide-react";
+import { Home, Image as ImageIcon, Calculator, Grid, MoreHorizontal, ArrowLeft, X, Phone, MessageSquare, Palette, MapPin, Star, Wrench, Calendar, Download, Lock } from "lucide-react";
 import { useAppData } from "@/lib/useAppData";
 import { useSettings } from "@/lib/useSettings";
 import AppHome from "@/components/app/AppHome";
@@ -25,7 +25,7 @@ const TABS = [
 ];
 
 const TITLES = {
-  home: { eyebrow: "EPOXY PRO", title: "Garage Floor Toolkit" },
+  home: { eyebrow: "EPOXY PRO", title: "Auto Bid Generator" },
   visualizer: { eyebrow: "EPOXY PRO · TOOLS", title: "Floor Visualizer" },
   estimate: { eyebrow: "EPOXY PRO · TOOLS", title: "Instant Bid" },
   gallery: { eyebrow: "EPOXY PRO · GALLERY", title: "Project Gallery" },
@@ -97,7 +97,7 @@ export default function EpoxyProGuide() {
                 <button
                   key={m.key}
                   onClick={() => m.key === "chat" ? setChatOpen(true) : setSub(m.key)}
-                  className="w-full flex items-center gap-3 p-3 rounded-2xl bg-white border border-stone-200 shadow-sm hover:border-amber-300 transition text-left"
+                  className="w-full flex items-center gap-3 p-3 rounded-2xl bg-white border border-stone-200 shadow-sm hover:border-amber-400 hover:shadow-md hover:bg-amber-50/50 transition text-left"
                 >
                   <div className="h-11 w-11 rounded-xl bg-amber-50 flex items-center justify-center shrink-0">
                     <m.icon className="h-5 w-5 text-amber-600" strokeWidth={1.8} />
@@ -112,13 +112,13 @@ export default function EpoxyProGuide() {
             <button onClick={() => navigate("/")} className="w-full text-center text-xs text-stone-400">
               ← Back to main website
             </button>
-            <Link to="/admin" className="w-full flex items-center gap-3 p-3 rounded-2xl bg-stone-900 border border-stone-700 hover:border-amber-500 transition text-left">
-              <div className="h-11 w-11 rounded-xl bg-amber-500/10 flex items-center justify-center shrink-0">
-                <Lock className="h-5 w-5 text-amber-500" strokeWidth={1.8} />
+            <Link to="/admin" className="w-full flex items-center gap-3 p-3 rounded-2xl border border-black bg-gradient-to-b from-amber-300 to-amber-600 hover:shadow-md hover:brightness-105 transition text-left">
+              <div className="h-11 w-11 rounded-xl bg-black/10 flex items-center justify-center shrink-0">
+                <Lock className="h-5 w-5 text-stone-900" strokeWidth={1.8} />
               </div>
               <div className="flex-1">
-                <div className="text-sm font-bold text-white">Admin Sign In</div>
-                <div className="text-xs text-stone-400">Dashboard, leads & settings</div>
+                <div className="text-sm font-bold text-stone-900">Admin Sign In</div>
+                <div className="text-xs text-stone-800">Dashboard, leads & settings</div>
               </div>
             </Link>
           </div>
@@ -160,10 +160,9 @@ export default function EpoxyProGuide() {
             </div>
           </div>
           <div className="vx-header__actions">
-            <button onClick={() => setSub("schedule")} className="vx-icon-btn relative" aria-label="Notifications">
-              <Bell className="w-5 h-5" />
-              {appData.appointment && <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-amber-500 ring-2 ring-white" />}
-            </button>
+            <a href={`tel:${(settings.phone || "").replace(/[^\d+]/g, "")}`} className="xa-cta-gold" style={{ width: 'auto', minHeight: 40, padding: '0 14px', fontSize: 12, borderRadius: 10 }}>
+              <Phone className="w-4 h-4" /> Call
+            </a>
           </div>
         </header>
 
@@ -171,17 +170,6 @@ export default function EpoxyProGuide() {
         <main className="vx-main flex-1" style={{ paddingBottom: 80 }}>
           {sub ? renderSubScreen() : renderTab()}
         </main>
-
-        {/* Floating chat button */}
-        {!chatOpen && !sub && (
-          <button
-            onClick={() => setChatOpen(true)}
-            className="fixed bottom-24 h-12 w-12 rounded-full bg-stone-950 shadow-lg shadow-stone-900/20 flex items-center justify-center z-40"
-            style={{ right: "max(1rem, calc((100% - 28rem) / 2 + 1rem))" }}
-          >
-            <MessageSquare className="h-5 w-5 text-white" />
-          </button>
-        )}
 
         {/* Chat overlay */}
         {chatOpen && <AppChat onClose={() => setChatOpen(false)} />}

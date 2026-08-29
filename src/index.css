@@ -141,7 +141,7 @@
 @layer components {
   /* === Xtreme AI design system — shell === */
   .vx-app-shell { min-height: 100vh; background: var(--vx-canvas); }
-  .vx-device-shell { max-width: 28rem; margin: 0 auto; min-height: 100vh; position: relative; background: var(--vx-canvas); box-shadow: 0 0 60px rgba(0,0,0,.06); display: flex; flex-direction: column; }
+  .vx-device-shell { max-width: 28rem; margin: 0 auto; height: 100vh; height: 100dvh; position: relative; background: var(--vx-canvas); box-shadow: 0 0 60px rgba(0,0,0,.06); display: flex; flex-direction: column; overflow: hidden; }
   .vx-header { min-height: 64px; padding: 10px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; border-bottom: 1px solid var(--vx-border); background: var(--vx-canvas); position: sticky; top: 0; z-index: 30; backdrop-filter: blur(18px); }
   .vx-icon-btn { display: grid; place-items: center; width: 40px; height: 40px; border: 1px solid var(--vx-border); border-radius: 10px; background: var(--vx-panel); color: var(--vx-text); cursor: pointer; transition: border-color .12s; }
   .vx-icon-btn:hover { border-color: var(--vx-accent); }
@@ -150,7 +150,7 @@
   .xa-header-center small { display: block; color: var(--vx-accent); font-size: 9px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; line-height: 1; }
   .xa-header-center h1 { color: var(--vx-text-primary); font-size: 14px; font-weight: 800; line-height: 1.1; margin: 2px 0 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .vx-header__actions { display: flex; align-items: center; gap: 6px; }
-  .vx-main { overflow-y: auto; overscroll-behavior-y: none; flex: 1; min-height: 0; }
+  .vx-main { overflow-y: auto; -webkit-overflow-scrolling: touch; touch-action: pan-y; flex: 1; min-height: 0; }
   .vx-main::-webkit-scrollbar { display: none; }
 
   /* === Bottom nav with center FAB === */
@@ -163,9 +163,11 @@
 
   /* === CTA buttons === */
   .xa-cta-gold { width: 100%; min-height: 48px; border-radius: 14px; border: 1px solid #C8A300; background: linear-gradient(180deg, #FFE25A 0%, var(--vx-accent) 45%, #C8A300 100%); color: #1a1a1a; font-weight: 800; font-size: 14px; display: inline-flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; box-shadow: inset 0 1px rgba(255,255,255,.5), 0 6px 18px rgba(255,215,0,.35); transition: transform .12s, box-shadow .12s; }
+  .xa-cta-gold:hover { filter: brightness(1.08); box-shadow: inset 0 1px rgba(255,255,255,.6), 0 8px 26px rgba(255,215,0,.5); }
   .xa-cta-gold:active { transform: translateY(1px); }
   .xa-cta-gold:disabled { opacity: .6; cursor: not-allowed; }
-  .xa-cta-black { width: 100%; min-height: 48px; border-radius: 14px; border: 1px solid #000; background: #000; color: #fff; font-weight: 800; font-size: 14px; display: inline-flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; transition: transform .12s; }
+  .xa-cta-black { width: 100%; min-height: 48px; border-radius: 14px; border: 1px solid #000; background: linear-gradient(180deg, #FFE25A 0%, var(--vx-accent) 45%, #C8A300 100%); color: #1a1a1a; font-weight: 800; font-size: 14px; display: inline-flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; box-shadow: inset 0 1px rgba(255,255,255,.5), 0 6px 18px rgba(255,215,0,.35); transition: filter .12s, box-shadow .12s, transform .12s; }
+  .xa-cta-black:hover { filter: brightness(1.08); box-shadow: inset 0 1px rgba(255,255,255,.6), 0 8px 26px rgba(255,215,0,.5); }
   .xa-cta-black:active { transform: translateY(1px); }
 
   /* === Cards === */
