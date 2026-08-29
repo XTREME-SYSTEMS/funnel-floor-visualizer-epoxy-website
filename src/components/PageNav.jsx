@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import { Menu, X, Phone } from "lucide-react";
+import { Menu, X, Phone, Sun, Moon } from "lucide-react";
 import Logo from "@/components/Logo";
 import { useSettings } from "@/lib/useSettings";
+import { useTheme } from "@/lib/useTheme";
 
 const LINKS = [
   { label: "Home", to: "/" },
@@ -18,30 +19,52 @@ const LINKS = [
 export default function PageNav() {
   const [open, setOpen] = useState(false);
   const { settings } = useSettings();
+  const { isDark, toggle } = useTheme();
+  const headerRef = useRef(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const onClickOutside = (e) => {
+      if (headerRef.current && !headerRef.current.contains(e.target)) setOpen(false);
+    };
+    document.addEventListener("mousedown", onClickOutside);
+    document.addEventListener("touchstart", onClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", onClickOutside);
+      document.removeEventListener("touchstart", onClickOutside);
+    };
+  }, [open]);
 
   return (
-    <header className="fixed top-0 inset-x-0 z-50 bg-stone-950/95 backdrop-blur border-b border-white/10">
+    <header ref={headerRef} className="fixed top-0 inset-x-0 z-50 bg-white dark:bg-stone-950 backdrop-blur border-b border-stone-200 dark:border-white/10 transition-colors">
       <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
         <div className="flex items-center gap-5">
           <button
             onClick={() => window.history.back()}
-            className="flex items-center gap-1.5 text-sm text-stone-300 hover:text-white transition"
+            className="flex items-center gap-1.5 text-sm text-stone-600 dark:text-stone-300 hover:text-amber-500 transition"
             aria-label="Go back"
           >
             <span className="text-lg leading-none">&larr;</span>
             <span className="hidden sm:inline font-medium">Back</span>
           </button>
-          <span className="h-5 w-px bg-white/15" />
-          <Logo colorClass="text-white" />
+          <span className="h-5 w-px bg-stone-200 dark:bg-white/15" />
+          <Logo colorClass="text-stone-900 dark:text-white" />
         </div>
 
         <div className="flex items-center gap-3">
           <a
             href={`tel:${settings.phone}`}
-            className="hidden sm:flex items-center gap-1.5 text-sm font-semibold text-stone-200 hover:text-amber-500 transition"
+            className="hidden sm:flex items-center gap-1.5 text-sm font-semibold text-stone-700 dark:text-stone-200 hover:text-amber-500 transition"
           >
             <Phone className="h-4 w-4" /> {settings.phone}
           </a>
+          <button
+            onClick={toggle}
+            className="flex h-9 w-9 items-center justify-center rounded-lg text-stone-600 dark:text-stone-300 hover:text-amber-500 hover:bg-stone-100 dark:hover:bg-white/5 transition"
+            aria-label="Toggle dark mode"
+          >
+            {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+          </button>
           <Link
             to="/funnel"
             className="hidden sm:inline-flex h-9 px-5 items-center rounded-lg bg-amber-500 hover:bg-amber-400 text-stone-950 text-sm font-semibold transition"
@@ -54,7 +77,7 @@ export default function PageNav() {
             </a>
             <button
               onClick={() => setOpen(!open)}
-              className="text-white p-1"
+              className="text-stone-900 dark:text-white p-1"
               aria-label="Toggle menu"
             >
               {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -62,7 +85,7 @@ export default function PageNav() {
           </div>
           <button
             onClick={() => setOpen(!open)}
-            className="hidden sm:block text-white p-1"
+            className="hidden sm:block text-stone-900 dark:text-white p-1"
             aria-label="Toggle menu"
           >
             {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -71,13 +94,13 @@ export default function PageNav() {
       </div>
 
       {open && (
-        <div className="bg-stone-950 border-t border-white/10 px-6 py-4 space-y-1 md:hidden">
+        <div className="bg-white dark:bg-stone-950 border-t border-stone-200 dark:border-white/10 px-6 py-4 space-y-1 md:hidden text-right">
           {LINKS.map((l) => (
             <Link
               key={l.to}
               to={l.to}
               onClick={() => setOpen(false)}
-              className="block py-2.5 text-sm font-medium text-stone-200 hover:text-amber-500"
+              className="block py-2.5 text-sm font-medium text-stone-700 dark:text-stone-200 hover:text-amber-500"
             >
               {l.label}
             </Link>

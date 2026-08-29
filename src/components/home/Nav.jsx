@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import { Menu, X, Phone, Smartphone, Palette, ArrowRight } from "lucide-react";
+import { Menu, X, Phone, Smartphone, Palette, ArrowRight, Sun, Moon } from "lucide-react";
 import Logo from "@/components/Logo";
+import { useTheme } from "@/lib/useTheme";
 
 export default function Nav({ settings }) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const headerRef = useRef(null);
+  const { isDark, toggle } = useTheme();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -47,15 +49,15 @@ export default function Nav({ settings }) {
         🎉 10% OFF YOUR GARAGE FLOOR COATING — TAP TO GET YOUR FREE ESTIMATE
       </Link>
 
-      <div className="transition-all duration-300 bg-transparent">
+      <div className="transition-all duration-300 bg-white dark:bg-stone-950 border-b border-stone-200 dark:border-white/10">
         <div className="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
-          <Logo size="xl" colorClass={scrolled ? "text-stone-900" : "text-white"} />
+          <Logo size="xl" colorClass="text-stone-900 dark:text-white" />
 
           <nav className="hidden md:flex items-center gap-7">
             {links.map((l) => (
               l.to
-                ? <Link key={l.label} to={l.to} className={`text-sm font-medium transition ${scrolled ? "text-stone-700 hover:text-amber-500" : "text-white hover:text-amber-500"}`}>{l.label}</Link>
-                : <a key={l.label} href={l.href} className={`text-sm font-medium transition ${scrolled ? "text-stone-700 hover:text-amber-500" : "text-white hover:text-amber-500"}`}>{l.label}</a>
+                ? <Link key={l.label} to={l.to} className="text-sm font-medium text-stone-700 dark:text-stone-200 hover:text-amber-500 transition">{l.label}</Link>
+                : <a key={l.label} href={l.href} className="text-sm font-medium text-stone-700 dark:text-stone-200 hover:text-amber-500 transition">{l.label}</a>
             ))}
           </nav>
 
@@ -63,42 +65,57 @@ export default function Nav({ settings }) {
             <Link to="/funnel" className="h-9 px-5 inline-flex items-center rounded-lg bg-amber-500 hover:bg-amber-400 text-stone-950 text-sm font-semibold transition">
               Get Free Estimate
             </Link>
-            <a href={`tel:${settings.phone}`} className={`flex items-center gap-1.5 text-sm font-semibold transition ${scrolled ? "text-stone-700 hover:text-amber-500" : "text-white hover:text-amber-500"}`}>
+            <a href={`tel:${settings.phone}`} className="flex items-center gap-1.5 text-sm font-semibold text-stone-700 dark:text-stone-200 hover:text-amber-500 transition">
               <Phone className="h-4 w-4" /> {settings.phone}
             </a>
           </div>
 
           <div className="flex items-center gap-2 md:hidden">
+            <button
+              onClick={toggle}
+              className="flex h-9 w-9 items-center justify-center rounded-lg text-stone-700 dark:text-stone-200 hover:text-amber-500 transition"
+              aria-label="Toggle dark mode"
+            >
+              {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+            </button>
             <a href={`tel:${settings.phone}`} className="flex h-9 items-center gap-1.5 px-3 rounded-lg text-xs font-bold transition" style={{ background: 'linear-gradient(180deg, #FFE25A 0%, #FFD700 45%, #C8A300 100%)', border: '2px solid #000', color: '#1a1a1a', boxShadow: '0 3px 8px rgba(255,215,0,.35), inset 0 1px rgba(255,255,255,.4)' }}>
               <Phone className="h-4 w-4" /> Call Now
             </a>
-            <button onClick={() => setOpen(!open)} className={scrolled ? "text-stone-900" : "text-white"}>
+            <button onClick={() => setOpen(!open)} className="text-stone-900 dark:text-white">
               {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>
           </div>
+
+          <button
+            onClick={toggle}
+            className="hidden md:flex h-9 w-9 items-center justify-center rounded-lg text-stone-700 dark:text-stone-200 hover:text-amber-500 transition"
+            aria-label="Toggle dark mode"
+          >
+            {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+          </button>
         </div>
       </div>
 
       {open && (
-        <div className="md:hidden bg-white border-t border-stone-100 px-6 py-4 space-y-3 text-right">
+        <div className="md:hidden bg-white dark:bg-stone-950 border-t border-stone-200 dark:border-white/10 px-6 py-4 space-y-3 text-right">
           {links.map((l) => (
             l.to
-              ? <Link key={l.label} to={l.to} onClick={() => setOpen(false)} className="block text-sm font-medium text-stone-700">{l.label}</Link>
-              : <a key={l.label} href={l.href} onClick={() => setOpen(false)} className="block text-sm font-medium text-stone-700">{l.label}</a>
+              ? <Link key={l.label} to={l.to} onClick={() => setOpen(false)} className="block text-sm font-medium text-stone-700 dark:text-stone-200">{l.label}</Link>
+              : <a key={l.label} href={l.href} onClick={() => setOpen(false)} className="block text-sm font-medium text-stone-700 dark:text-stone-200">{l.label}</a>
           ))}
-          <a href={`tel:${settings.phone}`} className="block text-sm font-medium text-stone-700">{settings.phone}</a>
-          <div className="pt-2 border-t border-stone-100 space-y-2.5">
+          <a href={`tel:${settings.phone}`} className="block text-sm font-medium text-stone-700 dark:text-stone-200">{settings.phone}</a>
+          <div className="pt-2 border-t border-stone-100 dark:border-white/10 space-y-2.5">
             <Link to="/funnel" onClick={() => setOpen(false)} className="flex h-11 items-center justify-end gap-2 rounded-xl text-sm font-bold transition pr-4" style={{ background: 'linear-gradient(180deg, #FFE25A 0%, #FFD700 45%, #C8A300 100%)', border: '2px solid #000', color: '#1a1a1a', boxShadow: '0 4px 12px rgba(255,215,0,.4), inset 0 1px rgba(255,255,255,.4)' }}>
               Get Free Estimate <ArrowRight className="h-4 w-4" />
             </Link>
-            <Link to="/epoxy-pro-guide" onClick={() => setOpen(false)} className="flex h-11 items-center justify-end gap-2 rounded-xl bg-stone-950 hover:bg-stone-800 text-sm font-bold transition pr-4" style={{ border: '2px solid #FFD700', color: '#FFD700' }}>
+            <Link to="/epoxy-pro-guide" onClick={() => setOpen(false)} className="flex h-11 items-center justify-end gap-2 rounded-xl bg-stone-950 dark:bg-white dark:text-stone-950 hover:bg-stone-800 dark:hover:bg-stone-100 text-sm font-bold transition pr-4" style={{ border: '2px solid #FFD700', color: '#FFD700' }}>
               Download Epoxy Pro Guide App <Smartphone className="h-4 w-4" />
             </Link>
-            <Link to="/epoxy-pro-guide" onClick={() => setOpen(false)} className="flex h-11 items-center justify-end gap-2 rounded-xl bg-white hover:bg-amber-50 text-sm font-bold transition pr-4" style={{ border: '2px solid #D9B835', color: '#A4880F' }}>
+            <Link to="/epoxy-pro-guide" onClick={() => setOpen(false)} className="flex h-11 items-center justify-end gap-2 rounded-xl bg-white dark:bg-stone-900 hover:bg-amber-50 dark:hover:bg-stone-800 text-sm font-bold transition pr-4" style={{ border: '2px solid #D9B835', color: '#A4880F' }}>
               Use Floor Visualizer <Palette className="h-4 w-4" />
             </Link>
           </div>
-          <Link to="/admin" onClick={() => setOpen(false)} className="block text-sm font-medium text-stone-400 pt-2">
+          <Link to="/admin" onClick={() => setOpen(false)} className="block text-sm font-medium text-stone-400 dark:text-stone-500 pt-2">
             Admin Sign In
           </Link>
         </div>
