@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { Menu, X, Phone, Smartphone, Palette, ArrowRight } from "lucide-react";
 import Logo from "@/components/Logo";
@@ -6,12 +6,26 @@ import Logo from "@/components/Logo";
 export default function Nav({ settings }) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const headerRef = useRef(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  useEffect(() => {
+    if (!open) return;
+    const onClickOutside = (e) => {
+      if (headerRef.current && !headerRef.current.contains(e.target)) setOpen(false);
+    };
+    document.addEventListener("mousedown", onClickOutside);
+    document.addEventListener("touchstart", onClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", onClickOutside);
+      document.removeEventListener("touchstart", onClickOutside);
+    };
+  }, [open]);
 
   const links = [
     { label: "How it works", to: "/how-it-works" },
@@ -24,7 +38,7 @@ export default function Nav({ settings }) {
   ];
 
   return (
-    <header className="fixed top-0 inset-x-0 z-50">
+    <header ref={headerRef} className="fixed top-0 inset-x-0 z-50">
       {/* 10% OFF promo bar — clickable to the estimate funnel */}
       <Link
         to="/funnel"
