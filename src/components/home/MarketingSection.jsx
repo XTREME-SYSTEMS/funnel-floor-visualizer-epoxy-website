@@ -61,9 +61,9 @@ export default function MarketingSection() {
                   animation: done ? "none" : "vx-caret 0.7s step-end infinite"
                 }}
               />
-              <Star className="h-5 w-5 text-amber-400 fill-amber-400 shrink-0" strokeWidth={2.2} />
             </span>
           </span>
+          <Star className="h-5 w-5 text-amber-400 shrink-0 fill-amber-400" strokeWidth={2.2} />
         </div>
       </div>
 
