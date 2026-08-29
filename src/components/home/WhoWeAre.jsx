@@ -134,17 +134,41 @@ export default function WhoWeAre({ settings }) {
         </div>
 
         {/* Sales Pros team */}
-        <div className="mt-16 rounded-3xl border border-stone-200 overflow-hidden bg-stone-950 shadow-sm">
-          <div className="relative h-64 md:h-96">
-            <Image src={TEAM_IMG} alt="Xtreme Polishing Systems sales pros team" fittingType="fill" focalPointX={0.5} focalPointY={0.5} className="h-full w-full" />
+        <div className="mt-16 rounded-3xl border border-stone-200 overflow-hidden bg-white shadow-sm">
+          <div className="bg-stone-950 flex items-center justify-center">
+            <Image
+              src={TEAM_IMG}
+              alt="Xtreme Polishing Systems rockstar sales pros team with floor polishing equipment"
+              fittingType="fit"
+              className="w-full h-44 sm:h-56 md:h-80"
+            />
           </div>
-          <div className="p-6 text-center">
+          <div className="p-6 md:p-10">
             <div className="inline-flex items-center gap-2 text-xs font-bold tracking-[0.15em] text-amber-600">
               <Award className="h-4 w-4" /> OUR ROCKSTAR SALES PROS
             </div>
-            <h3 className="mt-2 text-2xl font-semibold text-stone-900">Meet the Team Behind Your Estimate</h3>
-            <p className="mt-3 text-sm text-stone-600 leading-relaxed max-w-2xl mx-auto">
-              The same crew that grinds, coats, and polishes floors every day — real pros who know the craft inside and out, ready to help you price and plan your project.
+            <h3 className="mt-2 text-2xl md:text-3xl font-semibold text-stone-900">
+              Meet the Epoxy Flooring Sales Team Behind Your Estimate
+            </h3>
+            <p className="mt-4 text-sm md:text-base text-stone-600 leading-relaxed">
+              When you request a garage floor coating estimate from Xtreme Polishing Systems, you're not handed off to a call center. You work directly with our rockstar sales pros — seasoned concrete and epoxy flooring specialists who have spent years grinding, polishing, and coating real residential and commercial floors. Every member of our sales team graduates from <strong>Polished Concrete University</strong>, the world's #1 decorative concrete and epoxy training school, so they can answer technical questions about surface prep, moisture mitigation, flake systems, and hot-tire resistance that a typical lead-gen rep simply can't.
+            </p>
+            <div className="mt-6 grid sm:grid-cols-2 gap-5">
+              <div>
+                <h4 className="text-sm font-bold text-stone-900">Real Floor Coating Experts, Not Scripted Reps</h4>
+                <p className="mt-1.5 text-sm text-stone-600 leading-relaxed">
+                  Our sales pros have run the same floor grinders, scarifiers, and epoxy application equipment you'll see on your project. That hands-on experience means accurate square-footage takeoffs, honest condition assessments, and product recommendations tailored to your garage — whether you need a 100% solids epoxy system, a metallic floor, or a decorative flake coating.
+                </p>
+              </div>
+              <div>
+                <h4 className="text-sm font-bold text-stone-900">Backed by America's #1 Epoxy Superstore</h4>
+                <p className="mt-1.5 text-sm text-stone-600 leading-relaxed">
+                  As the in-house sales team for Xtreme Polishing Systems and XPS Xpress — with 70+ locations nationwide — our pros have direct access to the manufacturer's full catalog of industrial-grade epoxy coatings, polyurea topcoats, and diamond tooling. That means faster quotes, transparent pricing, and premium materials on every garage floor coating estimate.
+                </p>
+              </div>
+            </div>
+            <p className="mt-6 text-sm text-stone-500 leading-relaxed">
+              From your first phone consultation to the final walk-through, our epoxy flooring sales professionals guide you through every step — system selection, color and flake choice, pricing, scheduling, and installation day. It's the white-glove experience homeowners across South Florida and beyond have come to expect from the nation's leader in residential garage floor coatings.
             </p>
           </div>
         </div>
