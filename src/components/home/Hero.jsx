@@ -44,7 +44,7 @@ export default function Hero({ settings }) {
           <Link to="/funnel" className="inline-flex items-center gap-2 rounded-full bg-amber-500/15 border border-amber-500/40 backdrop-blur-sm px-5 py-2.5 hover:bg-amber-500/25 transition">
             <Sparkles className="h-4 w-4 text-amber-400 shrink-0" />
             <span className="text-sm md:text-base font-semibold text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]">
-              See a realistic image of your floor before it's done — absolutely free!
+              See your new floor before you commit — free.
             </span>
           </Link>
           <p className="hidden md:block text-white text-sm font-medium drop-shadow-[0_2px_6px_rgba(0,0,0,0.85)]">{settings.service_area}</p>
