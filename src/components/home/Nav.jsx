@@ -49,15 +49,15 @@ export default function Nav({ settings }) {
         🎉 10% OFF YOUR GARAGE FLOOR COATING — TAP TO GET YOUR FREE ESTIMATE
       </Link>
 
-      <div className="transition-all duration-300 bg-white dark:bg-stone-950 border-b border-stone-200 dark:border-white/10">
+      <div className="transition-all duration-300 bg-transparent">
         <div className="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
-          <Logo size="xl" colorClass="text-stone-900 dark:text-white" />
+          <Logo size="xl" colorClass="text-white" />
 
           <nav className="hidden md:flex items-center gap-7">
             {links.map((l) => (
               l.to
-                ? <Link key={l.label} to={l.to} className="text-sm font-medium text-stone-700 dark:text-stone-200 hover:text-amber-500 transition">{l.label}</Link>
-                : <a key={l.label} href={l.href} className="text-sm font-medium text-stone-700 dark:text-stone-200 hover:text-amber-500 transition">{l.label}</a>
+                ? <Link key={l.label} to={l.to} className="text-sm font-medium text-white hover:text-amber-500 transition">{l.label}</Link>
+                : <a key={l.label} href={l.href} className="text-sm font-medium text-white hover:text-amber-500 transition">{l.label}</a>
             ))}
           </nav>
 
@@ -65,7 +65,7 @@ export default function Nav({ settings }) {
             <Link to="/funnel" className="h-9 px-5 inline-flex items-center rounded-lg bg-amber-500 hover:bg-amber-400 text-stone-950 text-sm font-semibold transition">
               Get Free Estimate
             </Link>
-            <a href={`tel:${settings.phone}`} className="flex items-center gap-1.5 text-sm font-semibold text-stone-700 dark:text-stone-200 hover:text-amber-500 transition">
+            <a href={`tel:${settings.phone}`} className="flex items-center gap-1.5 text-sm font-semibold text-white hover:text-amber-500 transition">
               <Phone className="h-4 w-4" /> {settings.phone}
             </a>
           </div>
@@ -73,7 +73,7 @@ export default function Nav({ settings }) {
           <div className="flex items-center gap-2 md:hidden">
             <button
               onClick={toggle}
-              className="flex h-9 w-9 items-center justify-center rounded-lg text-stone-700 dark:text-stone-200 hover:text-amber-500 transition"
+              className="flex h-9 w-9 items-center justify-center rounded-lg text-white hover:text-amber-500 transition"
               aria-label="Toggle dark mode"
             >
               {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
@@ -81,14 +81,14 @@ export default function Nav({ settings }) {
             <a href={`tel:${settings.phone}`} className="flex h-9 items-center gap-1.5 px-3 rounded-lg text-xs font-bold transition" style={{ background: 'linear-gradient(180deg, #FFE25A 0%, #FFD700 45%, #C8A300 100%)', border: '2px solid #000', color: '#1a1a1a', boxShadow: '0 3px 8px rgba(255,215,0,.35), inset 0 1px rgba(255,255,255,.4)' }}>
               <Phone className="h-4 w-4" /> Call Now
             </a>
-            <button onClick={() => setOpen(!open)} className="text-stone-900 dark:text-white">
+            <button onClick={() => setOpen(!open)} className="text-white">
               {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>
           </div>
 
           <button
             onClick={toggle}
-            className="hidden md:flex h-9 w-9 items-center justify-center rounded-lg text-stone-700 dark:text-stone-200 hover:text-amber-500 transition"
+            className="hidden md:flex h-9 w-9 items-center justify-center rounded-lg text-white hover:text-amber-500 transition"
             aria-label="Toggle dark mode"
           >
             {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
