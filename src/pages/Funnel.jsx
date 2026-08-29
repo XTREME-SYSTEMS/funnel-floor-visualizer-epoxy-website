@@ -10,8 +10,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, ArrowLeft, CheckCircle2, Phone, Clock, ShieldCheck } from "lucide-react";
 import BackButton from "@/components/BackButton";
 import ScrapeProgress from "@/components/funnel/ScrapeProgress";
-import ColorPicker from "@/components/funnel/ColorPicker";
-import PhotoUpload from "@/components/funnel/PhotoUpload";
+import FloorVisualizer from "@/components/funnel/FloorVisualizer";
 import ResultVisualizer from "@/components/funnel/ResultVisualizer";
 import Logo from "@/components/Logo";
 import { generateBidPdf } from "@/lib/bidPdf";
@@ -25,8 +24,8 @@ const CONDITIONS = [
   { key: "major", label: "Major damage / not sure", desc: "We'll assess it" }
 ];
 
-// Steps: 0 welcome · 1 address · 2 condition · 3 color · 4 photos · 5 contact · 6 scrape · 7 results
-const STEP_EVENTS = ["funnel_started", "address_entered", "condition_selected", "color_selected", "photos_uploaded", "contact_entered"];
+// Steps: 0 welcome · 1 address · 2 condition · 3 visualizer · 4 contact · 5 scrape · 6 results
+const STEP_EVENTS = ["funnel_started", "address_entered", "condition_selected", "color_selected", "contact_entered"];
 
 export default function Funnel() {
   const navigate = useNavigate();
@@ -45,7 +44,7 @@ export default function Funnel() {
   // Once the visualizer has produced the floor image (step 7), email the
   // branded estimate to the customer from the connected Gmail account.
   useEffect(() => {
-    if (step === 7 && leadId && floorImage !== null && !sentRef.current) {
+    if (step === 6 && leadId && floorImage !== null && !sentRef.current) {
       sentRef.current = true;
       (async () => {
         try {
@@ -135,9 +134,9 @@ export default function Funnel() {
       const fullAddress = `${data.address}, ${data.city}, ${data.state} ${data.zip}`;
       lookupPromise.current = lookupGarageSqft(fullAddress);
     }
-    trackEvent("contact_entered", { step: 5 });
+    trackEvent("contact_entered", { step: 4 });
     setSubmitting(false);
-    setStep(6);
+    setStep(5);
     window.scrollTo(0, 0);
   };
 
@@ -186,7 +185,7 @@ export default function Funnel() {
     // Push to HubSpot CRM immediately (does not block the funnel).
     base44.functions.invoke("pushLeadToHubspot", { lead_id: lead.id }).catch(() => {});
     trackEvent("scrape_complete", { lead_id: lead.id, sqft, source: result.source });
-    setStep(7);
+    setStep(6);
     window.scrollTo(0, 0);
   };
 
@@ -195,12 +194,12 @@ export default function Funnel() {
   }
 
   // Scrape animation step
-  if (step === 6) {
+  if (step === 5) {
     return <ScrapeProgress address={`${data.address}, ${data.city}, ${data.state} ${data.zip}`} lookup={lookupPromise.current} onComplete={onScrapeComplete} />;
   }
 
-  const totalSteps = 5;
-  const progressPct = step <= 5 ? (step / totalSteps) * 100 : 100;
+  const totalSteps = 4;
+  const progressPct = step <= 4 ? (step / totalSteps) * 100 : 100;
 
   return (
     <div className="min-h-screen bg-stone-50 flex flex-col">
@@ -211,7 +210,7 @@ export default function Funnel() {
             <BackButton className="text-stone-300 hover:text-white" showLabel={false} />
             <Logo />
           </div>
-          {step > 0 && step <= 5 && (
+          {step > 0 && step <= 4 && (
             <button onClick={back} className="flex items-center gap-1 text-sm text-stone-400 hover:text-white">
               <ArrowLeft className="h-4 w-4" /> Back
             </button>
@@ -220,7 +219,7 @@ export default function Funnel() {
       </header>
 
       {/* Progress bar */}
-      {step <= 5 && (
+      {step <= 4 && (
         <div className="h-1 bg-stone-200">
           <div className="h-full bg-amber-500 transition-all duration-500" style={{ width: `${progressPct}%` }} />
         </div>
@@ -305,35 +304,24 @@ export default function Funnel() {
             </div>
           )}
 
-          {/* Step 3: Flake color */}
+          {/* Step 3: Visualizer — upload photo + pick color + see before/after */}
           {step === 3 && (
             <div>
-              <StepHeader n="3" title="Choose your color" sub="Browse every finish system and pick the color you love — we'll match it to your estimate." />
+              <StepHeader n="3" title="Visualize your new floor" sub="Upload a photo of your garage, then pick a color to see your transformation instantly." />
               <div className="mt-6">
-                <ColorPicker
-                  selected={data.flake_color}
-                  onSelect={(c) => update({ flake_color: c.code, flake_color_name: c.color_name, flake_color_hex: c.hex, desired_system: c.system })}
+                <FloorVisualizer
+                  initialPhoto={(data.photos || [])[0]}
+                  initialColor={data.flake_color ? { code: data.flake_color, color_name: data.flake_color_name, hex: data.flake_color_hex, system: data.desired_system } : null}
+                  onPhotoChange={(url) => update({ photos: url ? [url] : [] })}
+                  onColorSelected={(c) => update({ flake_color: c.code, flake_color_name: c.color_name, flake_color_hex: c.hex, desired_system: c.system })}
                 />
               </div>
-              <Button
-                onClick={next}
-                disabled={!data.flake_color}
-                className="mt-6 h-14 w-full text-base font-bold bg-stone-950 hover:bg-stone-800"
-              >
-                CONTINUE <ArrowRight className="h-5 w-5" />
-              </Button>
-            </div>
-          )}
-
-          {/* Step 4: Photos */}
-          {step === 4 && (
-            <div>
-              <StepHeader n="4" title="Add photos of your garage floor" sub="Optional, but it helps us give you a more accurate quote. You can skip this step." />
-              <div className="mt-6">
-                <PhotoUpload photos={data.photos || []} onChange={(urls) => update({ photos: urls })} />
-              </div>
               <div className="mt-6 space-y-2">
-                <Button onClick={next} className="h-14 w-full text-base font-bold bg-stone-950 hover:bg-stone-800">
+                <Button
+                  onClick={next}
+                  disabled={!data.flake_color}
+                  className="h-14 w-full text-base font-bold bg-stone-950 hover:bg-stone-800"
+                >
                   CONTINUE <ArrowRight className="h-5 w-5" />
                 </Button>
                 <button onClick={next} className="w-full h-11 text-sm font-medium text-stone-500 hover:text-stone-800">
@@ -343,10 +331,10 @@ export default function Funnel() {
             </div>
           )}
 
-          {/* Step 5: Contact info */}
-          {step === 5 && (
+          {/* Step 4: Contact info */}
+          {step === 4 && (
             <div>
-              <StepHeader n="5" title="Last step — where do we send your estimate?" sub="We'll look up your garage and prepare your personalized quote." />
+              <StepHeader n="4" title="Last step — where do we send your estimate?" sub="We'll look up your garage and prepare your personalized quote." />
               <div className="space-y-3 mt-6">
                 <div className="grid grid-cols-2 gap-3">
                   <Input placeholder="First name" value={data.first_name || ""} onChange={(e) => update({ first_name: e.target.value })} className="h-12" />
@@ -366,8 +354,8 @@ export default function Funnel() {
             </div>
           )}
 
-          {/* Step 7: Results */}
-          {step === 7 && (
+          {/* Step 6: Results */}
+          {step === 6 && (
             <div className="space-y-8">
               {/* Detected sq ft */}
               <div className="rounded-2xl bg-stone-950 p-7 text-center">

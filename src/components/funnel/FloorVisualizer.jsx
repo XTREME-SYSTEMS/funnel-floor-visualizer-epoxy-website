@@ -1,10 +1,9 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { Upload, Loader2, Wand2, ImageIcon } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { COLOR_DATA } from "@/lib/colorData";
 import { compositeFloorImage } from "@/lib/floorComposite";
 import BeforeAfter from "@/components/funnel/BeforeAfter";
-import SwatchImg from "@/components/ui/SwatchImg";
 
 const SYSTEMS = [
   { key: "flake", label: "Flake" },
@@ -15,11 +14,11 @@ const SYSTEMS = [
   { key: "dye_stain", label: "Stain" }
 ];
 
-export default function FloorVisualizer({ onColorSelected }) {
-  const [system, setSystem] = useState("flake");
-  const [photoUrl, setPhotoUrl] = useState("");
+export default function FloorVisualizer({ onPhotoChange, onColorSelected, initialPhoto, initialColor }) {
+  const [system, setSystem] = useState(initialColor?.system || "flake");
+  const [photoUrl, setPhotoUrl] = useState(initialPhoto || "");
   const [uploading, setUploading] = useState(false);
-  const [selectedColor, setSelectedColor] = useState(null);
+  const [selectedColor, setSelectedColor] = useState(initialColor || null);
   const [generating, setGenerating] = useState(false);
   const [afterUrl, setAfterUrl] = useState("");
 
@@ -36,6 +35,7 @@ export default function FloorVisualizer({ onColorSelected }) {
     try {
       const { file_url } = await base44.integrations.Core.UploadFile({ file });
       setPhotoUrl(file_url);
+      onPhotoChange?.(file_url);
     } catch (err) {
       console.error(err);
     }
@@ -44,35 +44,35 @@ export default function FloorVisualizer({ onColorSelected }) {
 
   const pickColor = (c) => {
     setSelectedColor(c);
+    onColorSelected?.(c);
     setAfterUrl("");
   };
 
-  const visualize = async () => {
-    if (!photoUrl || !selectedColor) return;
-    setGenerating(true);
-    setAfterUrl("");
-    try {
-      // Canvas composite: exact uploaded photo + exact color chart color/texture
-      const dataUrl = await compositeFloorImage(photoUrl, selectedColor);
-      setAfterUrl(dataUrl);
-      onColorSelected?.(selectedColor);
-    } catch (err) {
-      console.error(err);
-    }
-    setGenerating(false);
-  };
+  // Auto-visualize as soon as both a photo and a color are selected
+  useEffect(() => {
+    if (!photoUrl || !selectedColor?.hex) return;
+    let cancelled = false;
+    const run = async () => {
+      setGenerating(true);
+      setAfterUrl("");
+      try {
+        const dataUrl = await compositeFloorImage(photoUrl, selectedColor);
+        if (!cancelled) setAfterUrl(dataUrl);
+      } catch (err) {
+        console.error(err);
+      }
+      if (!cancelled) setGenerating(false);
+    };
+    run();
+    return () => { cancelled = true; };
+  }, [photoUrl, selectedColor?.code]);
 
   return (
     <div className="space-y-6">
       {/* Upload */}
       <div>
-        <h3 className="text-xl font-semibold text-stone-900">Visualize your floor</h3>
-        <p className="text-sm text-stone-500 mt-1">
-          Upload a photo of your garage floor, pick a color, and see the transformation.
-        </p>
-
         {!photoUrl ? (
-          <label className="mt-4 flex flex-col items-center justify-center gap-2 border-2 border-dashed border-stone-300 rounded-2xl p-8 cursor-pointer hover:border-amber-500 hover:bg-amber-50/40 transition">
+          <label className="flex flex-col items-center justify-center gap-2 border-2 border-dashed border-stone-300 rounded-2xl p-8 cursor-pointer hover:border-amber-500 hover:bg-amber-50/40 transition">
             {uploading ? (
               <Loader2 className="h-8 w-8 text-amber-500 animate-spin" />
             ) : (
@@ -85,10 +85,10 @@ export default function FloorVisualizer({ onColorSelected }) {
             <input type="file" accept="image/*" className="hidden" onChange={handleUpload} />
           </label>
         ) : (
-          <div className="mt-4 relative rounded-2xl overflow-hidden border border-stone-200">
+          <div className="relative rounded-2xl overflow-hidden border border-stone-200">
             <img src={photoUrl} alt="Your garage floor" className="w-full h-48 object-cover" />
             <button
-              onClick={() => { setPhotoUrl(""); setAfterUrl(""); }}
+              onClick={() => { setPhotoUrl(""); setAfterUrl(""); onPhotoChange?.(""); }}
               className="absolute top-2 right-2 text-xs font-semibold bg-stone-950/80 text-white px-3 py-1.5 rounded-lg hover:bg-stone-950"
             >
               Change photo
@@ -131,18 +131,6 @@ export default function FloorVisualizer({ onColorSelected }) {
               </button>
             ))}
           </div>
-
-          <button
-            onClick={visualize}
-            disabled={!selectedColor || generating}
-            className="mt-4 w-full h-12 inline-flex items-center justify-center gap-2 rounded-xl bg-amber-500 hover:bg-amber-400 disabled:opacity-50 disabled:cursor-not-allowed text-stone-950 font-bold transition"
-          >
-            {generating ? (
-              <><Loader2 className="h-5 w-5 animate-spin" /> Visualizing…</>
-            ) : (
-              <><Wand2 className="h-5 w-5" /> {selectedColor ? `Visualize "${selectedColor.color_name}"` : "Pick a color to visualize"}</>
-            )}
-          </button>
         </div>
       )}
 
@@ -150,7 +138,10 @@ export default function FloorVisualizer({ onColorSelected }) {
       {generating && (
         <div className="flex flex-col items-center justify-center gap-3 py-12 text-stone-500">
           <Loader2 className="h-8 w-8 text-amber-500 animate-spin" />
-          <p className="text-sm">Generating your new floor…</p>
+          <p className="text-sm font-medium flex items-center gap-1.5">
+            <Wand2 className="h-4 w-4 text-amber-500" />
+            Applying {selectedColor?.color_name} to your floor…
+          </p>
         </div>
       )}
 
