@@ -30,18 +30,17 @@ export default function Hero({ settings }) {
             <Link to="/funnel" className="mt-6 md:mt-8 inline-flex w-full sm:w-auto items-center justify-center h-14 md:h-16 px-8 md:px-10 rounded-xl bg-amber-500 hover:bg-amber-400 transition text-stone-950 text-base font-bold tracking-wide shadow-lg shadow-amber-500/30">
               GET MY FREE ESTIMATE & FLOOR IMAGE
             </Link>
-            <p className="mt-3 text-sm text-white/90 font-medium drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]">
-              {trust.map((t, i) => (
+            <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-white/90 font-medium drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]">
+              <span>{trust.map((t, i) => (
                 <span key={i}>{i > 0 && " • "}{t.text}</span>
-              ))}
-            </p>
+              ))}</span>
+              <span className="hidden md:inline text-white/40">|</span>
+              <span className="hidden md:inline text-white/80">{settings.service_area}</span>
+            </div>
           </motion.div>
         </div>
       </div>
 
-      <div className="hidden md:block absolute bottom-0 inset-x-0 pb-24 text-center">
-        <p className="text-white text-sm font-medium drop-shadow-[0_2px_6px_rgba(0,0,0,0.85)]">{settings.service_area}</p>
-      </div>
     </section>
   );
 }
