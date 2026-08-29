@@ -95,11 +95,16 @@ module.exports = {
   				to: {
   					height: '0'
   				}
+  			},
+  			'pop-bounce': {
+  				'0%, 100%': { transform: 'translateY(0)' },
+  				'50%': { transform: 'translateY(-8px)' }
   			}
   		},
   		animation: {
   			'accordion-down': 'accordion-down 0.2s ease-out',
-  			'accordion-up': 'accordion-up 0.2s ease-out'
+  			'accordion-up': 'accordion-up 0.2s ease-out',
+  			'pop-bounce': 'pop-bounce 1.8s ease-in-out infinite'
   		}
   	}
   },
