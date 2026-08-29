@@ -13,7 +13,8 @@ import AppServices from "@/components/app/AppServices";
 import AppReviews from "@/components/app/AppReviews";
 import AppSchedule from "@/components/app/AppSchedule";
 import AppChat from "@/components/app/AppChat";
-import { LOGO_URL } from "@/components/Logo";
+import Logo from "@/components/Logo";
+import { Link } from "react-router-dom";
 
 const TABS = [
   { key: "home", label: "Home", icon: Home },
@@ -100,17 +101,21 @@ export default function EpoxyProGuide() {
 
   return (
     <div className="min-h-screen bg-stone-50 flex flex-col max-w-md mx-auto relative shadow-2xl">
+      {/* Promo bar — matches main site */}
+      {!sub && (
+        <Link to="/funnel" className="block bg-amber-500 text-stone-950 text-center text-[11px] font-bold tracking-wide py-1.5 shrink-0">
+          🎉 10% OFF YOUR GARAGE FLOOR COATING — TAP TO GET YOUR FREE ESTIMATE
+        </Link>
+      )}
+
       {/* Top bar */}
-      <header className="sticky top-0 z-30 bg-white border-b border-stone-200 px-4 h-14 flex items-center justify-between shrink-0">
+      <header className="sticky top-0 z-30 bg-white border-b border-stone-200 px-4 h-16 flex items-center justify-between shrink-0">
         {sub ? (
           <button onClick={handleBack} className="flex items-center gap-1.5 text-sm font-semibold text-stone-700">
             <ArrowLeft className="h-5 w-5" /> Back
           </button>
         ) : (
-          <div className="flex items-center gap-2">
-            <img src={LOGO_URL} alt="XPS" className="h-8 w-8 object-contain" />
-            <span className="font-display font-bold text-stone-900 text-sm">Epoxy Pro Guide</span>
-          </div>
+          <Logo size="md" colorClass="text-stone-900" />
         )}
         {!sub && (
           <a href={`tel:${settings.phone || "(877) 958-6408"}`} className="text-xs font-semibold text-amber-600">
@@ -138,14 +143,14 @@ export default function EpoxyProGuide() {
       {/* Chat overlay */}
       {chatOpen && <AppChat onClose={() => setChatOpen(false)} />}
 
-      {/* Bottom tab bar */}
+      {/* Bottom tab bar — dark to match site footer/hero aesthetic */}
       {!sub && !chatOpen && (
-        <nav className="fixed bottom-0 left-0 right-0 z-30 max-w-md mx-auto bg-white border-t border-stone-200 flex">
+        <nav className="fixed bottom-0 left-0 right-0 z-30 max-w-md mx-auto bg-stone-950 border-t-2 border-amber-500 flex">
           {TABS.map((t) => (
             <button
               key={t.key}
               onClick={() => setTab(t.key)}
-              className={`flex-1 flex flex-col items-center gap-0.5 py-2.5 transition ${tab === t.key ? "text-amber-600" : "text-stone-400"}`}
+              className={`flex-1 flex flex-col items-center gap-0.5 py-2.5 transition ${tab === t.key ? "text-amber-500" : "text-stone-500"}`}
             >
               <t.icon className="h-5 w-5" strokeWidth={tab === t.key ? 2.2 : 1.8} />
               <span className="text-[10px] font-semibold">{t.label}</span>

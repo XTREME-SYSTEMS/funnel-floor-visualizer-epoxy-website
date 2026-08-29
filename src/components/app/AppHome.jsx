@@ -22,13 +22,16 @@ export default function AppHome({ appData, onNavigate }) {
 
   return (
     <div className="pb-6">
-      {/* Hero banner */}
-      <div className="relative overflow-hidden bg-stone-950 px-5 pt-8 pb-6">
+      {/* Hero banner — matches main site hero aesthetic */}
+      <div className="relative overflow-hidden bg-stone-950 px-5 pt-8 pb-6 border-b-2 border-amber-500">
         <div className="absolute inset-0 opacity-20" style={{ background: "radial-gradient(circle at 30% 20%, #D9B835, transparent 60%)" }} />
+        <div className="relative flex items-center gap-3 mb-3">
+          <img src={LOGO_URL} alt="Xtreme Polishing Systems" className="h-11 w-11 object-contain" />
+          <span className="font-display font-bold text-white text-lg">Epoxy Garage Floors</span>
+        </div>
         <div className="relative">
-          <img src={LOGO_URL} alt="XPS" className="h-12 w-12 object-contain mb-3" />
-          <h1 className="text-2xl font-display font-extrabold text-white tracking-tight">Epoxy Pro Guide</h1>
-          <p className="text-sm text-stone-400 mt-1">Your complete garage floor toolkit — visualize, estimate, and book in one place.</p>
+          <h1 className="text-2xl font-display font-extrabold text-white tracking-tight">Your Garage Floor Toolkit</h1>
+          <p className="text-sm text-stone-400 mt-1">Visualize, estimate, and book — all in one place.</p>
         </div>
       </div>
 
