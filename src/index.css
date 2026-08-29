@@ -162,13 +162,13 @@
   .xa-nav-center-label { margin-top: 2px; color: var(--vx-accent); font-size: 10px; font-weight: 600; }
 
   /* === CTA buttons === */
-  .xa-cta-gold { width: 100%; min-height: 48px; border-radius: 14px; border: 1px solid #C8A300; background: linear-gradient(180deg, #FFE25A 0%, var(--vx-accent) 45%, #C8A300 100%); color: #1a1a1a; font-weight: 800; font-size: 14px; display: inline-flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; box-shadow: inset 0 1px rgba(255,255,255,.5), 0 6px 18px rgba(255,215,0,.35); transition: transform .12s, box-shadow .12s; }
-  .xa-cta-gold:hover { filter: brightness(1.08); box-shadow: inset 0 1px rgba(255,255,255,.6), 0 8px 26px rgba(255,215,0,.5); }
-  .xa-cta-gold:active { transform: translateY(1px); }
+  .xa-cta-gold { width: 100%; min-height: 48px; border-radius: 14px; border: 2px solid #000; background: linear-gradient(180deg, #FFE25A 0%, var(--vx-accent) 45%, #C8A300 100%); color: #1a1a1a; font-weight: 800; font-size: 14px; display: inline-flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; box-shadow: 0 6px 18px rgba(255,215,0,.4), inset 0 1px rgba(255,255,255,.4); transition: transform .12s, box-shadow .12s; }
+  .xa-cta-gold:hover { filter: brightness(1.08); box-shadow: 0 8px 22px rgba(255,215,0,.5), inset 0 1px rgba(255,255,255,.5); }
+  .xa-cta-gold:active { transform: translateY(2px); box-shadow: 0 2px 8px rgba(255,215,0,.3), inset 0 1px rgba(255,255,255,.3); }
   .xa-cta-gold:disabled { opacity: .6; cursor: not-allowed; }
-  .xa-cta-black { width: 100%; min-height: 48px; border-radius: 14px; border: 1px solid #000; background: linear-gradient(180deg, #FFE25A 0%, var(--vx-accent) 45%, #C8A300 100%); color: #1a1a1a; font-weight: 800; font-size: 14px; display: inline-flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; box-shadow: inset 0 1px rgba(255,255,255,.5), 0 6px 18px rgba(255,215,0,.35); transition: filter .12s, box-shadow .12s, transform .12s; }
-  .xa-cta-black:hover { filter: brightness(1.08); box-shadow: inset 0 1px rgba(255,255,255,.6), 0 8px 26px rgba(255,215,0,.5); }
-  .xa-cta-black:active { transform: translateY(1px); }
+  .xa-cta-black { width: 100%; min-height: 48px; border-radius: 14px; border: 2px solid #000; background: linear-gradient(180deg, #FFE25A 0%, var(--vx-accent) 45%, #C8A300 100%); color: #1a1a1a; font-weight: 800; font-size: 14px; display: inline-flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; box-shadow: 0 6px 18px rgba(255,215,0,.4), inset 0 1px rgba(255,255,255,.4); transition: transform .12s, box-shadow .12s; }
+  .xa-cta-black:hover { filter: brightness(1.08); box-shadow: 0 8px 22px rgba(255,215,0,.5), inset 0 1px rgba(255,255,255,.5); }
+  .xa-cta-black:active { transform: translateY(2px); box-shadow: 0 2px 8px rgba(255,215,0,.3), inset 0 1px rgba(255,255,255,.3); }
 
   /* === Cards === */
   .xa-card-dark { background: var(--vx-panel); border: 1px solid var(--vx-border); border-radius: 18px; padding: 16px; }
