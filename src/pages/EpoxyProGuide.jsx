@@ -13,6 +13,11 @@ import AppServices from "@/components/app/AppServices";
 import AppReviews from "@/components/app/AppReviews";
 import AppSchedule from "@/components/app/AppSchedule";
 import AppChat from "@/components/app/AppChat";
+import TrustLocations from "@/components/app/TrustLocations";
+import TrustTraining from "@/components/app/TrustTraining";
+import TrustProducts from "@/components/app/TrustProducts";
+import TrustSelection from "@/components/app/TrustSelection";
+import TrustInstallers from "@/components/app/TrustInstallers";
 import { LOGO_URL } from "@/components/Logo";
 import { Link } from "react-router-dom";
 import { usePwaInstall } from "@/lib/usePwaInstall";
@@ -35,6 +40,11 @@ const TITLES = {
   services: { eyebrow: "EPOXY PRO · SERVICES", title: "Our Services" },
   reviews: { eyebrow: "EPOXY PRO · REVIEWS", title: "Customer Reviews" },
   schedule: { eyebrow: "EPOXY PRO · TRACKING", title: "Proposal Tracking" },
+  "trust-locations": { eyebrow: "XPS · LOCATIONS", title: "70+ Locations Nationwide" },
+  "trust-training": { eyebrow: "XPS · TRAINING", title: "Training Center" },
+  "trust-products": { eyebrow: "XPS · PRODUCTS", title: "Commercial Grade Products" },
+  "trust-selection": { eyebrow: "XPS · SELECTION", title: "Largest Selection" },
+  "trust-installers": { eyebrow: "XPS · CERTIFICATION", title: "XPS Trained Installers" },
 };
 
 const MORE_ITEMS = [
@@ -73,6 +83,11 @@ export default function EpoxyProGuide() {
       case "services": return <AppServices />;
       case "reviews": return <AppReviews />;
       case "schedule": return <AppSchedule appData={appData} />;
+      case "trust-locations": return <TrustLocations />;
+      case "trust-training": return <TrustTraining />;
+      case "trust-products": return <TrustProducts />;
+      case "trust-selection": return <TrustSelection />;
+      case "trust-installers": return <TrustInstallers />;
       case "chat": setChatOpen(true); setSub(null); return null;
       default: return null;
     }
@@ -160,10 +175,7 @@ export default function EpoxyProGuide() {
           )}
           <div className="xa-header-center">
             <img src={LOGO_URL} alt="XPS" className="xa-header-crest" />
-            <div>
-              <small>{meta.eyebrow}</small>
-              <h1>{meta.title}</h1>
-            </div>
+            <span className="xa-header-brand">Xtreme Polishing Systems</span>
           </div>
           <div className="vx-header__actions">
             <a href={`tel:${(settings.phone || "").replace(/[^\d+]/g, "")}`} className="xa-cta-gold" style={{ width: 'auto', minHeight: 40, padding: '0 14px', fontSize: 12, borderRadius: 10 }}>

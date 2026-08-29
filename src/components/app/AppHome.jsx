@@ -6,11 +6,11 @@ import { Image } from "@/components/ui/image";
 import { LOGO_URL } from "@/components/Logo";
 
 const TRUST_BADGES = [
-  { label: "+70 Locations Nationwide", icon: MapPin },
-  { label: "Training Center Near You", icon: GraduationCap },
-  { label: "Commercial Grade Products", icon: ShieldCheck },
-  { label: "Largest Selection in the Industry", icon: Layers },
-  { label: "XPS Trained Installers", icon: HardHat },
+  { label: "+70 Locations Nationwide", icon: MapPin, sub: "trust-locations" },
+  { label: "Training Center Near You", icon: GraduationCap, sub: "trust-training" },
+  { label: "Commercial Grade Products", icon: ShieldCheck, sub: "trust-products" },
+  { label: "Largest Selection in the Industry", icon: Layers, sub: "trust-selection" },
+  { label: "XPS Trained Installers", icon: HardHat, sub: "trust-installers" },
 ];
 
 const QUICK_ACTIONS = [
@@ -51,12 +51,25 @@ export default function AppHome({ appData, onNavigate }) {
       <div className="xa-band-inner" style={{ paddingTop: 20, paddingBottom: 8 }}>
         <div className="space-y-2.5">
           {TRUST_BADGES.map((b) => (
-            <div key={b.label} className="flex items-center gap-3">
-              <div className="h-9 w-9 rounded-lg bg-amber-50 border border-amber-200 flex items-center justify-center shrink-0">
-                <b.icon className="h-5 w-5 text-amber-600" strokeWidth={2} />
+            <button
+              key={b.label}
+              onClick={() => onNavigate({ sub: b.sub })}
+              className="w-full flex items-center gap-3 p-3 rounded-2xl bg-white border-2 border-black transition text-left"
+              style={{ boxShadow: "0 4px 12px rgba(0,0,0,0.08)" }}
+            >
+              <div
+                className="h-10 w-10 rounded-xl flex items-center justify-center shrink-0"
+                style={{
+                  background: "linear-gradient(180deg, #FFE25A 0%, #FFD700 45%, #C8A300 100%)",
+                  border: "2px solid #000",
+                  boxShadow: "0 4px 10px rgba(255,215,0,0.4), inset 0 1px rgba(255,255,255,0.4)",
+                }}
+              >
+                <b.icon className="h-5 w-5 text-stone-900" strokeWidth={2} />
               </div>
-              <span className="text-sm font-semibold text-stone-800">{b.label}</span>
-            </div>
+              <span className="text-sm font-bold text-stone-900 flex-1 text-left">{b.label}</span>
+              <ArrowRight className="h-4 w-4 text-stone-400 shrink-0" />
+            </button>
           ))}
         </div>
       </div>
