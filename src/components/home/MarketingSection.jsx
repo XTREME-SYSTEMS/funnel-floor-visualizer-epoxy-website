@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Droplets, ShieldCheck, Flame, Clock, Sparkles, Award, MapPin, Store } from "lucide-react";
+import { Droplets, ShieldCheck, Flame, Clock, Sparkles, Award, MapPin, Store, Star } from "lucide-react";
 
 const highlights = [
   { icon: MapPin, label: "70+ locations" },
@@ -37,7 +37,7 @@ export default function MarketingSection() {
       {/* Power statement banner */}
       <div className="border-b border-amber-500/40 bg-gradient-to-r from-stone-950 via-stone-900 to-stone-950 py-5 px-6">
         <div className="max-w-6xl mx-auto flex items-center justify-center gap-3 text-center">
-          <Award className="h-7 w-7 text-amber-400 shrink-0" strokeWidth={2.2} />
+          <Star className="h-5 w-5 text-amber-400 shrink-0 fill-amber-400" strokeWidth={2.2} />
           <span
             className="font-extrabold uppercase tracking-tight leading-none"
             style={{
@@ -47,7 +47,7 @@ export default function MarketingSection() {
               textShadow: "0 2px 8px rgba(0,0,0,0.6), 0 0 1px #ffffff"
             }}
           >
-            <span style={{ border: "1px solid rgba(255,255,255,0.85)", borderRadius: "8px", padding: "6px 14px", display: "inline-block" }}>
+            <span style={{ border: "1px solid rgba(255,255,255,0.85)", borderRadius: "8px", padding: "6px 14px", display: "inline-flex", alignItems: "center", gap: "10px" }}>
               {typed}
               <span
                 className="inline-block"
@@ -55,12 +55,13 @@ export default function MarketingSection() {
                   width: "2px",
                   height: "1em",
                   background: "#FFD700",
-                  marginLeft: "4px",
+                  marginLeft: "2px",
                   verticalAlign: "text-bottom",
                   opacity: done ? 0 : 1,
                   animation: done ? "none" : "vx-caret 0.7s step-end infinite"
                 }}
               />
+              <Star className="h-5 w-5 text-amber-400 fill-amber-400 shrink-0" strokeWidth={2.2} />
             </span>
           </span>
         </div>
