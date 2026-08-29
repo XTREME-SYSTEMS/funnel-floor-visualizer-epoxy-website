@@ -1,5 +1,6 @@
 import React from "react";
-import { Palette, Calendar, MapPin, Star, MessageSquare, Wrench, Clock, Image as ImageIcon, ArrowRight, Sparkles, Download } from "lucide-react";
+import { Palette, Calendar, MapPin, Star, MessageSquare, Wrench, Image as ImageIcon, ArrowRight, Sparkles, Download } from "lucide-react";
+import TimelineSteps from "@/components/app/TimelineSteps";
 import { useSettings } from "@/lib/useSettings";
 import { usePwaInstall } from "@/lib/usePwaInstall";
 import { Image } from "@/components/ui/image";
@@ -20,7 +21,6 @@ export default function AppHome({ appData, onNavigate }) {
   const { settings } = useSettings();
   const { canInstall, isInstalled, promptInstall } = usePwaInstall();
   const { savedFloors, estimate, appointment, timeline } = appData;
-  const completedSteps = timeline.filter((t) => t.status === "done").length;
 
   return (
     <div className="pb-6">
@@ -97,24 +97,14 @@ export default function AppHome({ appData, onNavigate }) {
 
       {/* Project status / timeline */}
       <div className="px-5 pt-6">
-        <button onClick={() => onNavigate({ sub: "schedule" })} className="w-full text-left rounded-2xl bg-gradient-to-br from-stone-900 to-stone-800 p-4 shadow-sm">
-          <div className="flex items-center justify-between mb-2">
-            <h2 className="text-sm font-bold text-white flex items-center gap-1.5">
-              <Clock className="h-4 w-4 text-amber-500" /> Project Timeline
-            </h2>
-            <span className="text-[11px] font-semibold text-amber-500">{completedSteps}/{timeline.length} steps</span>
-          </div>
-          {appointment ? (
-            <p className="text-xs text-stone-300">In-home visit: {appointment.date} at {appointment.time}</p>
-          ) : (
-            <p className="text-xs text-stone-400">Schedule your in-home estimate to unlock live updates.</p>
-          )}
-          <div className="mt-3 flex gap-1">
-            {timeline.map((t) => (
-              <div key={t.key} className={`h-1.5 flex-1 rounded-full ${t.status === "done" ? "bg-amber-500" : "bg-stone-700"}`} />
-            ))}
-          </div>
+        <button onClick={() => onNavigate({ sub: "schedule" })} className="w-full text-left">
+          <TimelineSteps timeline={timeline} />
         </button>
+        {appointment ? (
+          <p className="text-xs text-stone-500 mt-2 text-center">In-home visit: {appointment.date} at {appointment.time} — tap for details</p>
+        ) : (
+          <p className="text-xs text-stone-500 mt-2 text-center">Schedule your in-home estimate to unlock live updates.</p>
+        )}
       </div>
 
       {/* Instant bid preview */}

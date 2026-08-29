@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { Calendar, Clock, Check, User, Phone, MessageSquare, Bell } from "lucide-react";
+import { Calendar, Check, User, Phone, MessageSquare } from "lucide-react";
 import { useSettings } from "@/lib/useSettings";
+import TimelineSteps from "@/components/app/TimelineSteps";
 
 export default function AppSchedule({ appData }) {
   const { settings } = useSettings();
@@ -106,31 +107,7 @@ export default function AppSchedule({ appData }) {
           </div>
 
           {/* Timeline */}
-          <div className="rounded-2xl bg-white border border-stone-200 shadow-sm p-4">
-            <h2 className="text-sm font-bold text-stone-900 mb-3 flex items-center gap-1.5">
-              <Bell className="h-4 w-4 text-amber-500" /> Communication Timeline
-            </h2>
-            <div className="space-y-0">
-              {timeline.map((step, i) => {
-                const isLast = i === timeline.length - 1;
-                return (
-                  <div key={step.key} className="flex gap-3">
-                    <div className="flex flex-col items-center">
-                      <div className={`h-8 w-8 rounded-full flex items-center justify-center shrink-0 ${step.status === "done" ? "bg-amber-500" : step.status === "upcoming" ? "bg-stone-200 border-2 border-amber-400" : "bg-stone-100 border-2 border-stone-200"}`}>
-                        {step.status === "done" ? <Check className="h-4 w-4 text-stone-950" /> : <Clock className="h-3.5 w-3.5 text-stone-400" />}
-                      </div>
-                      {!isLast && <div className={`w-0.5 flex-1 ${step.status === "done" ? "bg-amber-500" : "bg-stone-200"} min-h-[24px]`} />}
-                    </div>
-                    <div className={`pb-4 ${isLast ? "pb-0" : ""}`}>
-                      <div className={`text-sm font-semibold ${step.status === "done" ? "text-stone-900" : step.status === "upcoming" ? "text-stone-800" : "text-stone-400"}`}>{step.label}</div>
-                      <div className="text-xs text-stone-500">{step.detail}</div>
-                      {step.status === "upcoming" && <span className="text-[10px] font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded mt-1 inline-block">UP NEXT</span>}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
+          <TimelineSteps timeline={timeline} />
 
           {/* SMS link */}
           <a
