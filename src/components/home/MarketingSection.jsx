@@ -36,34 +36,39 @@ export default function MarketingSection() {
     <section className="bg-stone-950 text-white">
       {/* Power statement banner */}
       <div className="border-b border-amber-500/40 bg-gradient-to-r from-stone-950 via-stone-900 to-stone-950 py-5 px-6">
-        <div className="max-w-6xl mx-auto flex items-center justify-center gap-4 text-center">
-          <Star className="h-6 w-6 text-amber-400 shrink-0 fill-amber-400" strokeWidth={2.2} style={{ marginRight: "6px" }} />
-          <span
-            className="font-extrabold uppercase tracking-tight leading-none"
-            style={{
-              fontSize: "clamp(1.1rem, 2.4vw, 1.9rem)",
-              color: "#FFD700",
-              WebkitTextStroke: "0.5px #000",
-              textShadow: "0 2px 8px rgba(0,0,0,0.6), 0 0 1px #ffffff"
-            }}
-          >
-            <span style={{ border: "1px solid rgba(255,255,255,0.85)", borderRadius: "8px", padding: "6px 14px", display: "inline-flex", alignItems: "center", gap: "10px" }}>
-              {typed}
-              <span
-                className="inline-block"
-                style={{
-                  width: "2px",
-                  height: "1em",
-                  background: "#FFD700",
-                  marginLeft: "2px",
-                  verticalAlign: "text-bottom",
-                  opacity: done ? 0 : 1,
-                  animation: done ? "none" : "vx-caret 0.7s step-end infinite"
-                }}
-              />
+        <div className="max-w-6xl mx-auto flex flex-col items-center gap-2 text-center">
+          <div className="flex items-center justify-center gap-4 text-center">
+            <Star className="h-6 w-6 text-amber-400 shrink-0 fill-amber-400" strokeWidth={2.2} style={{ marginRight: "6px" }} />
+            <span
+              className="font-extrabold uppercase tracking-tight leading-none"
+              style={{
+                fontSize: "clamp(1.1rem, 2.4vw, 1.9rem)",
+                color: "#FFD700",
+                WebkitTextStroke: "0.5px #000",
+                textShadow: "0 2px 8px rgba(0,0,0,0.6), 0 0 1px #ffffff"
+              }}
+            >
+              <span style={{ border: "1px solid rgba(255,255,255,0.85)", borderRadius: "8px", padding: "6px 14px", display: "inline-flex", alignItems: "center", gap: "10px" }}>
+                {typed}
+                <span
+                  className="inline-block"
+                  style={{
+                    width: "2px",
+                    height: "1em",
+                    background: "#FFD700",
+                    marginLeft: "2px",
+                    verticalAlign: "text-bottom",
+                    opacity: done ? 0 : 1,
+                    animation: done ? "none" : "vx-caret 0.7s step-end infinite"
+                  }}
+                />
+              </span>
             </span>
+            <Star className="h-6 w-6 text-amber-400 shrink-0 fill-amber-400" strokeWidth={2.2} style={{ marginLeft: "6px" }} />
+          </div>
+          <span className="text-[11px] sm:text-xs font-bold uppercase tracking-[0.2em] text-stone-200">
+            #1 Largest Epoxy Superstore
           </span>
-          <Star className="h-6 w-6 text-amber-400 shrink-0 fill-amber-400" strokeWidth={2.2} style={{ marginLeft: "6px" }} />
         </div>
       </div>
 
