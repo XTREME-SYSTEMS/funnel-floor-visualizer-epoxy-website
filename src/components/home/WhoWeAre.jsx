@@ -12,7 +12,7 @@ const TEAM_IMG = "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8
 const PCU_IMG = "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/1896152f7_121725747_3705443039488227_8851277793604007373_n.jpg";
 const OFFICE_LADIES_IMG = "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/aa7e294d6_images6.jpg";
 const COO_IMG = "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/b077aba0c_images3.jpg";
-const WAREHOUSE_IMG = "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/8e11c9bd3_maxresdefault.jpg";
+const WAREHOUSE_IMG = "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/1412966f7_generated_image.png";
 
 const stats = [
   { value: "30+", label: "Years in business" },
