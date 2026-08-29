@@ -26,8 +26,8 @@ export default function Hero({ settings }) {
             </h1>
             <motion.p
               initial={{ opacity: 0, scale: 0.6 }}
-              animate={{ opacity: 1, scale: [0.6, 1.18, 0.95, 1.08, 1] }}
-              transition={{ duration: 1.1, delay: 0.5, ease: "easeOut" }}
+              animate={{ opacity: 1, scale: [0.6, 1.18, 0.95, 1.08, 1, 1.04, 1, 1.04, 1] }}
+              transition={{ duration: 2.4, delay: 0.5, times: [0, 0.2, 0.35, 0.45, 0.55, 0.7, 0.85, 0.95, 1], repeat: Infinity, repeatDelay: 2, ease: "easeOut" }}
               className="mt-5 inline-block text-lg md:text-xl font-semibold text-white leading-relaxed drop-shadow-[0_2px_6px_rgba(0,0,0,0.85)]"
               style={{ border: "1px solid #FFD700", padding: "10px 16px", borderRadius: "12px", background: "rgba(0,0,0,0.25)" }}
             >
