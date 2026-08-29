@@ -7,6 +7,7 @@ import LocationMap from "@/components/home/LocationMap";
 const TRAINING_IMG = "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/8bb317033_IMG_8152-min_c55bf5c4-40e1-4893-b5c7-699a395f36c6.jpg";
 const SHOWROOM_IMG = "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/74e7fe427_images1.jpg";
 const XPS_IMG = "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/92ad83dc2_xtreme-polishing-systems-blog-paragraph_03_d7345246-7dbb-4a6d-8e86-08bcc63927be.webp";
+const CHRIS_IMG = "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/910b91397_chris-lavin-xtreme-polishing-systems-600w.webp";
 
 const stats = [
   { value: "30+", label: "Years in business" },
@@ -88,6 +89,9 @@ export default function WhoWeAre({ settings }) {
         <div className="grid md:grid-cols-3 gap-6 items-start">
           {/* Chris Lavin — owner */}
           <div className="md:col-span-2 rounded-3xl border border-stone-200 overflow-hidden bg-white shadow-sm">
+            <div className="h-64 md:h-80 bg-stone-100">
+              <Image src={CHRIS_IMG} alt="Chris Lavin on a floor grinder" fittingType="fill" className="h-full w-full" />
+            </div>
             <div className="p-6">
               <div className="inline-flex items-center gap-2 text-xs font-bold tracking-[0.15em] text-amber-600">
                 <Award className="h-4 w-4" /> OWNER & FOUNDER

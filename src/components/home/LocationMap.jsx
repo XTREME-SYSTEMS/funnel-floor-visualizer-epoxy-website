@@ -237,7 +237,7 @@ export default function LocationMap() {
               className="h-12 px-5 inline-flex items-center justify-center gap-2 rounded-xl bg-amber-500 hover:bg-amber-400 disabled:opacity-50 text-stone-950 font-bold transition"
             >
               {loading ? <Loader2 className="h-5 w-5 animate-spin" /> : <Search className="h-5 w-5" />}
-              <span className="hidden sm:inline">{loading ? "Searching" : "Find"}</span>
+              <span>{loading ? "Searching" : "Find"}</span>
             </button>
           </form>
 
