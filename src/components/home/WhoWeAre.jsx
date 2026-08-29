@@ -9,6 +9,9 @@ const SHOWROOM_IMG = "https://media.base44.com/images/public/6a77f4491f0bf92de9a
 const XPS_IMG = "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/92ad83dc2_xtreme-polishing-systems-blog-paragraph_03_d7345246-7dbb-4a6d-8e86-08bcc63927be.webp";
 const CHRIS_IMG = "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/910b91397_chris-lavin-xtreme-polishing-systems-600w.webp";
 const TEAM_IMG = "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/c77e33573_images5.jpg";
+const PCU_IMG = "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/1896152f7_121725747_3705443039488227_8851277793604007373_n.jpg";
+const OFFICE_LADIES_IMG = "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/aa7e294d6_images6.jpg";
+const COO_IMG = "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/b077aba0c_images3.jpg";
 
 const stats = [
   { value: "30+", label: "Years in business" },
@@ -170,6 +173,68 @@ export default function WhoWeAre({ settings }) {
             <p className="mt-6 text-sm text-stone-500 leading-relaxed">
               From your first phone consultation to the final walk-through, our epoxy flooring sales professionals guide you through every step — system selection, color and flake choice, pricing, scheduling, and installation day. It's the white-glove experience homeowners across South Florida and beyond have come to expect from the nation's leader in residential garage floor coatings.
             </p>
+          </div>
+        </div>
+
+        {/* Polished Concrete University */}
+        <div className="mt-16 grid md:grid-cols-2 gap-8 items-center rounded-3xl border border-stone-200 overflow-hidden bg-white shadow-sm">
+          <div className="bg-stone-950 h-56 md:h-full min-h-[280px]">
+            <Image src={PCU_IMG} alt="Polished Concrete University hands-on epoxy and concrete polishing certification class" fittingType="fill" focalPointX={0.5} focalPointY={0.5} className="h-full w-full" />
+          </div>
+          <div className="p-6 md:p-10">
+            <div className="inline-flex items-center gap-2 text-xs font-bold tracking-[0.15em] text-amber-600">
+              <GraduationCap className="h-4 w-4" /> POLISHED CONCRETE UNIVERSITY
+            </div>
+            <h3 className="mt-2 text-2xl md:text-3xl font-semibold text-stone-900">
+              The World's #1 Epoxy &amp; Concrete Polishing School
+            </h3>
+            <p className="mt-4 text-sm md:text-base text-stone-600 leading-relaxed">
+              Since 2017, Polished Concrete University has run hands-on, 5-day certification courses at our Pompano Beach, FL Epoxy Training Center. As the educational arm of Xtreme Polishing Systems, PCU trains the next generation of concrete polishing and epoxy resin professionals on the exact equipment, coatings, and techniques used on real jobs.
+            </p>
+            <ul className="mt-5 space-y-2 text-sm text-stone-600">
+              <li className="flex gap-2"><Award className="h-4 w-4 text-amber-500 shrink-0 mt-0.5" /> 5-day hands-on certification in concrete polishing, epoxy resin, and surface repair</li>
+              <li className="flex gap-2"><Award className="h-4 w-4 text-amber-500 shrink-0 mt-0.5" /> Master professional equipment, concrete stains, logos, and decorative imaging</li>
+              <li className="flex gap-2"><Award className="h-4 w-4 text-amber-500 shrink-0 mt-0.5" /> Learn bidding, estimating, marketing, and lead-sourcing to grow your business</li>
+              <li className="flex gap-2"><Award className="h-4 w-4 text-amber-500 shrink-0 mt-0.5" /> Lifetime support from the XPS pros — the same experts behind your estimate</li>
+            </ul>
+            <p className="mt-5 text-sm text-stone-500 leading-relaxed">
+              Every sales pro on your project is a PCU-trained specialist, so you get manufacturer-grade knowledge on surface prep, moisture mitigation, and epoxy system selection — not a scripted call-center rep.
+            </p>
+          </div>
+        </div>
+
+        {/* Office team + COO */}
+        <div className="mt-16 grid md:grid-cols-3 gap-6 items-stretch">
+          {/* Office ladies */}
+          <div className="md:col-span-2 rounded-3xl border border-stone-200 overflow-hidden bg-white shadow-sm">
+            <div className="bg-stone-950 h-56 md:h-72">
+              <Image src={OFFICE_LADIES_IMG} alt="Xtreme Polishing Systems office team women in XPS logo shirts" fittingType="fill" focalPointX={0.5} focalPointY={0.4} className="h-full w-full" />
+            </div>
+            <div className="p-6">
+              <div className="inline-flex items-center gap-2 text-xs font-bold tracking-[0.15em] text-amber-600">
+                <Building2 className="h-4 w-4" /> OUR OFFICE TEAM
+              </div>
+              <h3 className="mt-2 text-xl font-semibold text-stone-900">The Women Behind the Operations</h3>
+              <p className="mt-3 text-sm text-stone-600 leading-relaxed">
+                From quotes and scheduling to logistics and customer care, our office team keeps every garage floor coating project moving. These are the dedicated professionals who answer your calls, coordinate your installation, and make sure your experience with Xtreme Polishing Systems feels personal from first contact to final coat.
+              </p>
+            </div>
+          </div>
+
+          {/* COO */}
+          <div className="rounded-3xl border border-stone-200 overflow-hidden bg-white shadow-sm flex flex-col">
+            <div className="bg-stone-100 h-64 md:h-72">
+              <Image src={COO_IMG} alt="Xtreme Polishing Systems Chief Operating Officer portrait" fittingType="fill" focalPointX={0.5} focalPointY={0.35} className="h-full w-full" />
+            </div>
+            <div className="p-6 flex flex-col flex-1">
+              <div className="inline-flex items-center gap-2 text-xs font-bold tracking-[0.15em] text-amber-600">
+                <Award className="h-4 w-4" /> CHIEF OPERATING OFFICER
+              </div>
+              <h3 className="mt-2 text-xl font-semibold text-stone-900">Our COO</h3>
+              <p className="mt-3 text-sm text-stone-600 leading-relaxed">
+                Leading day-to-day operations across our 70+ locations, our COO ensures every estimate, installation, and customer interaction meets the standard homeowners expect from America's #1 epoxy superstore.
+              </p>
+            </div>
           </div>
         </div>
       </div>
