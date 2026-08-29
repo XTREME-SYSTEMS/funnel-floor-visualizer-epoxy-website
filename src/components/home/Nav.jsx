@@ -1,14 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import { Menu, X, Phone, Smartphone, Palette, ArrowRight, Sun, Moon } from "lucide-react";
+import { Menu, X, Phone, Smartphone, Palette, ArrowRight } from "lucide-react";
 import Logo from "@/components/Logo";
-import { useTheme } from "@/lib/useTheme";
 
 export default function Nav({ settings }) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const headerRef = useRef(null);
-  const { isDark, toggle } = useTheme();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -68,13 +66,6 @@ export default function Nav({ settings }) {
           </div>
 
           <div className="flex items-center gap-2 md:hidden">
-            <button
-              onClick={toggle}
-              className="flex h-9 w-9 items-center justify-center rounded-lg text-white hover:text-amber-500 transition"
-              aria-label="Toggle dark mode"
-            >
-              {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-            </button>
             <a href={`tel:${settings.phone}`} className="flex h-9 items-center gap-1.5 px-3 rounded-lg text-xs font-bold transition" style={{ background: 'linear-gradient(180deg, #FFE25A 0%, #FFD700 45%, #C8A300 100%)', border: '2px solid #000', color: '#1a1a1a', boxShadow: '0 3px 8px rgba(255,215,0,.35), inset 0 1px rgba(255,255,255,.4)' }}>
               <Phone className="h-4 w-4" /> Call Now
             </a>
@@ -83,13 +74,6 @@ export default function Nav({ settings }) {
             </button>
           </div>
 
-          <button
-            onClick={toggle}
-            className="hidden md:flex h-9 w-9 items-center justify-center rounded-lg text-white hover:text-amber-500 transition"
-            aria-label="Toggle dark mode"
-          >
-            {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-          </button>
         </div>
       </div>
 
