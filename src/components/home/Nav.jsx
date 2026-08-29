@@ -63,7 +63,7 @@ export default function Nav({ settings }) {
 
           <div className="hidden md:flex flex-col items-start gap-0.5 mt-4">
             <a href={`tel:${settings.phone}`} className="h-9 px-5 inline-flex items-center gap-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-stone-950 text-sm font-semibold transition">
-              <Phone className="h-4 w-4" /> Call Now: {settings.phone}
+              <Phone className="h-4 w-4" /> Call Now
             </a>
           </div>
 
