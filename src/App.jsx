@@ -42,6 +42,7 @@ import Guides from '@/pages/seo/Guides';
 import SeoFactory from '@/pages/admin/SeoFactory';
 import SopSystem from '@/pages/admin/SopSystem';
 import Reviews from '@/pages/admin/Reviews';
+import EpoxyProGuide from '@/pages/EpoxyProGuide';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -85,6 +86,7 @@ const AuthenticatedApp = () => {
       <Route path="/about" element={<AboutPage />} />
       <Route path="/contact" element={<ContactPage />} />
       <Route path="/guides" element={<Guides />} />
+      <Route path="/epoxy-pro-guide" element={<EpoxyProGuide />} />
       <Route path="/admin" element={<AdminLayout />}>
         <Route index element={<Dashboard />} />
         <Route path="leads" element={<Leads />} />

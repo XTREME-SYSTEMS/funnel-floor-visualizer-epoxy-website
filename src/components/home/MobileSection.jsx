@@ -31,9 +31,14 @@ export default function MobileSection() {
               </li>
             ))}
           </ul>
-          <Link to="/funnel" className="mt-8 inline-flex h-12 px-8 items-center rounded-xl bg-amber-500 hover:bg-amber-400 text-stone-950 font-semibold transition">
-            Start my estimate
-          </Link>
+          <div className="mt-8 flex flex-col sm:flex-row gap-3">
+            <Link to="/epoxy-pro-guide" className="inline-flex h-12 px-8 items-center justify-center gap-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold transition animate-pop-bounce">
+              <Smartphone className="h-5 w-5" /> Open the App
+            </Link>
+            <Link to="/funnel" className="inline-flex h-12 px-8 items-center justify-center rounded-xl bg-stone-800 hover:bg-stone-700 text-white font-semibold transition">
+              Start my estimate
+            </Link>
+          </div>
         </div>
         <div className="flex justify-center">
           <div className="relative w-64 h-[460px] rounded-[2.5rem] border-8 border-stone-800 bg-stone-900 overflow-hidden shadow-2xl">
