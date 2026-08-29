@@ -11,7 +11,7 @@ const trust = [
 
 export default function Hero({ settings }) {
   return (
-    <section className="relative h-[72vh] min-h-[520px] bg-stone-950 overflow-hidden border-b-2 border-amber-500">
+    <section className="relative h-[82vh] min-h-[620px] bg-stone-950 overflow-hidden border-b-2 border-amber-500">
       <img
         src={settings.hero_image_url}
         alt="Premium residential garage with black, white and gray flake epoxy floor, gray cabinets and chrome countertops"
@@ -39,7 +39,7 @@ export default function Hero({ settings }) {
         </div>
       </div>
 
-      <div className="hidden md:block absolute bottom-0 inset-x-0 pb-10 text-center">
+      <div className="hidden md:block absolute bottom-0 inset-x-0 pb-24 text-center">
         <p className="text-white text-sm font-medium drop-shadow-[0_2px_6px_rgba(0,0,0,0.85)]">{settings.service_area}</p>
       </div>
     </section>
