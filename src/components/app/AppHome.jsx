@@ -1,6 +1,7 @@
 import React from "react";
-import { Palette, Calendar, MapPin, Star, MessageSquare, Wrench, Clock, Image as ImageIcon, ArrowRight, Sparkles } from "lucide-react";
+import { Palette, Calendar, MapPin, Star, MessageSquare, Wrench, Clock, Image as ImageIcon, ArrowRight, Sparkles, Download } from "lucide-react";
 import { useSettings } from "@/lib/useSettings";
+import { usePwaInstall } from "@/lib/usePwaInstall";
 import { Image } from "@/components/ui/image";
 import { LOGO_URL } from "@/components/Logo";
 
@@ -17,6 +18,7 @@ const QUICK_ACTIONS = [
 
 export default function AppHome({ appData, onNavigate }) {
   const { settings } = useSettings();
+  const { canInstall, isInstalled, promptInstall } = usePwaInstall();
   const { savedFloors, estimate, appointment, timeline } = appData;
   const completedSteps = timeline.filter((t) => t.status === "done").length;
 
@@ -34,6 +36,18 @@ export default function AppHome({ appData, onNavigate }) {
           <p className="text-sm text-stone-400 mt-1">Visualize, estimate, and book — all in one place.</p>
         </div>
       </div>
+
+      {/* PWA install button */}
+      {canInstall && !isInstalled && (
+        <div className="px-5 pt-4">
+          <button
+            onClick={promptInstall}
+            className="w-full h-12 rounded-xl bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold text-sm flex items-center justify-center gap-2 transition shadow-lg shadow-amber-500/30"
+          >
+            <Download className="h-5 w-5" /> Add to Home Screen
+          </button>
+        </div>
+      )}
 
       {/* Quick action grid */}
       <div className="px-5 pt-5">

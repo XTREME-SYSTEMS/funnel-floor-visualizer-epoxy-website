@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Home, Image as ImageIcon, Calculator, Grid, MoreHorizontal, ArrowLeft, MessageSquare, Palette, MapPin, Star, Wrench, Calendar } from "lucide-react";
+import { Home, Image as ImageIcon, Calculator, Grid, MoreHorizontal, ArrowLeft, MessageSquare, Palette, MapPin, Star, Wrench, Calendar, Download } from "lucide-react";
 import { useAppData } from "@/lib/useAppData";
 import { useSettings } from "@/lib/useSettings";
 import AppHome from "@/components/app/AppHome";
@@ -15,6 +15,7 @@ import AppSchedule from "@/components/app/AppSchedule";
 import AppChat from "@/components/app/AppChat";
 import Logo from "@/components/Logo";
 import { Link } from "react-router-dom";
+import { usePwaInstall } from "@/lib/usePwaInstall";
 
 const TABS = [
   { key: "home", label: "Home", icon: Home },
@@ -40,6 +41,7 @@ export default function EpoxyProGuide() {
   const [tab, setTab] = useState("home");
   const [sub, setSub] = useState(null);
   const [chatOpen, setChatOpen] = useState(false);
+  const { canInstall, isInstalled, promptInstall } = usePwaInstall();
 
   const handleNavigate = (target) => {
     if (target.tab) { setTab(target.tab); setSub(null); }
@@ -73,6 +75,14 @@ export default function EpoxyProGuide() {
           <div className="p-4 pb-6">
             <h1 className="text-xl font-display font-extrabold text-stone-900 mb-1">More</h1>
             <p className="text-sm text-stone-500 mb-4">Everything else you need, all in one place.</p>
+            {canInstall && !isInstalled && (
+              <button
+                onClick={promptInstall}
+                className="w-full mb-3 h-12 rounded-2xl bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold text-sm flex items-center justify-center gap-2 transition shadow-lg shadow-amber-500/30"
+              >
+                <Download className="h-5 w-5" /> Install App to Home Screen
+              </button>
+            )}
             <div className="space-y-2">
               {MORE_ITEMS.map((m) => (
                 <button
