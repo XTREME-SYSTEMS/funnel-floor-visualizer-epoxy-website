@@ -337,9 +337,9 @@ export function locationLocalBusinessLd(loc) {
 
 // ── Per-route SEO config ────────────────────────────────────────────────────
 export const DEFAULT_SEO = {
-  title: "Epoxy Garage Floor Cost & Instant Estimate | Pompano Beach FL",
+  title: "Epoxy Garage Floor Cost & Instant Estimate | EpoxyGarageFloorEstimate.com",
   description:
-    "Get an instant epoxy garage floor cost estimate in about 60 seconds. Serving Pompano Beach and South Florida. Free, no obligation, personalized price range.",
+    "Get an instant epoxy garage floor cost estimate from EpoxyGarageFloorEstimate.com in 60 seconds. Serving Pompano Beach and South Florida. Free, no obligation.",
   image: BUSINESS.image,
 };
 
@@ -468,6 +468,18 @@ export const SEO_ROUTES = {
     image: BUSINESS.image,
     faq: FAQ_GENERAL,
     service: { name: "Garage Floor Coating in Pompano Beach, FL", priceRange: "$4-$12/sq ft" },
+  },
+  "/guides": {
+    title: "Garage Floor Guides | Epoxy Cost, Color & Installation Tips",
+    description:
+      "Browse expert guides on epoxy garage floor cost, color selection, installation, and maintenance from EpoxyGarageFloorEstimate.com.",
+    image: BUSINESS.image,
+  },
+  "/epoxy-pro-guide": {
+    title: "Epoxy Pro Guide | Floor Visualizer, Estimates & Color Charts",
+    description:
+      "EpoxyGarageFloorEstimate.com Pro Guide — visualize your garage floor, get instant estimates, browse colors, and book installation.",
+    image: BUSINESS.image,
   },
 };
 

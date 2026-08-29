@@ -68,7 +68,7 @@ export const DEFAULT_SETTINGS = {
   seo: {
     site_name: "Xtreme Polishing Systems",
     default_title: "Xtreme Polishing Systems | Garage Floor Coating Estimates in Pompano Beach, FL",
-    default_description: "Xtreme Polishing Systems provides professional garage floor coating installation in Pompano Beach, FL and South Florida. Get an instant epoxy garage floor cost estimate in about 60 seconds.",
+    default_description: "EpoxyGarageFloorEstimate.com offers instant epoxy garage floor cost estimates in Pompano Beach, FL. Get your free, personalized price range in 60 seconds.",
     business_hours: "Mon–Sat 7:00am–7:00pm",
     business_category: "Garage Floor Coating Contractor",
     gbp_url: "",
