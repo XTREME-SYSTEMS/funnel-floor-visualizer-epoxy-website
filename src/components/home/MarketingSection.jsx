@@ -11,7 +11,7 @@ const highlights = [
   { icon: Store, label: "Trust national retailers" }
 ];
 
-const POWER_TEXT = "Powered by America's #1 Epoxy Superstore";
+const POWER_TEXT = "Powered by America's #1 Largest Epoxy Superstore";
 
 // Black band highlighting the key benefits of an epoxy garage floor,
 // with a prominent power statement above it (typewriter animated).
@@ -66,9 +66,6 @@ export default function MarketingSection() {
             </span>
             <Star className="h-6 w-6 text-amber-400 shrink-0 fill-amber-400" strokeWidth={2.2} style={{ marginLeft: "6px" }} />
           </div>
-          <span className="text-[11px] sm:text-xs font-bold uppercase tracking-[0.2em] text-stone-200">
-            #1 Largest Epoxy Superstore
-          </span>
         </div>
       </div>
 
