@@ -190,8 +190,8 @@
 
   /* === Crest / hero === */
   .xa-crest { width: 128px; height: 128px; object-fit: contain; margin: 0 auto; display: block; filter: drop-shadow(0 10px 24px rgba(184,134,11,.30)); }
-  .xa-crest-title { margin: 14px 0 2px; font-size: 28px; font-weight: 900; letter-spacing: -.02em; color: var(--vx-text); line-height: 1.05; }
-  .xa-crest-sub { margin: 0; font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--vx-accent); }
+  .xa-crest-title { margin: 14px 0 2px; font-size: 28px; font-weight: 900; letter-spacing: -.02em; color: var(--vx-text); line-height: 1.05; text-align: center; }
+  .xa-crest-sub { margin: 0; font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--vx-accent); text-align: center; }
   .xa-boot-logo { width: 128px; height: 128px; object-fit: contain; }
 
   /* === Stat cards === */

@@ -1,9 +1,17 @@
 import React from "react";
-import { Palette, Calendar, MapPin, Star, MessageSquare, Wrench, Image as ImageIcon, ArrowRight, Sparkles, Download } from "lucide-react";
+import { Palette, Calendar, MapPin, Star, MessageSquare, Wrench, Image as ImageIcon, ArrowRight, Sparkles, Download, GraduationCap, ShieldCheck, Layers, HardHat } from "lucide-react";
 import TimelineSteps from "@/components/app/TimelineSteps";
 import { usePwaInstall } from "@/lib/usePwaInstall";
 import { Image } from "@/components/ui/image";
 import { LOGO_URL } from "@/components/Logo";
+
+const TRUST_BADGES = [
+  { label: "+70 Locations Nationwide", icon: MapPin },
+  { label: "Training Center Near You", icon: GraduationCap },
+  { label: "Commercial Grade Products", icon: ShieldCheck },
+  { label: "Largest Selection in the Industry", icon: Layers },
+  { label: "XPS Trained Installers", icon: HardHat },
+];
 
 const QUICK_ACTIONS = [
   { key: "visualizer", label: "Floor Visualizer", icon: ImageIcon, tab: "visualizer" },
@@ -28,8 +36,8 @@ export default function AppHome({ appData, onNavigate }) {
           <div className="relative">
             <img src={LOGO_URL} alt="Xtreme Polishing Systems" className="xa-crest" />
             <p className="xa-crest-sub">Xtreme Polishing Systems</p>
-            <h1 className="xa-crest-title">Auto Bid Generator</h1>
-            <p style={{ margin: "4px 0 18px", fontSize: 14, color: "#555", lineHeight: 1.45 }}>
+            <h1 className="xa-crest-title">Xtreme Project Tracker</h1>
+            <p style={{ margin: "4px 0 18px", fontSize: 14, color: "#555", lineHeight: 1.45, textAlign: "center" }}>
               Visualize, estimate, and book — all in one place.
             </p>
             <button className="xa-cta-gold" onClick={() => onNavigate({ tab: "estimate" })}>
@@ -38,6 +46,20 @@ export default function AppHome({ appData, onNavigate }) {
           </div>
         </div>
       </section>
+
+      {/* Trust badges */}
+      <div className="xa-band-inner" style={{ paddingTop: 20, paddingBottom: 8 }}>
+        <div className="space-y-2.5">
+          {TRUST_BADGES.map((b) => (
+            <div key={b.label} className="flex items-center gap-3">
+              <div className="h-9 w-9 rounded-lg bg-amber-50 border border-amber-200 flex items-center justify-center shrink-0">
+                <b.icon className="h-5 w-5 text-amber-600" strokeWidth={2} />
+              </div>
+              <span className="text-sm font-semibold text-stone-800">{b.label}</span>
+            </div>
+          ))}
+        </div>
+      </div>
 
       {/* PWA install */}
       {canInstall && !isInstalled && (

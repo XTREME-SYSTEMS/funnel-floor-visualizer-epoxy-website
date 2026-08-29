@@ -25,7 +25,7 @@ const TABS = [
 ];
 
 const TITLES = {
-  home: { eyebrow: "EPOXY PRO", title: "Auto Bid Generator" },
+  home: { eyebrow: "EPOXY PRO", title: "Xtreme Project Tracker" },
   visualizer: { eyebrow: "EPOXY PRO · TOOLS", title: "Floor Visualizer" },
   estimate: { eyebrow: "EPOXY PRO · TOOLS", title: "Instant Bid" },
   gallery: { eyebrow: "EPOXY PRO · GALLERY", title: "Project Gallery" },
