@@ -9,6 +9,8 @@ const SHOWROOM_IMG = "https://media.base44.com/images/public/6a77f4491f0bf92de9a
 const XPS_IMG = "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/92ad83dc2_xtreme-polishing-systems-blog-paragraph_03_d7345246-7dbb-4a6d-8e86-08bcc63927be.webp";
 const CHRIS_IMG = "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/910b91397_chris-lavin-xtreme-polishing-systems-600w.webp";
 const TEAM_IMG = "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/c77e33573_images5.jpg";
+const SALES_MANAGER_IMG = "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/e39b97788_images7.jpg";
+const ROBERT_PCU_IMG = "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/2b4d8139f_images8.jpg";
 const PCU_IMG = "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/1896152f7_121725747_3705443039488227_8851277793604007373_n.jpg";
 const OFFICE_LADIES_IMG = "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/aa7e294d6_images6.jpg";
 const COO_IMG = "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/b077aba0c_images3.jpg";
@@ -128,42 +130,113 @@ export default function WhoWeAre({ settings }) {
           </div>
         </div>
 
-        {/* Sales Pros team */}
+        {/* Sales Pros team — 3-image banner: Sales Manager | Team | Robert */}
         <div className="mt-16 rounded-3xl border border-stone-200 overflow-hidden bg-white shadow-sm">
-          <div className="bg-stone-950 flex items-center justify-center">
-            <Image
-              src={TEAM_IMG}
-              alt="Xtreme Polishing Systems rockstar sales pros team with floor polishing equipment"
-              fittingType="fit"
-              className="w-full h-44 sm:h-56 md:h-80"
-            />
+          <div className="bg-stone-950 grid grid-cols-3 items-stretch">
+            <div className="h-44 sm:h-56 md:h-80 bg-stone-950">
+              <Image
+                src={SALES_MANAGER_IMG}
+                alt="Xtreme Polishing Systems Sales Manager holding FlexQuartz epoxy coating buckets in the Pompano Beach warehouse"
+                fittingType="fill"
+                focalPointX={0.5}
+                focalPointY={0.5}
+                className="h-full w-full"
+              />
+            </div>
+            <div className="h-44 sm:h-56 md:h-80 bg-stone-950 flex items-center justify-center">
+              <Image
+                src={TEAM_IMG}
+                alt="Xtreme Polishing Systems rockstar sales pros team with floor polishing equipment in Pompano Beach FL"
+                fittingType="fit"
+                className="h-full w-full"
+              />
+            </div>
+            <div className="h-44 sm:h-56 md:h-80 bg-stone-950">
+              <Image
+                src={ROBERT_PCU_IMG}
+                alt="Robert, Polished Concrete University master trainer with 10 years at Xtreme Polishing Systems, teaching Stardek coating skills"
+                fittingType="fill"
+                focalPointX={0.5}
+                focalPointY={0.5}
+                className="h-full w-full"
+              />
+            </div>
           </div>
           <div className="p-6 md:p-10">
             <div className="inline-flex items-center gap-2 text-xs font-bold tracking-[0.15em] text-amber-600">
-              <Award className="h-4 w-4" /> OUR ROCKSTAR SALES PROS
+              <Award className="h-4 w-4" /> OUR ROCKSTAR SALES PROS &amp; PCU TRAINERS
             </div>
             <h3 className="mt-2 text-2xl md:text-3xl font-semibold text-stone-900">
-              Meet the Epoxy Flooring Sales Team Behind Your Estimate
+              Meet the Epoxy Flooring Sales Team &amp; Trainers Behind Your Estimate
             </h3>
             <p className="mt-4 text-sm md:text-base text-stone-600 leading-relaxed">
-              When you request a garage floor coating estimate from Xtreme Polishing Systems, you're not handed off to a call center. You work directly with our rockstar sales pros — seasoned concrete and epoxy flooring specialists who have spent years grinding, polishing, and coating real residential and commercial floors. Every member of our sales team graduates from <strong>Polished Concrete University</strong>, the world's #1 decorative concrete and epoxy training school, so they can answer technical questions about surface prep, moisture mitigation, flake systems, and hot-tire resistance that a typical lead-gen rep simply can't.
+              When you request a <strong>garage floor coating estimate</strong> from Xtreme Polishing Systems, you're not handed off to a call center. You work directly with our rockstar sales pros — seasoned <strong>concrete and epoxy flooring specialists</strong> who have spent years grinding, polishing, and coating real residential and commercial floors. Every member of our sales team graduates from <strong>Polished Concrete University</strong>, the world's #1 decorative concrete and epoxy training school, so they can answer technical questions about <strong>surface prep, moisture mitigation, flake systems, and hot-tire resistance</strong> that a typical lead-gen rep simply can't. Shop our full catalog of industrial-grade epoxy coatings, polyurea topcoats, and diamond tooling at{" "}
+              <a href="https://xtremepolishingsystems.com" target="_blank" rel="noopener noreferrer" className="text-black underline font-bold hover:text-amber-600">xtremepolishingsystems.com</a>.
             </p>
+
+            <div className="mt-6 grid sm:grid-cols-2 gap-5">
+              <div>
+                <h4 className="text-sm font-bold text-stone-900">Who Is the Sales Manager at Xtreme Polishing Systems?</h4>
+                <p className="mt-1.5 text-sm text-stone-600 leading-relaxed">
+                  Our <strong>Sales Manager</strong> (left) has run the same floor grinders, scarifiers, and epoxy application equipment you'll see on your project. He specializes in <strong>FlexQuartz</strong> seamless flake systems and 100% solids epoxy — meaning accurate square-footage takeoffs, honest condition assessments, and product recommendations tailored to your garage. Whether you need a 100% solids epoxy system, a metallic floor, or a decorative flake coating, he matches the right system to your slab.
+                </p>
+              </div>
+              <div>
+                <h4 className="text-sm font-bold text-stone-900">Who Is Robert, the PCU Master Trainer?</h4>
+                <p className="mt-1.5 text-sm text-stone-600 leading-relaxed">
+                  <strong>Robert</strong> (right) is the star <strong>Polished Concrete University</strong> trainer and has been with Xtreme Polishing Systems for <strong>10 years</strong>. He teaches hands-on <strong>Stardek coating skills</strong>, concrete polishing, and epoxy resin application at our Pompano Beach, FL Epoxy Training Center — the same techniques our sales pros use to spec your floor. Learn more about our training programs and shop pro-grade products at{" "}
+                  <a href="https://xtremepolishingsystems.com" target="_blank" rel="noopener noreferrer" className="text-black underline font-bold hover:text-amber-600">xtremepolishingsystems.com</a>.
+                </p>
+              </div>
+            </div>
+
             <div className="mt-6 grid sm:grid-cols-2 gap-5">
               <div>
                 <h4 className="text-sm font-bold text-stone-900">Real Floor Coating Experts, Not Scripted Reps</h4>
                 <p className="mt-1.5 text-sm text-stone-600 leading-relaxed">
-                  Our sales pros have run the same floor grinders, scarifiers, and epoxy application equipment you'll see on your project. That hands-on experience means accurate square-footage takeoffs, honest condition assessments, and product recommendations tailored to your garage — whether you need a 100% solids epoxy system, a metallic floor, or a decorative flake coating.
+                  Our sales pros have run the same floor grinders, scarifiers, and epoxy application equipment you'll see on your project. That hands-on experience means accurate square-footage takeoffs, honest condition assessments, and product recommendations tailored to your garage — whether you need a 100% solids epoxy system, a metallic floor, or a decorative flake coating. Browse the full epoxy coating and tooling catalog at{" "}
+                  <a href="https://xtremepolishingsystems.com" target="_blank" rel="noopener noreferrer" className="text-black underline font-bold hover:text-amber-600">xtremepolishingsystems.com</a>.
                 </p>
               </div>
               <div>
                 <h4 className="text-sm font-bold text-stone-900">Backed by America's #1 Epoxy Superstore</h4>
                 <p className="mt-1.5 text-sm text-stone-600 leading-relaxed">
-                  As the in-house sales team for Xtreme Polishing Systems and XPS Xpress — with 70+ locations nationwide — our pros have direct access to the manufacturer's full catalog of industrial-grade epoxy coatings, polyurea topcoats, and diamond tooling. That means faster quotes, transparent pricing, and premium materials on every garage floor coating estimate.
+                  As the in-house sales team for Xtreme Polishing Systems and XPS Xpress — with <strong>70+ locations nationwide</strong> — our pros have direct access to the manufacturer's full catalog of industrial-grade epoxy coatings, polyurea topcoats, and diamond tooling. That means faster quotes, transparent pricing, and premium materials on every garage floor coating estimate. Order direct from the manufacturer at{" "}
+                  <a href="https://xtremepolishingsystems.com" target="_blank" rel="noopener noreferrer" className="text-black underline font-bold hover:text-amber-600">xtremepolishingsystems.com</a>.
                 </p>
               </div>
             </div>
+
+            <div className="mt-8 rounded-2xl bg-stone-50 border border-stone-200 p-5 md:p-6">
+              <h4 className="text-sm font-bold text-stone-900">Frequently Asked Questions About Our Epoxy Flooring Team</h4>
+              <div className="mt-4 space-y-4 text-sm text-stone-600 leading-relaxed">
+                <div>
+                  <p className="font-semibold text-stone-900">Are your epoxy flooring sales reps trained professionals?</p>
+                  <p className="mt-1">Yes. Every sales pro graduates from Polished Concrete University, the world's #1 hands-on concrete polishing and epoxy resin training school, located in Pompano Beach, FL.</p>
+                </div>
+                <div>
+                  <p className="font-semibold text-stone-900">How many locations does Xtreme Polishing Systems have?</p>
+                  <p className="mt-1">Xtreme Polishing Systems and XPS Xpress operate 70+ locations nationwide, with our flagship store and warehouse at 2200 NW 32nd Street, Pompano Beach, FL.</p>
+                </div>
+                <div>
+                  <p className="font-semibold text-stone-900">Where can I buy Xtreme Polishing Systems epoxy coatings?</p>
+                  <p className="mt-1">You can shop the full catalog of industrial-grade epoxy coatings, polyurea topcoats, and diamond tooling direct from the manufacturer at{" "}
+                    <a href="https://xtremepolishingsystems.com" target="_blank" rel="noopener noreferrer" className="text-black underline font-bold hover:text-amber-600">xtremepolishingsystems.com</a>.
+                  </p>
+                </div>
+                <div>
+                  <p className="font-semibold text-stone-900">What epoxy systems do you install on garage floors?</p>
+                  <p className="mt-1">We install 100% solids epoxy, decorative flake systems (FlexQuartz), metallic epoxy floors, polyurea topcoats, and Stardek coating systems — all backed by manufacturer-grade materials from{" "}
+                    <a href="https://xtremepolishingsystems.com" target="_blank" rel="noopener noreferrer" className="text-black underline font-bold hover:text-amber-600">xtremepolishingsystems.com</a>.
+                  </p>
+                </div>
+              </div>
+            </div>
+
             <p className="mt-6 text-sm text-stone-500 leading-relaxed">
-              From your first phone consultation to the final walk-through, our epoxy flooring sales professionals guide you through every step — system selection, color and flake choice, pricing, scheduling, and installation day. It's the white-glove experience homeowners across South Florida and beyond have come to expect from the nation's leader in residential garage floor coatings.
+              From your first phone consultation to the final walk-through, our epoxy flooring sales professionals guide you through every step — system selection, color and flake choice, pricing, scheduling, and installation day. It's the white-glove experience homeowners across South Florida and beyond have come to expect from the nation's leader in residential garage floor coatings. Visit{" "}
+              <a href="https://xtremepolishingsystems.com" target="_blank" rel="noopener noreferrer" className="text-black underline font-bold hover:text-amber-600">xtremepolishingsystems.com</a>{" "}
+              to explore our full lineup of epoxy coating products, training courses, and equipment.
             </p>
           </div>
         </div>
