@@ -36,8 +36,8 @@ export default function MarketingSection() {
     <section className="bg-stone-950 text-white">
       {/* Power statement banner */}
       <div className="border-b border-amber-500/40 bg-gradient-to-r from-stone-950 via-stone-900 to-stone-950 py-5 px-6">
-        <div className="max-w-6xl mx-auto flex items-center justify-center gap-3 text-center">
-          <Star className="h-5 w-5 text-amber-400 shrink-0 fill-amber-400" strokeWidth={2.2} />
+        <div className="max-w-6xl mx-auto flex items-center justify-center gap-4 text-center">
+          <Star className="h-6 w-6 text-amber-400 shrink-0 fill-amber-400" strokeWidth={2.2} style={{ marginRight: "6px" }} />
           <span
             className="font-extrabold uppercase tracking-tight leading-none"
             style={{
@@ -63,7 +63,7 @@ export default function MarketingSection() {
               />
             </span>
           </span>
-          <Star className="h-5 w-5 text-amber-400 shrink-0 fill-amber-400" strokeWidth={2.2} />
+          <Star className="h-6 w-6 text-amber-400 shrink-0 fill-amber-400" strokeWidth={2.2} style={{ marginLeft: "6px" }} />
         </div>
       </div>
 
