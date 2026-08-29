@@ -33,7 +33,7 @@ export default function Hero({ settings }) {
             >
               Want to see exactly what your floor will cost and look like before signing up? We show you free!
             </motion.p>
-            <Link to="/funnel" className="mt-6 md:mt-8 inline-flex w-full sm:w-auto items-center justify-center h-14 md:h-16 px-8 md:px-10 rounded-xl bg-amber-500 hover:bg-amber-400 transition text-stone-950 text-base font-bold tracking-wide shadow-lg shadow-amber-500/30">
+            <Link to="/funnel" className="mt-6 md:mt-8 inline-flex w-full sm:w-auto items-center justify-center h-14 md:h-16 px-8 md:px-10 rounded-xl bg-amber-500 hover:bg-amber-400 transition text-stone-950 text-base font-bold tracking-wide shadow-lg shadow-amber-500/30 border border-white/80">
               GET MY FREE ESTIMATE & FLOOR IMAGE
             </Link>
             <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-white/90 font-medium drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]">
