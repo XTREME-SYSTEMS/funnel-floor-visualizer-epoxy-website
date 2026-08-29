@@ -33,7 +33,7 @@ export default function Nav({ settings }) {
         🎉 10% OFF YOUR GARAGE FLOOR COATING — TAP TO GET YOUR FREE ESTIMATE
       </Link>
 
-      <div className={`transition-all duration-300 ${scrolled ? "bg-white/95 backdrop-blur shadow-sm" : "bg-transparent"}`}>
+      <div className="transition-all duration-300 bg-transparent">
         <div className="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
           <Logo size="xl" colorClass={scrolled ? "text-stone-900" : "text-white"} />
 
