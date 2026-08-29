@@ -47,7 +47,7 @@ export default function Nav({ settings }) {
         🎉 10% OFF YOUR GARAGE FLOOR COATING — TAP TO GET YOUR FREE ESTIMATE
       </Link>
 
-      <div className="transition-all duration-300 bg-transparent">
+      <div className="transition-all duration-300 bg-stone-950/70 backdrop-blur-md border-b border-white/10">
         <div className="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
           <Logo size="xl" colorClass="text-white" />
 
