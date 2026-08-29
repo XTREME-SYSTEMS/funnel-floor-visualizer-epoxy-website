@@ -124,14 +124,18 @@ export default function EpoxyProGuide() {
           <button onClick={handleBack} className="flex items-center gap-1.5 text-sm font-semibold text-stone-700">
             <ArrowLeft className="h-5 w-5" /> Back
           </button>
+        ) : tab !== "home" ? (
+          <button onClick={() => setTab("home")} className="flex items-center gap-1.5 text-sm font-semibold text-stone-700">
+            <ArrowLeft className="h-5 w-5" /> Back
+          </button>
         ) : (
-          <Logo size="md" colorClass="text-stone-900" />
+          <button onClick={() => navigate("/")} className="flex items-center gap-1.5 text-sm font-semibold text-stone-700">
+            <ArrowLeft className="h-5 w-5" /> Back
+          </button>
         )}
-        {!sub && (
-          <a href={`tel:${settings.phone || "(877) 958-6408"}`} className="text-xs font-semibold text-amber-600">
-            {settings.phone || "(877) 958-6408"}
-          </a>
-        )}
+        <a href={`tel:${settings.phone || "(877) 958-6408"}`} className="text-xs font-semibold text-amber-600">
+          {settings.phone || "(877) 958-6408"}
+        </a>
       </header>
 
       {/* Content */}
