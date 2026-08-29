@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Clock, ShieldCheck, BadgeCheck, Sparkles } from "lucide-react";
+import { Clock, ShieldCheck, BadgeCheck } from "lucide-react";
 
 const trust = [
   { icon: BadgeCheck, text: "Free estimate" },
@@ -25,10 +25,10 @@ export default function Hero({ settings }) {
               How Much Will Your Epoxy Garage Floor Cost?
             </h1>
             <p className="mt-5 text-lg md:text-xl text-white/95 leading-relaxed drop-shadow-[0_2px_6px_rgba(0,0,0,0.85)]">
-              Get a personalized garage floor estimate in about 60 seconds.
+              Get a personalized garage floor estimate & a real image of your completed floor in 60 seconds.
             </p>
             <Link to="/funnel" className="mt-6 md:mt-8 inline-flex w-full sm:w-auto items-center justify-center h-14 md:h-16 px-8 md:px-10 rounded-xl bg-amber-500 hover:bg-amber-400 transition text-stone-950 text-base font-bold tracking-wide shadow-lg shadow-amber-500/30">
-              GET MY FREE ESTIMATE
+              GET MY FREE ESTIMATE & FLOOR IMAGE
             </Link>
             <p className="mt-3 text-sm text-white/90 font-medium drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]">
               {trust.map((t, i) => (
@@ -39,16 +39,8 @@ export default function Hero({ settings }) {
         </div>
       </div>
 
-      <div className="absolute bottom-0 inset-x-0 pb-5 px-6">
-        <div className="max-w-6xl mx-auto flex flex-col items-center gap-3">
-          <Link to="/funnel" className="inline-flex items-center gap-2 rounded-full bg-amber-500/15 border border-amber-500/40 backdrop-blur-sm px-5 py-2.5 hover:bg-amber-500/25 transition">
-            <Sparkles className="h-4 w-4 text-amber-400 shrink-0" />
-            <span className="text-sm md:text-base font-semibold text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]">
-              See your new floor before you commit — free.
-            </span>
-          </Link>
-          <p className="hidden md:block text-white text-sm font-medium drop-shadow-[0_2px_6px_rgba(0,0,0,0.85)]">{settings.service_area}</p>
-        </div>
+      <div className="hidden md:block absolute bottom-0 inset-x-0 pb-4 text-center">
+        <p className="text-white text-sm font-medium drop-shadow-[0_2px_6px_rgba(0,0,0,0.85)]">{settings.service_area}</p>
       </div>
     </section>
   );
