@@ -25,7 +25,7 @@ export default function Hero({ settings }) {
               How Much Will Your Epoxy Garage Floor Cost?
             </h1>
             <p className="mt-5 text-lg md:text-xl text-white/95 leading-relaxed drop-shadow-[0_2px_6px_rgba(0,0,0,0.85)]">
-              Get a personalized garage floor estimate & a real image of your completed floor in 60 seconds.
+              Get a personalized garage floor estimate & a REAL IMAGE of your completed floor in 60 seconds.
             </p>
             <Link to="/funnel" className="mt-6 md:mt-8 inline-flex w-full sm:w-auto items-center justify-center h-14 md:h-16 px-8 md:px-10 rounded-xl bg-amber-500 hover:bg-amber-400 transition text-stone-950 text-base font-bold tracking-wide shadow-lg shadow-amber-500/30">
               GET MY FREE ESTIMATE & FLOOR IMAGE
