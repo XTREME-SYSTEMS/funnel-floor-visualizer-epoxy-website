@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Droplets, ShieldCheck, Flame, Clock, Sparkles, Award } from "lucide-react";
 
 const highlights = [
@@ -9,9 +9,27 @@ const highlights = [
   { icon: Sparkles, label: "Easy to clean" }
 ];
 
+const POWER_TEXT = "Powered by America's #1 Epoxy Superstore";
+
 // Black band highlighting the key benefits of an epoxy garage floor,
-// with a prominent power statement above it.
+// with a prominent power statement above it (typewriter animated).
 export default function MarketingSection() {
+  const [typed, setTyped] = useState("");
+  const [done, setDone] = useState(false);
+
+  useEffect(() => {
+    let i = 0;
+    const interval = setInterval(() => {
+      i += 1;
+      setTyped(POWER_TEXT.slice(0, i));
+      if (i >= POWER_TEXT.length) {
+        clearInterval(interval);
+        setDone(true);
+      }
+    }, 55);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <section className="bg-stone-950 text-white">
       {/* Power statement banner */}
@@ -24,10 +42,24 @@ export default function MarketingSection() {
               fontSize: "clamp(1.1rem, 2.4vw, 1.9rem)",
               color: "#FFD700",
               WebkitTextStroke: "0.5px #000",
-              textShadow: "0 2px 8px rgba(0,0,0,0.6)"
+              textShadow: "0 2px 8px rgba(0,0,0,0.6), 0 0 1px #ffffff"
             }}
           >
-            Powered by America's #1 Epoxy Superstore
+            <span style={{ border: "1px solid rgba(255,255,255,0.85)", borderRadius: "8px", padding: "6px 14px", display: "inline-block" }}>
+              {typed}
+              <span
+                className="inline-block"
+                style={{
+                  width: "2px",
+                  height: "1em",
+                  background: "#FFD700",
+                  marginLeft: "4px",
+                  verticalAlign: "text-bottom",
+                  opacity: done ? 0 : 1,
+                  animation: done ? "none" : "vx-caret 0.7s step-end infinite"
+                }}
+              />
+            </span>
           </span>
         </div>
       </div>
@@ -43,6 +75,10 @@ export default function MarketingSection() {
           ))}
         </div>
       </div>
+
+      <style>{`
+        @keyframes vx-caret { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+      `}</style>
     </section>
   );
 }
