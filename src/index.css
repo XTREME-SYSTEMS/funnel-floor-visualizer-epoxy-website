@@ -149,7 +149,7 @@
   .xa-header-crest { width: 32px; height: 32px; object-fit: contain; flex-shrink: 0; }
   .xa-header-center small { display: block; color: var(--vx-accent); font-size: 9px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; line-height: 1; }
   .xa-header-center h1 { color: var(--vx-text-primary); font-size: 14px; font-weight: 800; line-height: 1.1; margin: 2px 0 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .xa-header-brand { color: #0B0B0D; font-size: 15px; font-weight: 800; line-height: 1.1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; letter-spacing: -0.01em; }
+  .xa-header-brand { color: #FFD700; -webkit-text-stroke: 1px #000; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000; font-size: 15px; font-weight: 800; line-height: 1.1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; letter-spacing: -0.01em; }
   .vx-header__actions { display: flex; align-items: center; gap: 6px; }
   .vx-main { overflow-y: auto; -webkit-overflow-scrolling: touch; touch-action: pan-y; flex: 1; min-height: 0; }
   .vx-main::-webkit-scrollbar { display: none; }
