@@ -7,6 +7,7 @@ import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import ScrollToTop from './components/ScrollToTop';
 import RouteSeo from '@/components/Seo';
+import { LOGO_URL } from '@/components/Logo';
 // Add page imports here
 import Home from '@/pages/Home';
 import Estimator from '@/pages/Estimator';
@@ -47,8 +48,9 @@ const AuthenticatedApp = () => {
 
   if (isLoadingPublicSettings || isLoadingAuth) {
     return (
-      <div className="fixed inset-0 flex items-center justify-center">
-        <div className="w-8 h-8 border-4 border-slate-200 border-t-slate-800 rounded-full animate-spin"></div>
+      <div className="fixed inset-0 flex flex-col items-center justify-center gap-5 bg-stone-50">
+        <img src={LOGO_URL} alt="Xtreme Polishing Systems" className="h-14 w-14 object-contain" />
+        <div className="w-8 h-8 border-4 border-stone-200 border-t-amber-500 rounded-full animate-spin"></div>
       </div>
     );
   }

@@ -11,10 +11,16 @@ module.exports = {
   		},
   		colors: {
   			amber: {
-  				300: '#d9f99d',
-  				400: '#bef264',
-  				500: '#a3e635',
-  				600: '#84cc16'
+  				50: '#FBF7E8',
+  				100: '#F9F0C8',
+  				200: '#F0DE9C',
+  				300: '#F7E09F',
+  				400: '#F4D03F',
+  				500: '#D4AF37',
+  				600: '#B7950B',
+  				700: '#9A7B0A',
+  				800: '#7D6308',
+  				900: '#5F4B06'
   			},
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',

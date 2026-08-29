@@ -20,7 +20,7 @@ L.Icon.Default.mergeOptions({
 // Custom amber pin for XPS locations
 const xpsIcon = L.divIcon({
   className: "",
-  html: `<div style="background:#a3e635;color:#0c0a09;font-weight:700;width:30px;height:30px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,.35);border:2px solid #0c0a09;"><span style="transform:rotate(45deg);font-size:13px;">X</span></div>`,
+  html: `<div style="background:#D4AF37;color:#0c0a09;font-weight:700;width:30px;height:30px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,.35);border:2px solid #0c0a09;"><span style="transform:rotate(45deg);font-size:13px;">X</span></div>`,
   iconSize: [30, 30],
   iconAnchor: [15, 30],
   popupAnchor: [0, -28]
@@ -28,7 +28,7 @@ const xpsIcon = L.divIcon({
 
 const hqIcon = L.divIcon({
   className: "",
-  html: `<div style="background:#0c0a09;color:#a3e635;font-weight:700;width:34px;height:34px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.45);border:2px solid #a3e635;"><span style="transform:rotate(45deg);font-size:14px;">HQ</span></div>`,
+  html: `<div style="background:#0c0a09;color:#D4AF37;font-weight:700;width:34px;height:34px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.45);border:2px solid #D4AF37;"><span style="transform:rotate(45deg);font-size:14px;">HQ</span></div>`,
   iconSize: [34, 34],
   iconAnchor: [17, 34],
   popupAnchor: [0, -30]

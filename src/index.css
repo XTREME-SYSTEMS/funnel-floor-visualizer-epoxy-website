@@ -95,3 +95,15 @@
     @apply bg-background text-foreground font-body;
   }
 }
+
+@layer utilities {
+  .bg-amber-500 {
+    background-image: linear-gradient(135deg, #F4D03F 0%, #D4AF37 45%, #B7950B 100%);
+  }
+  .bg-amber-400 {
+    background-image: linear-gradient(135deg, #F7E09F 0%, #F4D03F 50%, #D4AF37 100%);
+  }
+  .hover\:bg-amber-400:hover {
+    background-image: linear-gradient(135deg, #F7E09F 0%, #F4D03F 50%, #D4AF37 100%);
+  }
+}
