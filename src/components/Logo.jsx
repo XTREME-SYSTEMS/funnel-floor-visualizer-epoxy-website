@@ -7,19 +7,21 @@ export const LOGO_URL =
 // Brand logo — the Xtreme Polishing Systems crest emblem.
 // The image has a black background, so it reads as a badge on light headers
 // and blends seamlessly on dark headers.
-export default function Logo({ colorClass = "text-white", className = "" }) {
+export default function Logo({ colorClass = "text-white", className = "", size = "md" }) {
+  const imgSize = size === "xl" ? "h-24 w-24" : "h-9 w-9";
+  const textSize = size === "xl" ? "text-lg" : "text-sm";
   return (
     <Link
       to="/"
       aria-label="Epoxy Garage Floor Estimate — home"
-      className={`inline-flex items-center gap-2 shrink-0 ${colorClass} ${className}`}
+      className={`inline-flex items-center gap-3 shrink-0 ${colorClass} ${className}`}
     >
       <img
         src={LOGO_URL}
         alt="Xtreme Polishing Systems"
-        className="h-9 w-9 object-contain"
+        className={`${imgSize} object-contain`}
       />
-      <span className="hidden sm:inline font-display font-bold tracking-tight text-sm">
+      <span className={`hidden sm:inline font-display font-bold tracking-tight ${textSize}`}>
         Epoxy Garage Floors
       </span>
     </Link>

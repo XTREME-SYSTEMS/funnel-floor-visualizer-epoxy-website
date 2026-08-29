@@ -34,8 +34,8 @@ export default function Nav({ settings }) {
       </Link>
 
       <div className={`transition-all duration-300 ${scrolled ? "bg-white/95 backdrop-blur shadow-sm" : "bg-transparent"}`}>
-        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-          <Logo colorClass={scrolled ? "text-stone-900" : "text-white"} />
+        <div className="max-w-6xl mx-auto px-6 h-28 flex items-center justify-between">
+          <Logo size="xl" colorClass={scrolled ? "text-stone-900" : "text-white"} />
 
           <nav className="hidden md:flex items-center gap-7">
             {links.map((l) => (
