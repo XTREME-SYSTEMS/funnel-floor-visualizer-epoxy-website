@@ -8,6 +8,7 @@ const TRAINING_IMG = "https://media.base44.com/images/public/6a77f4491f0bf92de9a
 const SHOWROOM_IMG = "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/74e7fe427_images1.jpg";
 const XPS_IMG = "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/92ad83dc2_xtreme-polishing-systems-blog-paragraph_03_d7345246-7dbb-4a6d-8e86-08bcc63927be.webp";
 const CHRIS_IMG = "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/910b91397_chris-lavin-xtreme-polishing-systems-600w.webp";
+const TEAM_IMG = "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/c77e33573_images5.jpg";
 
 const stats = [
   { value: "30+", label: "Years in business" },
@@ -129,6 +130,22 @@ export default function WhoWeAre({ settings }) {
                 <Calendar className="h-4 w-4" /> Book a consultation
               </Link>
             </div>
+          </div>
+        </div>
+
+        {/* Sales Pros team */}
+        <div className="mt-16 rounded-3xl border border-stone-200 overflow-hidden bg-stone-950 shadow-sm">
+          <div className="relative h-64 md:h-96">
+            <Image src={TEAM_IMG} alt="Xtreme Polishing Systems sales pros team" fittingType="fill" focalPointX={0.5} focalPointY={0.5} className="h-full w-full" />
+          </div>
+          <div className="p-6 text-center">
+            <div className="inline-flex items-center gap-2 text-xs font-bold tracking-[0.15em] text-amber-600">
+              <Award className="h-4 w-4" /> OUR ROCKSTAR SALES PROS
+            </div>
+            <h3 className="mt-2 text-2xl font-semibold text-stone-900">Meet the Team Behind Your Estimate</h3>
+            <p className="mt-3 text-sm text-stone-600 leading-relaxed max-w-2xl mx-auto">
+              The same crew that grinds, coats, and polishes floors every day — real pros who know the craft inside and out, ready to help you price and plan your project.
+            </p>
           </div>
         </div>
       </div>
