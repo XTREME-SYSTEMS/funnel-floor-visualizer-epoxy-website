@@ -71,6 +71,12 @@ export default function Nav({ settings }) {
           <Link to="/funnel" onClick={() => setOpen(false)} className="block h-10 text-center leading-10 rounded-lg bg-amber-500 text-stone-950 text-sm font-semibold">
             Get Free Estimate
           </Link>
+          <Link to="/epoxy-pro-guide" onClick={() => setOpen(false)} className="block text-sm font-medium text-stone-700 pt-2 border-t border-stone-100">
+            Epoxy Pro Guide App
+          </Link>
+          <Link to="/admin" onClick={() => setOpen(false)} className="block text-sm font-medium text-stone-400">
+            Admin Sign In
+          </Link>
         </div>
       )}
     </header>

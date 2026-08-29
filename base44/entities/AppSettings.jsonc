@@ -44,6 +44,20 @@
       "type": "boolean",
       "default": true
     },
+    "show_precise_bid": {
+      "type": "boolean",
+      "default": true,
+      "description": "Show the Precise Bid option alongside price ranges in the app estimator"
+    },
+    "default_location_mode": {
+      "type": "string",
+      "enum": [
+        "nearest",
+        "hq"
+      ],
+      "default": "nearest",
+      "description": "Default home base for bids: nearest XPS Xpress store by ZIP or Corporate HQ"
+    },
     "description": {
       "type": "string",
       "maxLength": 1000

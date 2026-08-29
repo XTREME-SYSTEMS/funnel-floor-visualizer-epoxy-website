@@ -10,6 +10,8 @@ export const DEFAULT_SETTINGS = {
   primary_state: "FL",
   google_maps_api_key: "",
   is_test_pricing: true,
+  show_precise_bid: true,
+  default_location_mode: "nearest",
   size_defaults: { one_car: 240, two_car: 440, three_car: 660, four_car: 880, not_sure: 440 },
   systems: [
     { key: "flake", name: "Decorative Flake Floor", description: "Classic residential garage coating with a decorative flake blend. Popular, durable, and budget-friendly.", image_url: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800", price_per_sqft: 7 },

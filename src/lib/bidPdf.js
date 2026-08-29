@@ -1,10 +1,35 @@
 // Branded PDF proposal generator (runs in the browser via jsPDF). The output
-// is uploaded and attached to the estimate email. Mirrors the email layout:
-// estimate range, packages, scope of work, warranty, FAQs, and a book CTA.
+// is a professional bid document with the XPS logo, company contact info,
+// the homeowner's nearest XPS Xpress location (or HQ), the visualizer floor
+// preview, estimate (range or precise), packages, scope, warranty, and FAQs.
 import { jsPDF } from "jspdf";
 import { scopeForLead, WARRANTY_TEXT, FAQS } from "@/lib/bidContent";
+import { LOGO_URL } from "@/components/Logo";
 
 const money = (n) => (Math.round(Number(n) || 0)).toLocaleString("en-US");
+
+// Loads an image URL and returns a PNG data URL via canvas (jsPDF needs PNG/JPEG).
+async function loadImageDataUrl(url) {
+  if (!url) return null;
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.onload = () => {
+      try {
+        const canvas = document.createElement("canvas");
+        canvas.width = img.naturalWidth || 256;
+        canvas.height = img.naturalHeight || 256;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0);
+        resolve(canvas.toDataURL("image/png"));
+      } catch {
+        resolve(null);
+      }
+    };
+    img.onerror = () => resolve(null);
+    img.src = url;
+  });
+}
 
 function wrap(doc, text, style, size, maxWidth) {
   doc.setFont("helvetica", style);
@@ -12,7 +37,7 @@ function wrap(doc, text, style, size, maxWidth) {
   return doc.splitTextToSize(String(text || ""), maxWidth);
 }
 
-export function generateBidPdf(lead, settings, origin) {
+export async function generateBidPdf(lead, settings, origin, options = {}) {
   const doc = new jsPDF({ unit: "pt", format: "a4" });
   const W = doc.internal.pageSize.getWidth();
   const H = doc.internal.pageSize.getHeight();
@@ -21,21 +46,43 @@ export function generateBidPdf(lead, settings, origin) {
 
   const company = settings.public_business_name || "EpoxyGarageFloorEstimate.com";
   const phone = settings.phone || "";
+  const email = settings.email || "";
+  const address = settings.business_address || "";
   const firstName = lead.first_name || "there";
+  const isPrecise = options.bidType === "precise";
+  const location = options.location || null;
 
-  // Header band
+  // Load logo + floor preview images in parallel
+  const [logoDataUrl, floorDataUrl] = await Promise.all([
+    loadImageDataUrl(LOGO_URL),
+    loadImageDataUrl(options.floorImageUrl),
+  ]);
+
+  // ---- Header band (dark with gold accent) ----
   doc.setFillColor(12, 10, 9);
-  doc.rect(0, 0, W, 90, "F");
-  doc.setTextColor(163, 230, 53);
-  doc.setFont("helvetica", "bold");
-  doc.setFontSize(18);
-  doc.text(company, M, 38);
-  doc.setTextColor(168, 162, 158);
-  doc.setFontSize(8);
-  doc.text("INSTANT GARAGE FLOOR ESTIMATE", M, 56);
-  y = 90 + 36;
+  doc.rect(0, 0, W, 120, "F");
+  doc.setFillColor(217, 184, 53);
+  doc.rect(0, 120, W, 3, "F");
 
-  // Title
+  if (logoDataUrl) {
+    try { doc.addImage(logoDataUrl, "PNG", M, 25, 65, 65); } catch {}
+  }
+
+  doc.setTextColor(255, 255, 255);
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(16);
+  doc.text(company, M + 80, 45);
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(8);
+  doc.setTextColor(168, 162, 158);
+  doc.text("INSTANT GARAGE FLOOR ESTIMATE", M + 80, 60);
+  if (phone) doc.text(`Phone: ${phone}`, M + 80, 74);
+  if (email) doc.text(`Email: ${email}`, M + 80, 86);
+  if (address) doc.text(address, M + 80, 98);
+
+  y = 135 + 30;
+
+  // ---- Title ----
   doc.setTextColor(12, 10, 9);
   doc.setFont("helvetica", "bold");
   doc.setFontSize(16);
@@ -55,25 +102,71 @@ export function generateBidPdf(lead, settings, origin) {
     if (y + need > H - 60) { doc.addPage(); y = 48; }
   };
 
-  // Estimate range box
+  // ---- Home base location ----
+  if (location) {
+    ensure(70);
+    doc.setDrawColor(217, 184, 53);
+    doc.setFillColor(250, 250, 249);
+    doc.roundedRect(M, y, W - M * 2, 60, 8, 8, "FD");
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(9);
+    doc.setTextColor(120, 113, 108);
+    doc.text("YOUR HOME BASE", M + 16, y + 18);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(11);
+    doc.setTextColor(12, 10, 9);
+    doc.text(`${location.city}, ${location.state}${location.hq ? " (Corporate HQ)" : ""}`, M + 16, y + 34);
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(9);
+    doc.setTextColor(120, 113, 108);
+    doc.text(location.address || "", M + 16, y + 46);
+    if (location.phone) doc.text(`Phone: ${location.phone}`, M + 16, y + 58);
+    y += 60 + 16;
+  }
+
+  // ---- Floor preview (visualizer image) ----
+  if (floorDataUrl) {
+    ensure(170);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(9);
+    doc.setTextColor(120, 113, 108);
+    doc.text("YOUR FLOOR PREVIEW", M, y + 12);
+    y += 18;
+    try {
+      const imgW = W - M * 2;
+      const imgH = 140;
+      doc.addImage(floorDataUrl, "PNG", M, y, imgW, imgH);
+      y += imgH + 12;
+    } catch {}
+  }
+
+  // ---- Estimate box ----
   ensure(110);
-  doc.setDrawColor(231, 229, 228);
+  doc.setDrawColor(217, 184, 53);
   doc.setFillColor(250, 250, 249);
   doc.roundedRect(M, y, W - M * 2, 90, 8, 8, "FD");
   doc.setTextColor(120, 113, 108);
   doc.setFont("helvetica", "bold");
   doc.setFontSize(9);
-  doc.text("ESTIMATE RANGE", M + 20, y + 24);
+  doc.text(isPrecise ? "PRECISE ESTIMATE" : "ESTIMATE RANGE", M + 20, y + 24);
   doc.setTextColor(12, 10, 9);
   doc.setFontSize(28);
-  doc.text(`$${money(lead.estimate_low)} - $${money(lead.estimate_high)}`, M + 20, y + 56);
+  if (isPrecise) {
+    doc.text(`$${money(lead.estimate_mid)}`, M + 20, y + 56);
+  } else {
+    doc.text(`$${money(lead.estimate_low)} - $${money(lead.estimate_high)}`, M + 20, y + 56);
+  }
   doc.setFont("helvetica", "normal");
   doc.setFontSize(10);
   doc.setTextColor(68, 64, 60);
-  doc.text(`Most projects like yours land around $${money(lead.estimate_mid)}`, M + 20, y + 74);
+  if (!isPrecise) {
+    doc.text(`Most projects like yours land around $${money(lead.estimate_mid)}`, M + 20, y + 74);
+  } else {
+    doc.text("Based on your garage size and selected finish", M + 20, y + 74);
+  }
   y += 90 + 22;
 
-  // Packages
+  // ---- Packages ----
   const packages = Array.isArray(lead.package_options) ? lead.package_options : [];
   if (packages.length) {
     ensure(80);
@@ -102,7 +195,7 @@ export function generateBidPdf(lead, settings, origin) {
     y += 78;
   }
 
-  // Scope of work
+  // ---- Scope of work ----
   const scope = scopeForLead(lead.floor_condition);
   if (scope.length) {
     ensure(30);
@@ -116,7 +209,7 @@ export function generateBidPdf(lead, settings, origin) {
       const detailLines = wrap(doc, s.detail, "normal", 9, W - M * 2 - 20);
       const blockH = labelLines.length * 13 + detailLines.length * 12 + 12;
       ensure(blockH + 10);
-      doc.setFillColor(101, 163, 13);
+      doc.setFillColor(217, 184, 53);
       doc.rect(M, y, 6, 6, "F");
       let ty = y + 10;
       doc.setFont("helvetica", "bold");
@@ -134,7 +227,7 @@ export function generateBidPdf(lead, settings, origin) {
     }
   }
 
-  // Warranty
+  // ---- Warranty ----
   ensure(96);
   doc.setDrawColor(231, 229, 228);
   doc.setFillColor(250, 250, 249);
@@ -151,7 +244,7 @@ export function generateBidPdf(lead, settings, origin) {
   for (const ln of wLines) { doc.text(ln, M + 16, wy); wy += 12; }
   y += 96;
 
-  // FAQ
+  // ---- FAQ ----
   if (FAQS.length) {
     ensure(30);
     doc.setFont("helvetica", "bold");
@@ -177,9 +270,9 @@ export function generateBidPdf(lead, settings, origin) {
     }
   }
 
-  // CTA
+  // ---- CTA ----
   ensure(60);
-  const bookUrl = `${origin}/book/${lead.id}`;
+  const bookUrl = `${origin}/book/${lead.id || ""}`;
   doc.setFont("helvetica", "bold");
   doc.setFontSize(11);
   doc.setTextColor(12, 10, 9);
@@ -192,7 +285,7 @@ export function generateBidPdf(lead, settings, origin) {
   y += 16;
   if (phone) { doc.text(`or call ${phone}`, M, y); y += 14; }
 
-  // Footer on every page
+  // ---- Footer on every page ----
   const pageCount = doc.getNumberOfPages();
   for (let i = 1; i <= pageCount; i++) {
     doc.setPage(i);
@@ -202,9 +295,9 @@ export function generateBidPdf(lead, settings, origin) {
     doc.setFontSize(8);
     doc.setTextColor(120, 113, 108);
     doc.text(company, M, 28);
-    if (settings.business_address) {
+    if (address) {
       doc.setFont("helvetica", "normal");
-      doc.text(settings.business_address, M, 16);
+      doc.text(address, M, 16);
     }
     doc.text("Preliminary estimate - not a contract.", W - M, 28, { align: "right" });
   }

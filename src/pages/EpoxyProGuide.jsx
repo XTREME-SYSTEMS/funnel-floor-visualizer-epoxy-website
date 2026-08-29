@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Home, Image as ImageIcon, Calculator, Grid, MoreHorizontal, ArrowLeft, MessageSquare, Palette, MapPin, Star, Wrench, Calendar, Download } from "lucide-react";
+import { Home, Image as ImageIcon, Calculator, Grid, MoreHorizontal, ArrowLeft, MessageSquare, Palette, MapPin, Star, Wrench, Calendar, Download, Lock } from "lucide-react";
 import { useAppData } from "@/lib/useAppData";
 import { useSettings } from "@/lib/useSettings";
 import AppHome from "@/components/app/AppHome";
@@ -103,6 +103,15 @@ export default function EpoxyProGuide() {
             <button onClick={() => navigate("/")} className="mt-6 w-full text-center text-xs text-stone-400">
               ← Back to main website
             </button>
+            <Link to="/admin" className="mt-3 w-full flex items-center gap-3 p-3 rounded-2xl bg-stone-900 border border-stone-700 hover:border-amber-500 transition text-left">
+              <div className="h-11 w-11 rounded-xl bg-amber-500/10 flex items-center justify-center shrink-0">
+                <Lock className="h-5 w-5 text-amber-500" strokeWidth={1.8} />
+              </div>
+              <div className="flex-1">
+                <div className="text-sm font-bold text-white">Admin Sign In</div>
+                <div className="text-xs text-stone-400">Dashboard, leads & settings</div>
+              </div>
+            </Link>
           </div>
         );
       default: return null;

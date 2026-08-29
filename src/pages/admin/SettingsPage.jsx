@@ -65,6 +65,25 @@ export default function SettingsPage() {
         </div>
       </div>
 
+      <div className="rounded-2xl bg-white border border-stone-200 p-6 grid gap-4 sm:grid-cols-2">
+        <h2 className="font-semibold text-stone-900 sm:col-span-2">Bid & location</h2>
+        <div className="sm:col-span-2 flex items-center gap-3">
+          <Switch checked={!!form.show_precise_bid} onCheckedChange={(v) => set({ show_precise_bid: v })} />
+          <span className="text-sm text-stone-600">Show "Precise Bid" option alongside price ranges</span>
+        </div>
+        <Field label="Default location mode">
+          <select
+            value={form.default_location_mode || "nearest"}
+            onChange={(e) => set({ default_location_mode: e.target.value })}
+            className="h-10 w-full rounded-md border border-stone-200 px-3 text-sm"
+          >
+            <option value="nearest">Nearest XPS Xpress store by ZIP</option>
+            <option value="hq">Corporate HQ (Pompano Beach, FL)</option>
+          </select>
+        </Field>
+        <Field label="Legal business name"><Input value={form.legal_business_name || ""} onChange={(e) => set({ legal_business_name: e.target.value })} /></Field>
+      </div>
+
       <div className="rounded-2xl bg-white border border-stone-200 p-6 grid gap-4 sm:grid-cols-3">
         <h2 className="font-semibold text-stone-900 sm:col-span-3">Pricing engine</h2>
         <Field label="Minimum project price ($)"><Input type="number" value={form.minimum_project_price ?? ""} onChange={(e) => set({ minimum_project_price: num(e.target.value) })} /></Field>
