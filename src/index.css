@@ -42,6 +42,21 @@
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+    --vx-accent: #FFD700;
+    --vx-accent-2: #B8860B;
+    --vx-bg: #FFFFFF;
+    --vx-panel: #FFFFFF;
+    --vx-panel-2: #F6F6F7;
+    --vx-panel-3: #ECECEE;
+    --vx-text: #0B0B0D;
+    --vx-muted: #555555;
+    --vx-faint: #8A8A8A;
+    --vx-border: #E4E4E7;
+    --vx-border-soft: #EFEFF1;
+    --vx-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    --vx-canvas: #FFFFFF;
+    --vx-text-primary: #0B0B0D;
+    --vx-nav-bg: rgba(255, 255, 255, 0.96);
   }
 
   .dark {
@@ -77,6 +92,21 @@
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+    --vx-accent: #FFD700;
+    --vx-accent-2: #B8860B;
+    --vx-bg: #0B0B0D;
+    --vx-panel: #101012;
+    --vx-panel-2: #161618;
+    --vx-panel-3: #232325;
+    --vx-text: #F5F5F5;
+    --vx-muted: #A8A8A8;
+    --vx-faint: #8A8A8A;
+    --vx-border: #2E2E2E;
+    --vx-border-soft: #1F1F1F;
+    --vx-shadow: 0 16px 44px rgba(0, 0, 0, 0.5);
+    --vx-canvas: #0B0B0D;
+    --vx-text-primary: #F5F5F5;
+    --vx-nav-bg: rgba(5, 5, 5, 0.96);
   }
 }
 
@@ -106,4 +136,69 @@
   .hover\:bg-amber-400:hover {
     background-image: linear-gradient(135deg, #F8E592 0%, #F5DA38 50%, #D9B835 100%);
   }
+}
+
+@layer components {
+  /* === Xtreme AI design system — shell === */
+  .vx-app-shell { min-height: 100vh; background: var(--vx-canvas); }
+  .vx-device-shell { max-width: 28rem; margin: 0 auto; min-height: 100vh; position: relative; background: var(--vx-canvas); box-shadow: 0 0 60px rgba(0,0,0,.06); display: flex; flex-direction: column; }
+  .vx-header { min-height: 64px; padding: 10px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; border-bottom: 1px solid var(--vx-border); background: var(--vx-canvas); position: sticky; top: 0; z-index: 30; backdrop-filter: blur(18px); }
+  .vx-icon-btn { display: grid; place-items: center; width: 40px; height: 40px; border: 1px solid var(--vx-border); border-radius: 10px; background: var(--vx-panel); color: var(--vx-text); cursor: pointer; transition: border-color .12s; }
+  .vx-icon-btn:hover { border-color: var(--vx-accent); }
+  .xa-header-center { display: flex; align-items: center; gap: 10px; min-width: 0; flex: 1; justify-content: center; }
+  .xa-header-crest { width: 32px; height: 32px; object-fit: contain; flex-shrink: 0; }
+  .xa-header-center small { display: block; color: var(--vx-accent); font-size: 9px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; line-height: 1; }
+  .xa-header-center h1 { color: var(--vx-text-primary); font-size: 14px; font-weight: 800; line-height: 1.1; margin: 2px 0 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .vx-header__actions { display: flex; align-items: center; gap: 6px; }
+  .vx-main { overflow-y: auto; overscroll-behavior-y: none; flex: 1; min-height: 0; }
+  .vx-main::-webkit-scrollbar { display: none; }
+
+  /* === Bottom nav with center FAB === */
+  .vx-bottom-nav { position: fixed; left: 50%; bottom: 0; z-index: 30; width: min(100%, 28rem); transform: translateX(-50%); display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); padding: 8px 8px calc(8px + env(safe-area-inset-bottom)); border-top: 1px solid var(--vx-border); background: var(--vx-nav-bg); backdrop-filter: blur(18px); }
+  .vx-bottom-nav button { display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 4px; color: var(--vx-faint); font-size: 10px; font-weight: 600; background: transparent; border: 0; cursor: pointer; transition: color .12s; }
+  .vx-bottom-nav button.active { color: var(--vx-accent); }
+  .xa-nav-center { display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 4px; background: transparent; border: 0; cursor: pointer; }
+  .xa-nav-center-btn { width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(180deg, #FFE25A 0%, var(--vx-accent) 45%, #C8A300 100%); display: grid; place-items: center; border: 2px solid #6e5408; box-shadow: 0 6px 18px rgba(255,215,0,.4), inset 0 1px rgba(255,255,255,.4); margin-top: -22px; color: #1a1a1a; }
+  .xa-nav-center-label { margin-top: 2px; color: var(--vx-accent); font-size: 10px; font-weight: 600; }
+
+  /* === CTA buttons === */
+  .xa-cta-gold { width: 100%; min-height: 48px; border-radius: 14px; border: 1px solid #C8A300; background: linear-gradient(180deg, #FFE25A 0%, var(--vx-accent) 45%, #C8A300 100%); color: #1a1a1a; font-weight: 800; font-size: 14px; display: inline-flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; box-shadow: inset 0 1px rgba(255,255,255,.5), 0 6px 18px rgba(255,215,0,.35); transition: transform .12s, box-shadow .12s; }
+  .xa-cta-gold:active { transform: translateY(1px); }
+  .xa-cta-gold:disabled { opacity: .6; cursor: not-allowed; }
+  .xa-cta-black { width: 100%; min-height: 48px; border-radius: 14px; border: 1px solid #000; background: #000; color: #fff; font-weight: 800; font-size: 14px; display: inline-flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; transition: transform .12s; }
+  .xa-cta-black:active { transform: translateY(1px); }
+
+  /* === Cards === */
+  .xa-card-dark { background: var(--vx-panel); border: 1px solid var(--vx-border); border-radius: 18px; padding: 16px; }
+  .xa-card-light { background: #F8F9FA; border: 1px solid #EAEAEA; border-radius: 18px; padding: 16px; }
+  .xa-section-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 12px; }
+  .xa-section-head h2 { margin: 0; font-size: 16px; font-weight: 800; color: var(--vx-text); }
+  .xa-see-all { color: var(--vx-accent); font-size: 13px; font-weight: 700; background: none; border: 0; cursor: pointer; }
+
+  /* === Progress === */
+  .xa-progress-track { height: 10px; border-radius: 999px; background: var(--vx-panel-3); overflow: hidden; }
+  .xa-progress-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, #FFF870, var(--vx-accent)); box-shadow: 0 0 10px rgba(255,215,0,.5); transition: width .4s ease; }
+  .xa-step-node { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; border: 1.5px solid var(--vx-border); color: var(--vx-faint); flex-shrink: 0; font-size: 12px; }
+  .xa-step-node.done { background: linear-gradient(180deg, #FFE25A, var(--vx-accent)); border-color: #C8A300; color: #1a1a1a; box-shadow: 0 0 10px rgba(255,215,0,.5); }
+  .xa-step-node.current { border-color: var(--vx-accent); color: var(--vx-accent); box-shadow: 0 0 12px rgba(255,215,0,.4); }
+
+  /* === Bands === */
+  .xa-band-inner { padding: 20px 16px; }
+  .xa-band-light { background: linear-gradient(180deg, #ffffff 0%, #ececee 100%); }
+
+  /* === Crest / hero === */
+  .xa-crest { width: 128px; height: 128px; object-fit: contain; margin: 0 auto; display: block; filter: drop-shadow(0 10px 24px rgba(184,134,11,.30)); }
+  .xa-crest-title { margin: 14px 0 2px; font-size: 28px; font-weight: 900; letter-spacing: -.02em; color: var(--vx-text); line-height: 1.05; }
+  .xa-crest-sub { margin: 0; font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--vx-accent); }
+  .xa-boot-logo { width: 128px; height: 128px; object-fit: contain; }
+
+  /* === Stat cards === */
+  .xa-stat-card { background: var(--vx-panel); border: 1px solid var(--vx-border); border-radius: 16px; padding: 14px; display: grid; gap: 6px; }
+  .xa-stat-ico { width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; color: var(--vx-accent); background: rgba(255,215,0,.08); border: 1px solid #8a6d0b; }
+  .xa-stat-val { font-size: 22px; font-weight: 900; color: var(--vx-text); }
+  .xa-stat-label { font-size: 11px; color: var(--vx-muted); }
+
+  /* === Inputs === */
+  .xa-input { width: 100%; height: 44px; border-radius: 11px; border: 1px solid var(--vx-border); background: var(--vx-panel); color: var(--vx-text); padding: 0 14px; font-size: 14px; outline: none; transition: border-color .12s; }
+  .xa-input:focus { border-color: var(--vx-accent); }
 }

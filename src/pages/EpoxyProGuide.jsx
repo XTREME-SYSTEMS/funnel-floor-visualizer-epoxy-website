@@ -13,7 +13,7 @@ import AppServices from "@/components/app/AppServices";
 import AppReviews from "@/components/app/AppReviews";
 import AppSchedule from "@/components/app/AppSchedule";
 import AppChat from "@/components/app/AppChat";
-import Logo from "@/components/Logo";
+import { LOGO_URL } from "@/components/Logo";
 import { Link } from "react-router-dom";
 import { usePwaInstall } from "@/lib/usePwaInstall";
 
@@ -23,6 +23,19 @@ const TABS = [
   { key: "gallery", label: "Gallery", icon: Grid },
   { key: "more", label: "More", icon: MoreHorizontal }
 ];
+
+const TITLES = {
+  home: { eyebrow: "EPOXY PRO", title: "Garage Floor Toolkit" },
+  visualizer: { eyebrow: "EPOXY PRO · TOOLS", title: "Floor Visualizer" },
+  estimate: { eyebrow: "EPOXY PRO · TOOLS", title: "Instant Bid" },
+  gallery: { eyebrow: "EPOXY PRO · GALLERY", title: "Project Gallery" },
+  more: { eyebrow: "EPOXY PRO", title: "More" },
+  colors: { eyebrow: "EPOXY PRO · COLORS", title: "Color Charts" },
+  locations: { eyebrow: "EPOXY PRO · STORES", title: "Find a Store" },
+  services: { eyebrow: "EPOXY PRO · SERVICES", title: "Our Services" },
+  reviews: { eyebrow: "EPOXY PRO · REVIEWS", title: "Customer Reviews" },
+  schedule: { eyebrow: "EPOXY PRO · TRACKING", title: "Proposal Tracking" },
+};
 
 const MORE_ITEMS = [
   { key: "colors", label: "Color Charts", icon: Palette, desc: "Browse 150+ XPS & Torginol colors" },
@@ -51,6 +64,8 @@ export default function EpoxyProGuide() {
     setSub(null);
   };
 
+  const meta = sub ? (TITLES[sub] || { eyebrow: "EPOXY PRO", title: "More" }) : (TITLES[tab] || TITLES.home);
+
   const renderSubScreen = () => {
     switch (sub) {
       case "colors": return <AppColors />;
@@ -71,15 +86,10 @@ export default function EpoxyProGuide() {
       case "gallery": return <AppGallery />;
       case "more":
         return (
-          <div className="p-4 pb-6">
-            <h1 className="text-xl font-display font-extrabold text-stone-900 mb-1">More</h1>
-            <p className="text-sm text-stone-500 mb-4">Everything else you need, all in one place.</p>
+          <div className="xa-band-inner space-y-4">
             {canInstall && !isInstalled && (
-              <button
-                onClick={promptInstall}
-                className="w-full mb-3 h-12 rounded-2xl bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold text-sm flex items-center justify-center gap-2 transition shadow-lg shadow-amber-500/30"
-              >
-                <Download className="h-5 w-5" /> Install App to Home Screen
+              <button onClick={promptInstall} className="xa-cta-gold">
+                <Download className="w-5 h-5" /> Install App to Home Screen
               </button>
             )}
             <div className="space-y-2">
@@ -99,10 +109,10 @@ export default function EpoxyProGuide() {
                 </button>
               ))}
             </div>
-            <button onClick={() => navigate("/")} className="mt-6 w-full text-center text-xs text-stone-400">
+            <button onClick={() => navigate("/")} className="w-full text-center text-xs text-stone-400">
               ← Back to main website
             </button>
-            <Link to="/admin" className="mt-3 w-full flex items-center gap-3 p-3 rounded-2xl bg-stone-900 border border-stone-700 hover:border-amber-500 transition text-left">
+            <Link to="/admin" className="w-full flex items-center gap-3 p-3 rounded-2xl bg-stone-900 border border-stone-700 hover:border-amber-500 transition text-left">
               <div className="h-11 w-11 rounded-xl bg-amber-500/10 flex items-center justify-center shrink-0">
                 <Lock className="h-5 w-5 text-amber-500" strokeWidth={1.8} />
               </div>
@@ -118,93 +128,100 @@ export default function EpoxyProGuide() {
   };
 
   return (
-    <div className="min-h-screen bg-white flex flex-col max-w-md mx-auto relative shadow-2xl">
-      {/* Promo bar — matches main site */}
-      {!sub && (
-        <Link to="/funnel" className="block bg-amber-500 text-stone-950 text-center text-[11px] font-bold tracking-wide py-1.5 shrink-0">
-          🎉 10% OFF YOUR GARAGE FLOOR COATING — TAP TO GET YOUR FREE ESTIMATE
-        </Link>
-      )}
+    <div className="vx-app-shell">
+      <div className="vx-device-shell">
+        {/* Promo bar */}
+        {!sub && (
+          <Link to="/funnel" className="block bg-amber-500 text-stone-950 text-center text-[11px] font-bold tracking-wide py-1.5 shrink-0">
+            🎉 10% OFF YOUR GARAGE FLOOR COATING — TAP TO GET YOUR FREE ESTIMATE
+          </Link>
+        )}
 
-      {/* Top bar — X / centered brand / bell */}
-      <header className="sticky top-0 z-30 bg-white px-4 h-16 flex items-center justify-between shrink-0">
-        {sub ? (
-          <button onClick={handleBack} className="flex items-center justify-center h-10 w-10 -ml-2 text-stone-900">
-            <ArrowLeft className="h-5 w-5" />
-          </button>
-        ) : tab !== "home" ? (
-          <button onClick={() => setTab("home")} className="flex items-center justify-center h-10 w-10 -ml-2 text-stone-900">
-            <ArrowLeft className="h-5 w-5" />
-          </button>
-        ) : (
-          <button onClick={() => navigate("/")} className="flex items-center justify-center h-10 w-10 -ml-2 text-stone-900">
-            <X className="h-5 w-5" />
+        {/* Header — crest / eyebrow+title / actions */}
+        <header className="vx-header">
+          {sub ? (
+            <button onClick={handleBack} className="vx-icon-btn" aria-label="Back">
+              <ArrowLeft className="w-5 h-5" />
+            </button>
+          ) : tab !== "home" ? (
+            <button onClick={() => setTab("home")} className="vx-icon-btn" aria-label="Back">
+              <ArrowLeft className="w-5 h-5" />
+            </button>
+          ) : (
+            <button onClick={() => navigate("/")} className="vx-icon-btn" aria-label="Close">
+              <X className="w-5 h-5" />
+            </button>
+          )}
+          <div className="xa-header-center">
+            <img src={LOGO_URL} alt="XPS" className="xa-header-crest" />
+            <div>
+              <small>{meta.eyebrow}</small>
+              <h1>{meta.title}</h1>
+            </div>
+          </div>
+          <div className="vx-header__actions">
+            <button onClick={() => setSub("schedule")} className="vx-icon-btn relative" aria-label="Notifications">
+              <Bell className="w-5 h-5" />
+              {appData.appointment && <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-amber-500 ring-2 ring-white" />}
+            </button>
+          </div>
+        </header>
+
+        {/* Content */}
+        <main className="vx-main flex-1" style={{ paddingBottom: 80 }}>
+          {sub ? renderSubScreen() : renderTab()}
+        </main>
+
+        {/* Floating chat button */}
+        {!chatOpen && !sub && (
+          <button
+            onClick={() => setChatOpen(true)}
+            className="fixed bottom-24 h-12 w-12 rounded-full bg-stone-950 shadow-lg shadow-stone-900/20 flex items-center justify-center z-40"
+            style={{ right: "max(1rem, calc((100% - 28rem) / 2 + 1rem))" }}
+          >
+            <MessageSquare className="h-5 w-5 text-white" />
           </button>
         )}
-        <div className="font-display font-extrabold text-lg tracking-tight select-none">
-          <span className="text-stone-900">EPOXY </span>
-          <span className="text-amber-500">PRO</span>
-        </div>
-        <button onClick={() => setSub("schedule")} className="flex items-center justify-center h-10 w-10 -mr-2 text-stone-900 relative">
-          <Bell className="h-5 w-5" />
-          {appData.appointment && <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-amber-500 ring-2 ring-white" />}
-        </button>
-      </header>
 
-      {/* Content */}
-      <main className="flex-1 overflow-y-auto pb-20">
-        {sub ? renderSubScreen() : renderTab()}
-      </main>
+        {/* Chat overlay */}
+        {chatOpen && <AppChat onClose={() => setChatOpen(false)} />}
 
-      {/* Floating chat button */}
-      {!chatOpen && !sub && (
-        <button
-          onClick={() => setChatOpen(true)}
-          className="fixed bottom-24 h-12 w-12 rounded-full bg-stone-950 shadow-lg shadow-stone-900/20 flex items-center justify-center z-40"
-          style={{ right: "max(1rem, calc((100% - 28rem) / 2 + 1rem))" }}
-        >
-          <MessageSquare className="h-5 w-5 text-white" />
-        </button>
-      )}
-
-      {/* Chat overlay */}
-      {chatOpen && <AppChat onClose={() => setChatOpen(false)} />}
-
-      {/* Bottom tab bar — white with center FAB */}
-      {!sub && !chatOpen && (
-        <nav className="fixed bottom-0 left-0 right-0 z-30 max-w-md mx-auto bg-white border-t border-stone-200 flex">
-          {TABS.slice(0, 2).map((t) => (
+        {/* Bottom nav — 4 tabs + center FAB */}
+        {!sub && !chatOpen && (
+          <nav className="vx-bottom-nav" aria-label="Primary navigation">
+            {TABS.slice(0, 2).map((t) => (
+              <button
+                key={t.key}
+                className={tab === t.key ? "active" : undefined}
+                onClick={() => setTab(t.key)}
+              >
+                <t.icon className="w-5 h-5" strokeWidth={tab === t.key ? 2.2 : 1.8} />
+                <span>{t.label}</span>
+              </button>
+            ))}
             <button
-              key={t.key}
-              onClick={() => setTab(t.key)}
-              className={`flex-1 flex flex-col items-center gap-0.5 py-2.5 transition ${tab === t.key ? "text-amber-500" : "text-stone-400"}`}
+              className="xa-nav-center"
+              onClick={() => { setTab("estimate"); setSub(null); }}
+              aria-label="Instant Bid"
             >
-              <t.icon className="h-5 w-5" strokeWidth={tab === t.key ? 2.2 : 1.8} />
-              <span className="text-[10px] font-semibold">{t.label}</span>
+              <span className="xa-nav-center-btn">
+                <Calculator className="w-6 h-6" strokeWidth={2.5} />
+              </span>
+              <span className="xa-nav-center-label">Bid</span>
             </button>
-          ))}
-          {/* Center FAB — Instant Bid */}
-          <button
-            onClick={() => { setTab("estimate"); setSub(null); }}
-            className="flex-1 flex flex-col items-center -mt-6"
-          >
-            <div className="h-14 w-14 rounded-full bg-amber-500 flex items-center justify-center border-4 border-white shadow-lg shadow-amber-500/40">
-              <Calculator className="h-6 w-6 text-stone-950" strokeWidth={2.5} />
-            </div>
-            <span className={`text-[10px] font-semibold mt-0.5 ${tab === "estimate" ? "text-amber-600" : "text-stone-500"}`}>Bid</span>
-          </button>
-          {TABS.slice(2).map((t) => (
-            <button
-              key={t.key}
-              onClick={() => setTab(t.key)}
-              className={`flex-1 flex flex-col items-center gap-0.5 py-2.5 transition ${tab === t.key ? "text-amber-500" : "text-stone-400"}`}
-            >
-              <t.icon className="h-5 w-5" strokeWidth={tab === t.key ? 2.2 : 1.8} />
-              <span className="text-[10px] font-semibold">{t.label}</span>
-            </button>
-          ))}
-        </nav>
-      )}
+            {TABS.slice(2).map((t) => (
+              <button
+                key={t.key}
+                className={tab === t.key ? "active" : undefined}
+                onClick={() => setTab(t.key)}
+              >
+                <t.icon className="w-5 h-5" strokeWidth={tab === t.key ? 2.2 : 1.8} />
+                <span>{t.label}</span>
+              </button>
+            ))}
+          </nav>
+        )}
+      </div>
     </div>
   );
 }

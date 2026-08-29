@@ -23,53 +23,48 @@ export default function AppHome({ appData, onNavigate }) {
   const { savedFloors, estimate, appointment, timeline } = appData;
 
   return (
-    <div className="pb-6">
-      {/* Hero — clean white with confetti, matching reference aesthetic */}
-      <div className="relative overflow-hidden bg-white px-5 pt-10 pb-8">
-        {/* Confetti decoration */}
-        <div className="absolute top-3 left-8 h-3 w-3 rounded-sm bg-amber-400 rotate-12 opacity-80" />
-        <div className="absolute top-7 left-20 h-2 w-2 rounded-full bg-blue-300 opacity-70" />
-        <div className="absolute top-5 right-10 h-3 w-3 rounded-sm bg-pink-300 rotate-45 opacity-80" />
-        <div className="absolute top-10 right-24 h-2 w-2 rounded-full bg-amber-400 opacity-70" />
-        <div className="absolute top-14 left-12 h-2 w-2 rounded-sm bg-blue-300 rotate-12 opacity-60" />
-        <div className="absolute top-2 right-16 h-2.5 w-2.5 rounded-full bg-pink-200 opacity-70" />
+    <div>
+      {/* Hero — crest with confetti, gold CTA */}
+      <section className="xa-band-light">
+        <div className="xa-band-inner" style={{ paddingTop: 28, paddingBottom: 28 }}>
+          {/* Confetti decoration */}
+          <div className="relative">
+            <div className="absolute -top-2 left-6 h-3 w-3 rounded-sm bg-amber-400 rotate-12 opacity-80" />
+            <div className="absolute top-2 left-20 h-2 w-2 rounded-full bg-blue-300 opacity-70" />
+            <div className="absolute -top-1 right-10 h-3 w-3 rounded-sm bg-pink-300 rotate-45 opacity-80" />
+            <div className="absolute top-4 right-24 h-2 w-2 rounded-full bg-amber-400 opacity-70" />
+            <div className="absolute top-8 left-12 h-2 w-2 rounded-sm bg-blue-300 rotate-12 opacity-60" />
+            <div className="absolute -top-3 right-16 h-2.5 w-2.5 rounded-full bg-pink-200 opacity-70" />
 
-        {/* Logo centered */}
-        <div className="relative flex justify-center mb-4">
-          <img src={LOGO_URL} alt="Xtreme Polishing Systems" className="h-20 w-20 object-contain" />
+            <img src={LOGO_URL} alt="Xtreme Polishing Systems" className="xa-crest" />
+            <p className="xa-crest-sub">Xtreme Polishing Systems</p>
+            <h1 className="xa-crest-title">
+              Your Garage Floor <span style={{ color: "#C8A300" }}>Toolkit</span>
+            </h1>
+            <p style={{ margin: "4px 0 18px", fontSize: 14, color: "#555", lineHeight: 1.45 }}>
+              Visualize, estimate, and book — all in one place.
+            </p>
+            <button className="xa-cta-gold" onClick={() => onNavigate({ tab: "estimate" })}>
+              <Sparkles className="w-4 h-4" /> Get My Free Estimate <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
         </div>
+      </section>
 
-        {/* Headline */}
-        <div className="relative text-center">
-          <h1 className="text-2xl font-display font-extrabold text-stone-900 tracking-tight leading-tight">
-            Your Garage Floor <span className="text-amber-500">Toolkit</span>
-          </h1>
-          <p className="text-sm text-stone-500 mt-2">Visualize, estimate, and book — all in one place.</p>
-        </div>
-
-        {/* CTA — black pill like reference */}
-        <button
-          onClick={() => onNavigate({ tab: "estimate" })}
-          className="relative mt-5 w-full py-3.5 rounded-full bg-stone-950 text-white font-bold text-sm flex items-center justify-center gap-2 hover:bg-stone-800 transition"
-        >
-          Get My Free Estimate <ArrowRight className="h-4 w-4" />
-        </button>
-      </div>
-
-      {/* PWA install button */}
+      {/* PWA install */}
       {canInstall && !isInstalled && (
-        <div className="px-5 pt-4">
-          <button
-            onClick={promptInstall}
-            className="w-full h-12 rounded-xl bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold text-sm flex items-center justify-center gap-2 transition shadow-lg shadow-amber-500/30"
-          >
-            <Download className="h-5 w-5" /> Add to Home Screen
+        <div className="xa-band-inner" style={{ paddingTop: 16 }}>
+          <button onClick={promptInstall} className="xa-cta-black">
+            <Download className="w-5 h-5" /> Add to Home Screen
           </button>
         </div>
       )}
 
       {/* Quick action grid */}
-      <div className="px-5 pt-5">
+      <div className="xa-band-inner" style={{ paddingTop: 20 }}>
+        <div className="xa-section-head">
+          <h2>Quick Tools</h2>
+        </div>
         <div className="grid grid-cols-4 gap-3">
           {QUICK_ACTIONS.map((a) => (
             <button
@@ -88,16 +83,12 @@ export default function AppHome({ appData, onNavigate }) {
 
       {/* Saved floors */}
       {savedFloors.length > 0 && (
-        <div className="px-5 pt-6">
-          <div className="flex items-center justify-between mb-3">
-            <h2 className="text-sm font-bold text-stone-900 flex items-center gap-1.5">
-              <ImageIcon className="h-4 w-4 text-amber-500" /> My Saved Floors
-            </h2>
-            <button onClick={() => onNavigate({ tab: "visualizer" })} className="text-xs font-semibold text-amber-600 flex items-center gap-0.5">
-              View all <ArrowRight className="h-3 w-3" />
-            </button>
+        <div className="xa-band-inner" style={{ paddingTop: 20 }}>
+          <div className="xa-section-head">
+            <h2>My Saved Floors</h2>
+            <button onClick={() => onNavigate({ tab: "visualizer" })} className="xa-see-all">View all</button>
           </div>
-          <div className="flex gap-3 overflow-x-auto pb-2 -mx-5 px-5">
+          <div className="flex gap-3 overflow-x-auto pb-2 -mx-4 px-4">
             {savedFloors.slice(0, 6).map((f) => (
               <div key={f.id} className="shrink-0 w-28 rounded-xl overflow-hidden bg-stone-100 border border-stone-200">
                 <div className="h-20 relative">
@@ -114,8 +105,8 @@ export default function AppHome({ appData, onNavigate }) {
         </div>
       )}
 
-      {/* Project status / timeline */}
-      <div className="px-5 pt-6">
+      {/* Project timeline */}
+      <div className="xa-band-inner" style={{ paddingTop: 20 }}>
         <button onClick={() => onNavigate({ sub: "schedule" })} className="w-full text-left">
           <TimelineSteps timeline={timeline} />
         </button>
@@ -128,11 +119,11 @@ export default function AppHome({ appData, onNavigate }) {
 
       {/* Instant bid preview */}
       {estimate && (
-        <div className="px-5 pt-4">
-          <button onClick={() => onNavigate({ tab: "estimate" })} className="w-full text-left rounded-2xl bg-amber-50 border border-amber-200 p-4">
+        <div className="xa-band-inner" style={{ paddingTop: 16 }}>
+          <button onClick={() => onNavigate({ tab: "estimate" })} className="w-full text-left xa-card-dark">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-[11px] font-bold tracking-wider text-amber-700 uppercase">Your Instant Bid</div>
+                <div className="text-[11px] font-bold tracking-wider text-amber-600 uppercase">Your Instant Bid</div>
                 <div className="text-xl font-extrabold text-stone-900 mt-0.5">${estimate.low.toLocaleString()} – ${estimate.high.toLocaleString()}</div>
                 <div className="text-xs text-stone-500">{estimate.system_name} · {estimate.square_footage} sq ft</div>
               </div>
@@ -143,7 +134,7 @@ export default function AppHome({ appData, onNavigate }) {
       )}
 
       {/* Trust strip */}
-      <div className="px-5 pt-5">
+      <div className="xa-band-inner" style={{ paddingTop: 20, paddingBottom: 24 }}>
         <div className="flex items-center justify-center gap-4 text-center">
           <div>
             <div className="text-lg font-extrabold text-stone-900">{settings.google_rating || 4.4}★</div>
