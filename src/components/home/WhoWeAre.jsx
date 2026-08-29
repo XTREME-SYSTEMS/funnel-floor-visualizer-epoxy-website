@@ -90,7 +90,7 @@ export default function WhoWeAre({ settings }) {
           {/* Chris Lavin — owner */}
           <div className="md:col-span-2 rounded-3xl border border-stone-200 overflow-hidden bg-white shadow-sm">
             <div className="h-64 md:h-80 bg-stone-100">
-              <Image src={CHRIS_IMG} alt="Chris Lavin on a floor grinder" fittingType="fill" className="h-full w-full" />
+              <Image src={CHRIS_IMG} alt="Chris Lavin on a floor grinder" fittingType="fill" focalPointY={0} className="h-full w-full" />
             </div>
             <div className="p-6">
               <div className="inline-flex items-center gap-2 text-xs font-bold tracking-[0.15em] text-amber-600">
