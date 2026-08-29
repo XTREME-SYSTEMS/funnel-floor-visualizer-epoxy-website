@@ -7,7 +7,7 @@ const highlights = [
   { icon: Flame, label: "Hot-tire proof" },
   { icon: Clock, label: "1-day installation" },
   { icon: Sparkles, label: "Easy to clean" },
-  { icon: TrendingUp, label: "Boosts home value" }
+  { icon: TrendingUp, label: "Powered by Americas #1 Epoxy Superstore" }
 ];
 
 // Small black band highlighting the key benefits of an epoxy garage floor.
