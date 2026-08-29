@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Clock, ShieldCheck, BadgeCheck } from "lucide-react";
+import { Clock, ShieldCheck, BadgeCheck, Sparkles } from "lucide-react";
 
 const trust = [
   { icon: BadgeCheck, text: "Free estimate" },
@@ -39,8 +39,16 @@ export default function Hero({ settings }) {
         </div>
       </div>
 
-      <div className="hidden md:block absolute bottom-0 inset-x-0 pb-4 text-center">
-        <p className="text-white text-sm font-medium drop-shadow-[0_2px_6px_rgba(0,0,0,0.85)]">{settings.service_area}</p>
+      <div className="absolute bottom-0 inset-x-0 pb-5 px-6">
+        <div className="max-w-6xl mx-auto flex flex-col items-center gap-3">
+          <Link to="/funnel" className="inline-flex items-center gap-2 rounded-full bg-amber-500/15 border border-amber-500/40 backdrop-blur-sm px-5 py-2.5 hover:bg-amber-500/25 transition">
+            <Sparkles className="h-4 w-4 text-amber-400 shrink-0" />
+            <span className="text-sm md:text-base font-semibold text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]">
+              See a realistic image of your floor before it's done — absolutely free!
+            </span>
+          </Link>
+          <p className="hidden md:block text-white text-sm font-medium drop-shadow-[0_2px_6px_rgba(0,0,0,0.85)]">{settings.service_area}</p>
+        </div>
       </div>
     </section>
   );

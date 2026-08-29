@@ -8,7 +8,7 @@ export const LOGO_URL =
 // The image has a black background, so it reads as a badge on light headers
 // and blends seamlessly on dark headers.
 export default function Logo({ colorClass = "text-white", className = "", size = "md" }) {
-  const imgSize = size === "xl" ? "h-24 w-24" : "h-9 w-9";
+  const imgSize = size === "xl" ? "h-12 w-12" : "h-9 w-9";
   const textSize = size === "xl" ? "text-lg" : "text-sm";
   return (
     <Link
