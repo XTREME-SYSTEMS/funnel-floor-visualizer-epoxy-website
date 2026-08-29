@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Menu, X, Phone } from "lucide-react";
+import { Menu, X, Phone, Smartphone, Palette, ArrowRight } from "lucide-react";
 import Logo from "@/components/Logo";
 
 export default function Nav({ settings }) {
@@ -68,13 +68,18 @@ export default function Nav({ settings }) {
               : <a key={l.label} href={l.href} onClick={() => setOpen(false)} className="block text-sm font-medium text-stone-700">{l.label}</a>
           ))}
           <a href={`tel:${settings.phone}`} className="block text-sm font-medium text-stone-700">{settings.phone}</a>
-          <Link to="/funnel" onClick={() => setOpen(false)} className="block h-10 text-center leading-10 rounded-lg bg-amber-500 text-stone-950 text-sm font-semibold">
-            Get Free Estimate
-          </Link>
-          <Link to="/epoxy-pro-guide" onClick={() => setOpen(false)} className="block text-sm font-medium text-stone-700 pt-2 border-t border-stone-100">
-            Epoxy Pro Guide App
-          </Link>
-          <Link to="/admin" onClick={() => setOpen(false)} className="block text-sm font-medium text-stone-400">
+          <div className="pt-2 border-t border-stone-100 space-y-2.5">
+            <Link to="/funnel" onClick={() => setOpen(false)} className="flex h-11 items-center justify-center gap-2 rounded-xl text-sm font-bold transition" style={{ background: 'linear-gradient(180deg, #FFE25A 0%, #FFD700 45%, #C8A300 100%)', border: '2px solid #000', color: '#1a1a1a', boxShadow: '0 4px 12px rgba(255,215,0,.4), inset 0 1px rgba(255,255,255,.4)' }}>
+              <ArrowRight className="h-4 w-4" /> Get Free Estimate
+            </Link>
+            <Link to="/epoxy-pro-guide" onClick={() => setOpen(false)} className="flex h-11 items-center justify-center gap-2 rounded-xl bg-stone-950 hover:bg-stone-800 text-sm font-bold transition" style={{ border: '2px solid #FFD700', color: '#FFD700' }}>
+              <Smartphone className="h-4 w-4" /> Download Epoxy Pro Guide App
+            </Link>
+            <Link to="/epoxy-pro-guide" onClick={() => setOpen(false)} className="flex h-11 items-center justify-center gap-2 rounded-xl bg-white hover:bg-amber-50 text-sm font-bold transition" style={{ border: '2px solid #D9B835', color: '#A4880F' }}>
+              <Palette className="h-4 w-4" /> Use Floor Visualizer
+            </Link>
+          </div>
+          <Link to="/admin" onClick={() => setOpen(false)} className="block text-sm font-medium text-stone-400 pt-2">
             Admin Sign In
           </Link>
         </div>
