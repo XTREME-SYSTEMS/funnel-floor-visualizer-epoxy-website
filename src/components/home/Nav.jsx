@@ -62,11 +62,8 @@ export default function Nav({ settings }) {
           </nav>
 
           <div className="hidden md:flex flex-col items-start gap-0.5 mt-4">
-            <Link to="/funnel" className="h-9 px-5 inline-flex items-center rounded-lg bg-amber-500 hover:bg-amber-400 text-stone-950 text-sm font-semibold transition">
-              Get Free Estimate
-            </Link>
-            <a href={`tel:${settings.phone}`} className="flex items-center gap-1.5 text-sm font-semibold text-white hover:text-amber-500 transition">
-              <Phone className="h-4 w-4" /> {settings.phone}
+            <a href={`tel:${settings.phone}`} className="h-9 px-5 inline-flex items-center gap-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-stone-950 text-sm font-semibold transition">
+              <Phone className="h-4 w-4" /> Call Now: {settings.phone}
             </a>
           </div>
 
