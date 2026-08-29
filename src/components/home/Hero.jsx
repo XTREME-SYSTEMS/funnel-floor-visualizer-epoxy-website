@@ -18,10 +18,10 @@ export default function Hero({ settings }) {
         className="absolute inset-0 w-full h-full object-cover object-[center_75%]"
       />
       <div className="absolute inset-0 bg-gradient-to-r from-stone-950/85 via-stone-950/55 to-transparent" />
-      <div className="absolute inset-0 flex items-start md:items-center pt-28 md:pt-0">
+      <div className="absolute inset-0 flex items-start md:items-center pt-28 md:pt-24">
         <div className="w-full max-w-6xl mx-auto px-6">
           <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="max-w-2xl">
-            <h1 className="mt-2 font-display text-3xl md:text-6xl font-extrabold tracking-tight text-white leading-[1.05] drop-shadow-[0_3px_12px_rgba(0,0,0,0.9)]">
+            <h1 className="mt-8 md:mt-10 font-display text-3xl md:text-6xl font-extrabold tracking-tight text-white leading-[1.05] drop-shadow-[0_3px_12px_rgba(0,0,0,0.9)]">
               How Much Will Your Epoxy Garage Floor Cost?
             </h1>
             <p className="mt-5 text-lg md:text-xl text-white/95 leading-relaxed drop-shadow-[0_2px_6px_rgba(0,0,0,0.85)]">
