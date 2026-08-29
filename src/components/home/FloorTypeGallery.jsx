@@ -1,4 +1,6 @@
 import React from "react";
+import { Link } from "react-router-dom";
+import { ArrowRight } from "lucide-react";
 import BeforeAfter from "@/components/funnel/BeforeAfter";
 
 const FLOOR_TYPES = [
@@ -68,6 +70,15 @@ export default function FloorTypeGallery() {
               </div>
             </div>
           ))}
+        </div>
+
+        <div className="mt-14 text-center">
+          <Link
+            to="/funnel"
+            className="inline-flex items-center justify-center gap-2 h-14 px-8 rounded-xl bg-amber-500 hover:bg-amber-400 transition text-stone-950 text-base font-bold tracking-wide shadow-lg shadow-amber-500/30 animate-pop-bounce"
+          >
+            TRY THE FLOOR VISUALIZER NOW <ArrowRight className="h-5 w-5" />
+          </Link>
         </div>
       </div>
     </section>
