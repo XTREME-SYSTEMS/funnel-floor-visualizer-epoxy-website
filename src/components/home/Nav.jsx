@@ -97,25 +97,25 @@ export default function Nav({ settings }) {
       </div>
 
       {open && (
-        <div className="md:hidden bg-white dark:bg-stone-950 border-t border-stone-200 dark:border-white/10 px-6 py-4 space-y-3 text-right">
+        <div className="md:hidden bg-stone-950/95 backdrop-blur-md border-t border-white/10 px-6 py-4 space-y-3 text-right">
           {links.map((l) => (
             l.to
-              ? <Link key={l.label} to={l.to} onClick={() => setOpen(false)} className="block text-sm font-medium text-stone-700 dark:text-stone-200">{l.label}</Link>
-              : <a key={l.label} href={l.href} onClick={() => setOpen(false)} className="block text-sm font-medium text-stone-700 dark:text-stone-200">{l.label}</a>
+              ? <Link key={l.label} to={l.to} onClick={() => setOpen(false)} className="block text-sm font-medium text-stone-200 hover:text-amber-500">{l.label}</Link>
+              : <a key={l.label} href={l.href} onClick={() => setOpen(false)} className="block text-sm font-medium text-stone-200 hover:text-amber-500">{l.label}</a>
           ))}
-          <a href={`tel:${settings.phone}`} className="block text-sm font-medium text-stone-700 dark:text-stone-200">{settings.phone}</a>
-          <div className="pt-2 border-t border-stone-100 dark:border-white/10 space-y-2.5">
+          <a href={`tel:${settings.phone}`} className="block text-sm font-medium text-stone-200">{settings.phone}</a>
+          <div className="pt-2 border-t border-white/10 space-y-2.5">
             <Link to="/funnel" onClick={() => setOpen(false)} className="flex h-11 items-center justify-end gap-2 rounded-xl text-sm font-bold transition pr-4" style={{ background: 'linear-gradient(180deg, #FFE25A 0%, #FFD700 45%, #C8A300 100%)', border: '2px solid #000', color: '#1a1a1a', boxShadow: '0 4px 12px rgba(255,215,0,.4), inset 0 1px rgba(255,255,255,.4)' }}>
               Get Free Estimate <ArrowRight className="h-4 w-4" />
             </Link>
-            <Link to="/epoxy-pro-guide" onClick={() => setOpen(false)} className="flex h-11 items-center justify-end gap-2 rounded-xl bg-stone-950 dark:bg-white dark:text-stone-950 hover:bg-stone-800 dark:hover:bg-stone-100 text-sm font-bold transition pr-4" style={{ border: '2px solid #FFD700', color: '#FFD700' }}>
+            <Link to="/epoxy-pro-guide" onClick={() => setOpen(false)} className="flex h-11 items-center justify-end gap-2 rounded-xl bg-white/10 hover:bg-white/20 text-sm font-bold transition pr-4" style={{ border: '2px solid #FFD700', color: '#FFD700' }}>
               Download Epoxy Pro Guide App <Smartphone className="h-4 w-4" />
             </Link>
-            <Link to="/epoxy-pro-guide" onClick={() => setOpen(false)} className="flex h-11 items-center justify-end gap-2 rounded-xl bg-white dark:bg-stone-900 hover:bg-amber-50 dark:hover:bg-stone-800 text-sm font-bold transition pr-4" style={{ border: '2px solid #D9B835', color: '#A4880F' }}>
+            <Link to="/epoxy-pro-guide" onClick={() => setOpen(false)} className="flex h-11 items-center justify-end gap-2 rounded-xl bg-white/10 hover:bg-white/20 text-sm font-bold transition pr-4" style={{ border: '2px solid #D9B835', color: '#D9B835' }}>
               Use Floor Visualizer <Palette className="h-4 w-4" />
             </Link>
           </div>
-          <Link to="/admin" onClick={() => setOpen(false)} className="block text-sm font-medium text-stone-400 dark:text-stone-500 pt-2">
+          <Link to="/admin" onClick={() => setOpen(false)} className="block text-sm font-medium text-stone-400 pt-2">
             Admin Sign In
           </Link>
         </div>
