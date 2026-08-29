@@ -12,6 +12,7 @@ const TEAM_IMG = "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8
 const PCU_IMG = "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/1896152f7_121725747_3705443039488227_8851277793604007373_n.jpg";
 const OFFICE_LADIES_IMG = "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/aa7e294d6_images6.jpg";
 const COO_IMG = "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/b077aba0c_images3.jpg";
+const WAREHOUSE_IMG = "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/8e11c9bd3_maxresdefault.jpg";
 
 const stats = [
   { value: "30+", label: "Years in business" },
@@ -110,28 +111,19 @@ export default function WhoWeAre({ settings }) {
             </div>
           </div>
 
-          {/* Jeremy — smaller card */}
-          <div className="rounded-3xl border border-stone-200 overflow-hidden bg-white shadow-sm">
-            <div className="p-5">
-              <h3 className="text-lg font-semibold text-stone-900">{sp.name}</h3>
-              <p className="text-xs text-amber-600 font-semibold leading-snug mt-1">
-                Director of AI Architecture &amp; Engineering<br />Senior Floor Specialist
-              </p>
-              <div className="mt-4 space-y-1.5">
-                {settings.phone && (
-                  <a href={`tel:${settings.phone}`} className="flex items-center gap-2 text-xs text-stone-700">
-                    <Phone className="h-3.5 w-3.5 text-stone-400" /> {settings.phone}
-                  </a>
-                )}
-                {settings.email && (
-                  <a href={`mailto:${settings.email}`} className="flex items-center gap-2 text-xs text-stone-700">
-                    <Mail className="h-3.5 w-3.5 text-stone-400" /> {settings.email}
-                  </a>
-                )}
+          {/* Warehouse — Pompano Beach, FL */}
+          <div className="rounded-3xl border border-stone-200 overflow-hidden bg-white shadow-sm flex flex-col">
+            <div className="bg-stone-950 h-64 md:h-80">
+              <Image src={WAREHOUSE_IMG} alt="Inside the Xtreme Polishing Systems warehouse in Pompano Beach, Florida" fittingType="fill" focalPointX={0.5} focalPointY={0.5} className="h-full w-full" />
+            </div>
+            <div className="p-6 flex flex-col flex-1">
+              <div className="inline-flex items-center gap-2 text-xs font-bold tracking-[0.15em] text-amber-600">
+                <Building2 className="h-4 w-4" /> BEHIND THE SCENES
               </div>
-              <Link to="/funnel" className="mt-5 h-10 w-full inline-flex items-center justify-center gap-2 rounded-xl bg-stone-950 hover:bg-stone-800 text-white text-sm font-semibold transition">
-                <Calendar className="h-4 w-4" /> Book a consultation
-              </Link>
+              <h3 className="mt-2 text-lg font-semibold text-stone-900">Inside the XPS Warehouse</h3>
+              <p className="mt-3 text-sm text-stone-600 leading-relaxed">
+                Our 2200 NW 32nd Street headquarters in Pompano Beach, FL stocks the full catalog of industrial-grade epoxy coatings, polyurea topcoats, and diamond tooling — the same premium materials that go on your garage floor.
+              </p>
             </div>
           </div>
         </div>
