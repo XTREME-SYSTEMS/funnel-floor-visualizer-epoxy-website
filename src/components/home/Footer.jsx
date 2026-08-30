@@ -52,7 +52,7 @@ export default function Footer() {
           {/* Company Info */}
           <div>
             <div className="text-white font-bold text-lg">{settings.company_name || "EpoxyGarageFloorEstimate.com"}</div>
-            <div className="text-xs text-amber-500 font-semibold mt-1">Powered by Xtreme Polishing Systems</div>
+            <div className="inline-block text-xs text-white font-semibold mt-1 px-3 py-1 border-2 border-amber-500 rounded-lg">Powered by Xtreme Polishing Systems</div>
             <p className="mt-3 text-xs leading-relaxed text-stone-500">{COMPANY_BLURB}</p>
             <div className="mt-4 space-y-1">
               <a href={`tel:${settings.phone}`} className="flex items-center gap-2 text-xs hover:text-amber-500 transition">
