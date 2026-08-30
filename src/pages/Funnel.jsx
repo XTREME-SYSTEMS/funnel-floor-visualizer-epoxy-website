@@ -80,10 +80,43 @@ export default function Funnel() {
     update({ floor_condition: arr.includes(key) ? arr.filter((k) => k !== key) : [...arr, key] });
   };
 
-  // Pull the garage's real square footage from public property records via web
-  // search (Zillow, Realtor, county appraiser). Falls back to a default only if
-  // no property data can be found for the address at all.
+  // Pull the garage's real square footage from public property records.
+  // Primary: the deterministic propertyLookup backend function (Browserbase +
+  // Estately + OpenStreetMap) — same address always returns the same sqft.
+  // Secondary: AI-driven web search against property records (Zillow, Realtor,
+  // county appraiser) for wider coverage when the deterministic source has no
+  // data. Results are cached in localStorage per address so the same address
+  // always returns the same sqft (no more inconsistent values between runs).
   const lookupGarageSqft = async (fullAddress) => {
+    const cacheKey = `garage_sqft:${fullAddress.toLowerCase().replace(/\s+/g, " ").trim()}`;
+    try {
+      const cached = localStorage.getItem(cacheKey);
+      if (cached) return JSON.parse(cached);
+    } catch {}
+
+    const cache = (result) => {
+      try { localStorage.setItem(cacheKey, JSON.stringify(result)); } catch {}
+      return result;
+    };
+
+    let result = { sqft: 440, source: "fallback_size" };
+
+    // Primary — deterministic property records lookup
+    try {
+      const res = await base44.functions.invoke("propertyLookup", { address: fullAddress, fallback_sqft: 440 });
+      const sqft = Number(res?.sqft);
+      if (sqft > 0 && res?.source && res.source !== "fallback_size") {
+        return cache({
+          sqft: Math.min(Math.max(Math.round(sqft), 200), 1200),
+          source: res.source,
+          garage_spaces: res.garage_spaces ?? null,
+          interior_sqft: res.interior_sqft ?? null
+        });
+      }
+    } catch {
+      // fall through to secondary
+    }
+    // Secondary — AI web search for wider coverage
     try {
       const res = await base44.integrations.Core.InvokeLLM({
         prompt: `Look up the residential property at "${fullAddress}" using public property records and real estate listings such as Zillow, Realtor.com, Redfin, and the county property appraiser. I need the GARAGE square footage. If the garage square footage is not directly stated, estimate it from the number of garage spaces (1 car ≈ 220 sqft, 2 car ≈ 440 sqft, 3 car ≈ 660 sqft, 4 car ≈ 880 sqft) or from the interior living area (garage ≈ 20% of interior sqft). Return the best garage square footage estimate, the number of garage spaces, the interior living sqft, and your confidence level.`,
@@ -104,17 +137,17 @@ export default function Funnel() {
       });
       const sqft = Number(res?.garage_sqft);
       if (res?.found && sqft > 0) {
-        return {
+        return cache({
           sqft: Math.min(Math.max(Math.round(sqft), 200), 1200),
           source: "property_records",
           garage_spaces: res.garage_spaces ?? null,
           interior_sqft: res.interior_sqft ?? null
-        };
+        });
       }
     } catch {
       // fall through to default
     }
-    return { sqft: 440, source: "fallback_size" };
+    return cache(result);
   };
 
   // Start the records lookup as soon as we have a full address (step 1) so it
