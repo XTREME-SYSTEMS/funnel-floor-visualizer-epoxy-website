@@ -15,6 +15,9 @@ const PCU_IMG = "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b
 const OFFICE_LADIES_IMG = "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/aa7e294d6_images6.jpg";
 const COO_IMG = "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/b077aba0c_images3.jpg";
 const WAREHOUSE_IMG = "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/1412966f7_generated_image.png";
+const EQUIPMENT_IMG = "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/4d72a767f_348s.jpg";
+const FLOOR_FINISH_IMG = "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/613289773_images9.jpg";
+const ROCKSTAR_TEAM_IMG = "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/469544ab8_images5.jpg";
 
 const stats = [
   { value: "30+", label: "Years in business" },
@@ -130,35 +133,45 @@ export default function WhoWeAre({ settings }) {
           </div>
         </div>
 
-        {/* Sales Pros team — compiled banner: wide team photo on top, two portraits below */}
+        {/* Sales Pros team — 3-image banner: Equipment | Rockstar Team | Floor Finish */}
         <div className="mt-16 rounded-3xl border border-stone-200 overflow-hidden bg-white shadow-sm">
-          {/* Full-width team photo (landscape) — fit so all text & faces stay visible */}
-          <div className="bg-stone-950">
-            <Image
-              src={TEAM_IMG}
-              alt="Xtreme Polishing Systems rockstar sales pros team with floor polishing equipment in Pompano Beach FL"
-              fittingType="fit"
-              className="w-full h-48 sm:h-64 md:h-96"
-            />
+          <div className="grid grid-cols-1 sm:grid-cols-3">
+            <div className="h-64 sm:h-80 md:h-96">
+              <Image
+                src={EQUIPMENT_IMG}
+                alt="Industrial-grade floor polishing equipment and dust collection system at the Xtreme Polishing Systems showroom"
+                fittingType="fill"
+                focalPointX={0.5}
+                focalPointY={0.5}
+                className="h-full w-full"
+              />
+            </div>
+            <div className="h-64 sm:h-80 md:h-96">
+              <Image
+                src={ROCKSTAR_TEAM_IMG}
+                alt="Xtreme Polishing Systems rockstar sales pros team with industrial floor polishing equipment — Xtreme Projects Need Xtreme Solutions"
+                fittingType="fill"
+                focalPointX={0.5}
+                focalPointY={0.5}
+                className="h-full w-full"
+              />
+            </div>
+            <div className="h-64 sm:h-80 md:h-96">
+              <Image
+                src={FLOOR_FINISH_IMG}
+                alt="High-gloss metallic epoxy polished concrete floor finish by Xtreme Polishing Systems"
+                fittingType="fill"
+                focalPointX={0.5}
+                focalPointY={0.5}
+                className="h-full w-full"
+              />
+            </div>
           </div>
-          {/* Two portraits side by side on desktop, stacked on mobile — fit so heads & text aren't cut */}
-          <div className="grid sm:grid-cols-2 gap-px bg-stone-950">
-            <div className="bg-stone-950">
-              <Image
-                src={SALES_MANAGER_IMG}
-                alt="Xtreme Polishing Systems Sales Manager holding FlexQuartz epoxy coating buckets in the Pompano Beach warehouse"
-                fittingType="fit"
-                className="w-full h-80 sm:h-96 md:h-[32rem]"
-              />
-            </div>
-            <div className="bg-stone-950">
-              <Image
-                src={ROBERT_PCU_IMG}
-                alt="Robert, Polished Concrete University master trainer with 10 years at Xtreme Polishing Systems, teaching Stardek coating skills"
-                fittingType="fit"
-                className="w-full h-80 sm:h-96 md:h-[32rem]"
-              />
-            </div>
+          {/* Headline banner */}
+          <div className="bg-stone-950 px-6 py-8 md:py-10 text-center border-t border-amber-500/30">
+            <h3 className="text-xl md:text-3xl font-extrabold text-white leading-tight tracking-tight">
+              Grade A Equipment <span className="text-amber-500">+</span> Excellent Sales Team <span className="text-amber-500">=</span> Amazing Floors <span className="text-amber-500">=</span> Choose XPS for Install or Sales
+            </h3>
           </div>
           <div className="p-6 md:p-10">
             <div className="inline-flex items-center gap-2 text-xs font-bold tracking-[0.15em] text-amber-600">
