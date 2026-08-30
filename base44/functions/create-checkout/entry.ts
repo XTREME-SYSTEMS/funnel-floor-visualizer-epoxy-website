@@ -86,6 +86,7 @@ Deno.serve(async (req: Request) => {
     const PRODUCTS = {
       "home-designer": { name: "Xtreme AI — Home Designer Edition", price: "19.99" },
       "contractor": { name: "Xtreme AI — Contractor Edition", price: "19.99" },
+      "client-care": { name: "XPS Client Care App", price: "19.99" },
     };
     const product = PRODUCTS[productId];
     if (!product) {

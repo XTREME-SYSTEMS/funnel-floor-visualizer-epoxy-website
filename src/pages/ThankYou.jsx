@@ -11,8 +11,8 @@ export default function ThankYou() {
   const { canInstall, isInstalled, promptInstall } = usePwaInstall();
   const [installing, setInstalling] = useState(false);
 
-  const edition = searchParams.get("edition") === "contractor" ? "contractor" : "home-designer";
-  const appPath = edition === "contractor" ? "/elite" : "/";
+  const edition = searchParams.get("edition") === "client-care" ? "client-care" : "home-designer";
+  const appPath = edition === "client-care" ? "/care" : "/";
 
   const handleInstall = async () => {
     setInstalling(true);

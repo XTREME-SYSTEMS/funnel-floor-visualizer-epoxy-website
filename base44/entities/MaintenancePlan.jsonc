@@ -1,0 +1,65 @@
+{
+  "name": "MaintenancePlan",
+  "type": "object",
+  "properties": {
+    "project_id": {
+      "type": "string"
+    },
+    "client_email": {
+      "type": "string"
+    },
+    "floor_system": {
+      "type": "string"
+    },
+    "cleaning_instructions": {
+      "type": "string",
+      "maxLength": 2000
+    },
+    "seasonal_reminders": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "season": {
+            "type": "string"
+          },
+          "task": {
+            "type": "string"
+          },
+          "month": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "recommended_products": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "purpose": {
+            "type": "string"
+          },
+          "frequency": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "warranty_terms": {
+      "type": "string",
+      "maxLength": 2000
+    },
+    "pdf_url": {
+      "type": "string",
+      "description": "Generated care guide PDF URL"
+    }
+  },
+  "required": [
+    "project_id",
+    "client_email"
+  ]
+}

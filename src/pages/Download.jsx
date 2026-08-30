@@ -4,9 +4,9 @@ import { base44 } from "@/api/base44Client";
 import { LOGO_URL, XTREME_AI_ICON_URL } from "@/components/Logo";
 import { Image } from "@/components/ui/image";
 import AppShell from "@/components/app/AppShell";
-import ContractorMarketing from "@/components/download/ContractorMarketing";
 import {
-  Shield, CreditCard, CheckCircle2, ArrowRight, Lock, Gift
+  Shield, CreditCard, CheckCircle2, ArrowRight, Lock, Gift,
+  Heart, ClipboardList, MessageSquare, Calendar, Sparkles, Gift as GiftIcon,
 } from "lucide-react";
 
 const EDITIONS = {
@@ -14,11 +14,20 @@ const EDITIONS = {
     name: "Xtreme AI — Home Designer Edition",
     tagline: "Design, visualize, and estimate your dream floors from your phone.",
   },
-  "contractor": {
-    name: "Xtreme AI — Contractor Edition",
-    tagline: "Leads, bids, pricing, and rewards — your contractor command center.",
+  "client-care": {
+    name: "XPS Client Care App",
+    tagline: "Your personal floor care hub — live updates, messaging, maintenance & rewards.",
   },
 };
+
+const CARE_FEATURES = [
+  { icon: ClipboardList, title: "Live Project Tracker", text: "Real-time updates at every stage — from scheduling to completion — with photos at each milestone." },
+  { icon: MessageSquare, title: "Group Messaging", text: "Chat directly with your project team. No phone tag — everyone in one place." },
+  { icon: Calendar, title: "Smart Scheduling", text: "Book consultations, follow-ups, and maintenance visits with reminders via push, SMS & email." },
+  { icon: Heart, title: "Before & After Gallery", text: "Your project photos front and center, plus the full XPS color chart with your approved color." },
+  { icon: Sparkles, title: "Custom Maintenance Plan", text: "A tailored care guide for your specific floor — delivered via email, SMS, and in-app." },
+  { icon: GiftIcon, title: "Refer & Earn Rewards", text: "Refer 5 friends who book and unlock a custom cleaning kit with 1 year of special solution." },
+];
 
 const TERMS = `15-DAY FREE TRIAL
 You are signing up for a 15-day free trial of the Xtreme AI Starter Plan. A valid credit card is required to start your trial, but it will NOT be charged during the 15-day trial period.
@@ -43,7 +52,7 @@ You can cancel at any time from within the app or by contacting support. Cancel 
 
 export default function DownloadPage() {
   const [searchParams] = useSearchParams();
-  const edition = searchParams.get("edition") === "contractor" ? "contractor" : "home-designer";
+  const edition = searchParams.get("edition") === "client-care" ? "client-care" : "home-designer";
   const ed = EDITIONS[edition];
 
   const [form, setForm] = useState({ firstName: "", lastName: "", email: "", phone: "" });
@@ -137,8 +146,50 @@ export default function DownloadPage() {
         </div>
       </div>
 
-      {/* Contractor edition marketing */}
-      {edition === "contractor" && <ContractorMarketing />}
+      {/* Client Care app marketing */}
+      {edition === "client-care" && (
+        <div className="space-y-4 mb-6">
+          {/* What it is */}
+          <div className="rounded-2xl bg-gradient-to-b from-stone-900 to-black p-5 text-center">
+            <div className="w-14 h-14 mx-auto overflow-hidden mb-2">
+              <Image src={XTREME_AI_ICON_URL} alt="XPS" className="w-full h-full" fittingType="fit" />
+            </div>
+            <h2 className="text-base font-black text-white">What Is the Client Care App?</h2>
+            <p className="text-xs text-stone-400 mt-2 leading-relaxed">
+              A personal care hub designed to go above and beyond for our clients. Stay updated on
+              your project, message your team, access your maintenance plan, and earn rewards —
+              all in one beautiful app.
+            </p>
+          </div>
+
+          {/* Features */}
+          <div className="grid grid-cols-1 gap-2">
+            {CARE_FEATURES.map((f, i) => (
+              <div key={i} className="rounded-xl bg-white border border-stone-200 p-3 flex items-start gap-3">
+                <div
+                  className="h-9 w-9 rounded-xl flex items-center justify-center shrink-0"
+                  style={{ background: "linear-gradient(180deg, #FFF6D5 0%, #D4AF37 45%, #8B6914 100%)", border: "1.5px solid #000" }}
+                >
+                  <f.icon className="h-4 w-4 text-stone-900" strokeWidth={2} />
+                </div>
+                <div>
+                  <div className="text-sm font-bold text-stone-900">{f.title}</div>
+                  <div className="text-[11px] text-stone-500 leading-relaxed mt-0.5">{f.text}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Above & Beyond badge */}
+          <div className="rounded-2xl border-2 border-amber-500 bg-amber-50 p-4 text-center">
+            <p className="text-sm font-black text-amber-700 uppercase tracking-wide">Above & Beyond Care</p>
+            <p className="text-xs text-stone-700 mt-1">
+              We don't just install your floor — we partner with you for life. The Client Care App
+              is our commitment to providing above-average care, every step of the way.
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* Credit card required banner */}
       <div className="rounded-2xl bg-stone-900 p-4 mb-4 flex items-start gap-3">

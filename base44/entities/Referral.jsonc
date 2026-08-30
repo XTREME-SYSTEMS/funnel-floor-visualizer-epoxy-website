@@ -1,0 +1,45 @@
+{
+  "name": "Referral",
+  "type": "object",
+  "properties": {
+    "referrer_email": {
+      "type": "string",
+      "description": "The client who is referring"
+    },
+    "referrer_name": {
+      "type": "string"
+    },
+    "referred_name": {
+      "type": "string"
+    },
+    "referred_email": {
+      "type": "string"
+    },
+    "referred_phone": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "invited",
+        "contacted",
+        "booked",
+        "completed",
+        "expired"
+      ],
+      "default": "invited"
+    },
+    "reward_unlocked": {
+      "type": "boolean",
+      "default": false
+    },
+    "notes": {
+      "type": "string",
+      "maxLength": 500
+    }
+  },
+  "required": [
+    "referrer_email",
+    "referred_email"
+  ]
+}

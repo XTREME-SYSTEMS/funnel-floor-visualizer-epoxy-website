@@ -1,0 +1,35 @@
+{
+  "name": "ChatMessage",
+  "type": "object",
+  "properties": {
+    "project_id": {
+      "type": "string"
+    },
+    "sender_name": {
+      "type": "string"
+    },
+    "sender_role": {
+      "type": "string",
+      "enum": [
+        "client",
+        "salesperson",
+        "installer",
+        "care"
+      ],
+      "default": "client"
+    },
+    "text": {
+      "type": "string",
+      "maxLength": 1000
+    },
+    "read": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "project_id",
+    "sender_name",
+    "text"
+  ]
+}

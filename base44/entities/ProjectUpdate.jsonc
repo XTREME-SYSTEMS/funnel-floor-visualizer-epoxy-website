@@ -1,0 +1,48 @@
+{
+  "name": "ProjectUpdate",
+  "type": "object",
+  "properties": {
+    "project_id": {
+      "type": "string"
+    },
+    "stage": {
+      "type": "string",
+      "enum": [
+        "scheduled",
+        "prep",
+        "installation",
+        "curing",
+        "complete"
+      ],
+      "default": "scheduled"
+    },
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 1000
+    },
+    "photo_url": {
+      "type": "string"
+    },
+    "author_name": {
+      "type": "string"
+    },
+    "author_role": {
+      "type": "string",
+      "enum": [
+        "salesperson",
+        "installer",
+        "care",
+        "system"
+      ],
+      "default": "system"
+    }
+  },
+  "required": [
+    "project_id",
+    "stage",
+    "title"
+  ]
+}

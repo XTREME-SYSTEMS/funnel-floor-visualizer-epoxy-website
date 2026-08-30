@@ -1,0 +1,106 @@
+{
+  "name": "ClientProject",
+  "type": "object",
+  "properties": {
+    "client_name": {
+      "type": "string"
+    },
+    "client_email": {
+      "type": "string"
+    },
+    "client_phone": {
+      "type": "string"
+    },
+    "address": {
+      "type": "string"
+    },
+    "city": {
+      "type": "string"
+    },
+    "state": {
+      "type": "string"
+    },
+    "zip": {
+      "type": "string"
+    },
+    "project_type": {
+      "type": "string",
+      "enum": [
+        "garage",
+        "patio",
+        "commercial",
+        "other"
+      ],
+      "default": "garage"
+    },
+    "floor_system": {
+      "type": "string",
+      "description": "Installed system name"
+    },
+    "flake_color": {
+      "type": "string"
+    },
+    "flake_color_name": {
+      "type": "string"
+    },
+    "flake_color_hex": {
+      "type": "string"
+    },
+    "square_footage": {
+      "type": "number"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "scheduled",
+        "prep",
+        "installation",
+        "curing",
+        "complete"
+      ],
+      "default": "scheduled"
+    },
+    "scheduled_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "installation_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "completion_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "before_photos": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "after_photos": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "warranty_expiration": {
+      "type": "string",
+      "format": "date"
+    },
+    "assigned_team": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "notes": {
+      "type": "string",
+      "maxLength": 1000
+    }
+  },
+  "required": [
+    "client_name",
+    "client_email"
+  ]
+}

@@ -1,7 +1,7 @@
 import { Toaster } from "@/components/ui/toaster"
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClientInstance } from '@/lib/query-client'
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
@@ -50,6 +50,15 @@ import ThankYou from '@/pages/ThankYou';
 import Questionnaire from '@/pages/Questionnaire';
 import AppSettings from '@/pages/AppSettings';
 import ToolManager from '@/pages/admin/ToolManager';
+import ClientCareShell from '@/components/care/ClientCareShell';
+import CareHome from '@/pages/care/CareHome';
+import ProjectTracker from '@/pages/care/ProjectTracker';
+import CareMessages from '@/pages/care/CareMessages';
+import CareGallery from '@/pages/care/CareGallery';
+import CareSchedule from '@/pages/care/CareSchedule';
+import CareMaintenance from '@/pages/care/CareMaintenance';
+import CareReferral from '@/pages/care/CareReferral';
+import CareSettings from '@/pages/care/CareSettings';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -95,8 +104,18 @@ const AuthenticatedApp = () => {
       <Route path="/guides" element={<Guides />} />
       <Route path="/epoxy-pro-guide" element={<EpoxyProGuide />} />
       <Route path="/app-onboarding" element={<AppOnboarding />} />
-      <Route path="/elite" element={<EpoxyProElite />} />
+      <Route path="/elite" element={<Navigate to="/care" replace />} />
       <Route path="/download" element={<DownloadPage />} />
+      <Route element={<ClientCareShell />}>
+        <Route path="/care" element={<CareHome />} />
+        <Route path="/care/project" element={<ProjectTracker />} />
+        <Route path="/care/messages" element={<CareMessages />} />
+        <Route path="/care/gallery" element={<CareGallery />} />
+        <Route path="/care/schedule" element={<CareSchedule />} />
+        <Route path="/care/maintenance" element={<CareMaintenance />} />
+        <Route path="/care/referral" element={<CareReferral />} />
+        <Route path="/care/settings" element={<CareSettings />} />
+      </Route>
       <Route path="/ThankYou" element={<ThankYou />} />
       <Route path="/questionnaire" element={<Questionnaire />} />
       <Route path="/app-settings" element={<AppSettings />} />
