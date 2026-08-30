@@ -110,14 +110,15 @@ export default function DownloadPage() {
         </div>
       </div>
 
-      {/* Trial info banner */}
-      <div className="rounded-2xl bg-amber-50 border border-amber-200 p-4 mb-6 flex items-start gap-3">
-        <Shield className="h-5 w-5 text-amber-600 shrink-0 mt-0.5" />
+      {/* Credit card required banner */}
+      <div className="rounded-2xl bg-stone-900 p-4 mb-4 flex items-start gap-3">
+        <CreditCard className="h-6 w-6 text-amber-400 shrink-0 mt-0.5" />
         <div>
-          <p className="text-sm font-bold text-amber-800">No charge for 15 days</p>
-          <p className="text-xs text-stone-600 mt-0.5">
-            Your card is captured but won't be charged during the trial. Cancel anytime
-            during the 15 days and you pay nothing. After the trial, it's $19.99/month.
+          <p className="text-sm font-bold text-white">Credit card required to start</p>
+          <p className="text-xs text-stone-400 mt-0.5">
+            You can try the app free for 15 days, but we must retain a card on file.
+            <span className="text-amber-400 font-semibold"> No charge during the trial.</span> Cancel
+            anytime in the 15 days and you pay nothing. After that, it's $19.99/month.
           </p>
         </div>
       </div>
@@ -242,7 +243,7 @@ export default function DownloadPage() {
           </>
         ) : (
           <>
-            <CreditCard className="h-5 w-5" /> Continue to Secure Checkout <ArrowRight className="h-5 w-5" />
+            <CreditCard className="h-5 w-5" /> Enter Card & Start Free Trial <ArrowRight className="h-5 w-5" />
           </>
         )}
       </button>
