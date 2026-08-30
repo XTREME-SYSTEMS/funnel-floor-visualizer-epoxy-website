@@ -81,14 +81,21 @@ export default function FloorVisualizer({ onPhotoChange, onColorSelected, initia
       const colorName = selectedColor?.name || "";
       const colorHex = selectedColor?.hex || "";
       const colorDesc = hexToColorDesc(colorHex);
+      const swatchUrl = selectedColor?.image_url;
       const isFlake = systemName.toLowerCase().includes("flake");
+      // Pass the color swatch photo as a second reference image so the AI can
+      // see the EXACT color and match it — text descriptions alone are unreliable.
+      const refImages = swatchUrl ? [photoUrls[0], swatchUrl] : photoUrls;
+      const colorRef = swatchUrl
+        ? ` Match the EXACT color shown in the second reference image (the color swatch photo). `
+        : "";
       const flakeClause = isFlake
-        ? ` The floor has a full-broadcast decorative vinyl flake/chip texture with multi-toned ${colorDesc} flakes scattered evenly across the surface, mimicking the manufacturer color chart named "${colorName}".`
-        : ` The floor is a solid ${colorDesc} surface matching the manufacturer color chart named "${colorName}".`;
-      const prompt = `Photorealistic interior design rendering of the EXACT same room shown in the reference photo — identical walls, geometry, lighting, and camera angle. ONLY the floor has changed: it is now a newly installed ${systemName} concrete floor.${flakeClause} The floor surface has ${sheenDesc(sheen)}. Seamless, professional epoxy/concrete coating installation. Preserve every detail of the room above the floor line. High-end real-estate photography, wide angle, natural light.`;
+        ? ` The floor has a full-broadcast decorative vinyl flake/chip texture with multi-toned ${colorDesc} flakes scattered evenly across the surface, exactly matching the manufacturer color chart named "${colorName}".${colorRef}The dominant floor color MUST be ${colorDesc} — do not drift toward gray or neutral tones.`
+        : ` The floor is a solid ${colorDesc} surface matching the manufacturer color chart named "${colorName}".${colorRef}The floor color MUST be exactly ${colorDesc} — do not drift toward gray or neutral tones.`;
+      const prompt = `Photorealistic interior design rendering of the EXACT same room shown in the first reference photo — identical walls, geometry, lighting, and camera angle. ONLY the floor has changed: it is now a newly installed ${systemName} concrete floor.${flakeClause} The floor surface has ${sheenDesc(sheen)}. Seamless, professional epoxy/concrete coating installation. Preserve every detail of the room above the floor line. High-end real-estate photography, wide angle, natural light.`;
       const res = await base44.integrations.Core.GenerateImage({
         prompt,
-        existing_image_urls: photoUrls,
+        existing_image_urls: refImages,
       });
       if (res?.url) {
         setConceptUrl(res.url);
