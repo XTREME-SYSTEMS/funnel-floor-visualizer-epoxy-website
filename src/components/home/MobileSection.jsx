@@ -1,7 +1,14 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import { Smartphone, MapPin, Camera, Palette, FileText, Mail, Phone, ArrowRight, Sparkles, GraduationCap, ShieldCheck, Layers, HardHat, Home as HomeIcon, Image as ImageIcon, Grid, Calculator, MoreHorizontal } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { Smartphone, MapPin, Camera, Palette, FileText, Mail, Phone, ArrowRight, Sparkles, GraduationCap, ShieldCheck, Layers, HardHat, Home as HomeIcon, Image as ImageIcon, Grid, Calculator, MoreHorizontal, Download, CheckCircle2 } from "lucide-react";
 import { LOGO_URL } from "@/components/Logo";
+import { usePwaInstall } from "@/lib/usePwaInstall";
+
+const APP_PERKS = [
+  "Get exclusive offers only for Epoxy Pro App users",
+  "Up-to-the-moment updates on your projects",
+  "Opportunities to experience the most advanced products on the market",
+];
 
 const benefits = [
   { icon: Palette, title: "Visualize Your Floor", text: "Upload a photo and preview real epoxy colors on your garage in seconds." },
@@ -32,6 +39,16 @@ const QUICK = [
 ];
 
 export default function MobileSection() {
+  const navigate = useNavigate();
+  const { canInstall, isInstalled, promptInstall } = usePwaInstall();
+
+  const handleDownload = async () => {
+    if (canInstall && !isInstalled) {
+      await promptInstall();
+    }
+    navigate("/app-onboarding");
+  };
+
   return (
     <section className="bg-stone-950 py-20 md:py-28 px-6">
       <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
@@ -59,14 +76,35 @@ export default function MobileSection() {
             ))}
           </div>
 
+          {/* App member perks callout — under trust partners */}
+          <div className="mt-7 rounded-2xl border-2 border-amber-500 bg-amber-500/10 p-5">
+            <div className="flex items-center gap-2 mb-3">
+              <Sparkles className="h-5 w-5 text-amber-500" />
+              <span className="text-sm font-bold text-amber-400 tracking-wide uppercase">App Member Perks</span>
+            </div>
+            <ul className="space-y-2">
+              {APP_PERKS.map((p, i) => (
+                <li key={i} className="flex items-start gap-2 text-sm text-stone-200 leading-relaxed">
+                  <CheckCircle2 className="h-4 w-4 text-amber-500 shrink-0 mt-0.5" />
+                  <span>{p}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
           <div className="mt-8 flex flex-col sm:flex-row gap-3">
-            <Link to="/epoxy-pro-guide" className="inline-flex h-12 px-8 items-center justify-center gap-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold transition animate-pop-bounce">
-              <Smartphone className="h-5 w-5" /> Open the App
-            </Link>
+            <button onClick={handleDownload} className="inline-flex h-12 px-8 items-center justify-center gap-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold transition animate-pop-bounce">
+              <Download className="h-5 w-5" /> Download App
+            </button>
             <Link to="/funnel" className="inline-flex h-12 px-8 items-center justify-center rounded-xl bg-stone-800 hover:bg-stone-700 text-white font-semibold transition">
               Start my estimate
             </Link>
           </div>
+          {isInstalled && (
+            <p className="mt-3 text-xs text-amber-500 font-semibold flex items-center gap-1">
+              <CheckCircle2 className="h-3.5 w-3.5" /> App installed — tap to open your estimate
+            </p>
+          )}
         </div>
 
         {/* Right: lifelike phone mockup of the actual app */}

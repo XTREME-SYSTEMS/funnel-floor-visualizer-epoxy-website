@@ -7,6 +7,10 @@
         "admin",
         "user"
       ]
+    },
+    "location": {
+      "type": "string",
+      "description": "User's location (ZIP code or city/state) collected during app onboarding"
     }
   },
   "required": [
