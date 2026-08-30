@@ -138,7 +138,7 @@ function drawSolid(ctx, x, y, w, h, baseHex) {
 }
 
 // ── Main compositing function ──────────────────────────────────────────────
-export async function compositeFloorImage(photoUrl, color) {
+export async function compositeFloorImage(photoUrl, color, sheen = "gloss") {
   const photoImg = await loadPhotoImage(photoUrl);
 
   const w = photoImg.naturalWidth;
@@ -185,18 +185,22 @@ export async function compositeFloorImage(photoUrl, color) {
     drawSolid(octx, 0, floorTop, w, floorH, baseHex);
   }
 
-  // Gloss clear-coat highlight for a coated, reflective look
-  octx.globalCompositeOperation = "soft-light";
-  octx.globalAlpha = 0.3;
-  const gloss = octx.createLinearGradient(0, floorTop, 0, h);
-  gloss.addColorStop(0, "rgba(255,255,255,0.5)");
-  gloss.addColorStop(0.35, "rgba(255,255,255,0)");
-  gloss.addColorStop(0.7, "rgba(255,255,255,0)");
-  gloss.addColorStop(1, "rgba(255,255,255,0.25)");
-  octx.fillStyle = gloss;
-  octx.fillRect(0, floorTop, w, floorH);
-  octx.globalAlpha = 1;
-  octx.globalCompositeOperation = "source-over";
+  // Gloss clear-coat highlight — intensity depends on sheen selection
+  // matte = none, satin = subtle, gloss = full reflective shine
+  const glossIntensity = sheen === "matte" ? 0 : sheen === "satin" ? 0.15 : 0.3;
+  if (glossIntensity > 0) {
+    octx.globalCompositeOperation = "soft-light";
+    octx.globalAlpha = glossIntensity;
+    const gloss = octx.createLinearGradient(0, floorTop, 0, h);
+    gloss.addColorStop(0, "rgba(255,255,255,0.5)");
+    gloss.addColorStop(0.35, "rgba(255,255,255,0)");
+    gloss.addColorStop(0.7, "rgba(255,255,255,0)");
+    gloss.addColorStop(1, "rgba(255,255,255,0.25)");
+    octx.fillStyle = gloss;
+    octx.fillRect(0, floorTop, w, floorH);
+    octx.globalAlpha = 1;
+    octx.globalCompositeOperation = "source-over";
+  }
 
   octx.restore();
 

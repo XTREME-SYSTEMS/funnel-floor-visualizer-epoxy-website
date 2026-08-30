@@ -1,8 +1,8 @@
 import React, { useState, useMemo } from "react";
 import { Loader2, Sparkles, AlertCircle } from "lucide-react";
-import { base44 } from "@/api/base44Client";
 import { getSystemColorRecords } from "@/lib/floorColors";
 import { FLOOR_SYSTEM_DATA } from "@/data/colorData";
+import { compositeFloorImage } from "@/lib/floorComposite";
 import PhotoUpload from "@/components/visualizer/PhotoUpload";
 import Disclosure from "@/components/vq/Disclosure";
 import { AI_DISCLOSURE } from "@/lib/brand";
@@ -103,25 +103,14 @@ export default function FloorVisualizer({ onPhotoChange, onColorSelected, initia
     setError("");
     setConceptUrl("");
     try {
-      const colorName = selectedColor?.name || "";
-      const colorHex = selectedColor?.hex || "";
-      const colorDesc = hexToColorDesc(colorHex);
-      const isFlake = systemName.toLowerCase().includes("flake");
-      const flakeClause = isFlake
-        ? ` The floor has a full-broadcast decorative vinyl flake/chip texture. The flakes are ${colorDesc}. The overall dominant color of the floor MUST be ${colorDesc}. This is the color "${colorName}" — it is NOT gray, NOT neutral, NOT charcoal. The floor must clearly and obviously appear ${colorDesc}. Scatter multi-toned ${colorDesc} vinyl flakes evenly across the entire floor surface.`
-        : ` The floor is a solid ${colorDesc} surface. The floor color MUST be exactly ${colorDesc}. This is the color "${colorName}" — it is NOT gray, NOT neutral. The floor must clearly and obviously appear ${colorDesc}.`;
-      const prompt = `Photorealistic interior design rendering of the EXACT same room shown in the reference photo — identical walls, geometry, lighting, and camera angle. ONLY the floor has changed: it is now a newly installed ${systemName} concrete floor.${flakeClause} The floor surface has ${sheenDesc(sheen)}. CRITICAL: The floor color must be ${colorDesc} — do NOT make it gray, do NOT make it neutral, do NOT make it charcoal. Seamless, professional epoxy/concrete coating installation. Preserve every detail of the room above the floor line. High-end real-estate photography, wide angle, natural light.`;
-      const res = await base44.integrations.Core.GenerateImage({
-        prompt,
-        existing_image_urls: photoUrls,
-      });
-      if (res?.url) {
-        setConceptUrl(res.url);
-      } else {
-        setError("Could not generate preview. Please try again.");
-      }
+      const systemKey = FLOOR_SYSTEM_DATA.find((s) => s.name === systemName)?.slug || "flake";
+      const dataUrl = await compositeFloorImage(photoUrls[0], {
+        hex: selectedColor.hex,
+        system: systemKey,
+      }, sheen);
+      setConceptUrl(dataUrl);
     } catch (err) {
-      setError("Generation failed. Please try again.");
+      setError("Could not generate preview. Please try again.");
       console.error(err);
     }
     setGenerating(false);

@@ -1,12 +1,12 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Loader2, MoveHorizontal } from "lucide-react";
-import { base44 } from "@/api/base44Client";
+import { compositeFloorImage } from "@/lib/floorComposite";
 
 const FALLBACK_BEFORE = "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/2fa2f386d_generated_image.png";
 
-// AI-powered result visualizer — generates a realistic floor preview using
-// the uploaded photo + selected color, then shows a before/after compare.
-// Replaces the old CSS-tint + canvas-composite approach.
+// Canvas-based result visualizer — composites the EXACT uploaded photo with
+// a procedural texture generated from the exact color chart hex value.
+// Guarantees color accuracy (no AI guessing). Shows a before/after compare.
 export default function ResultVisualizer({ photoUrl, color, onAfterReady }) {
   const [afterUrl, setAfterUrl] = useState("");
   const [loading, setLoading] = useState(false);
@@ -16,7 +16,7 @@ export default function ResultVisualizer({ photoUrl, color, onAfterReady }) {
 
   const colorName = color?.name || color?.color_name || color?.code || "";
 
-  // Generate AI concept image for the after preview + email
+  // Composite the floor texture onto the uploaded photo using the exact hex
   useEffect(() => {
     if (!photoUrl || !color?.hex) {
       onAfterReady?.(photoUrl || "");
@@ -26,14 +26,13 @@ export default function ResultVisualizer({ photoUrl, color, onAfterReady }) {
     setLoading(true);
     const run = async () => {
       try {
-        const res = await base44.integrations.Core.GenerateImage({
-          prompt: `Photorealistic interior of the same garage, but the concrete floor has been resurfaced with a ${colorName} epoxy floor coating. The floor color is ${color.hex} (${colorName}). The finish is high gloss. Keep the walls, ceiling, garage door, and all objects identical to the original photo. Only the floor surface changes — it now has a smooth, professional epoxy coating in ${colorName}.`,
-          existing_image_urls: [photoUrl],
-        });
+        const dataUrl = await compositeFloorImage(photoUrl, {
+          hex: color.hex,
+          system: color.system || "flake",
+        }, "gloss");
         if (!cancelled) {
-          const url = res?.url || photoUrl;
-          setAfterUrl(url);
-          onAfterReady?.(url);
+          setAfterUrl(dataUrl);
+          onAfterReady?.(dataUrl);
         }
       } catch {
         if (!cancelled) {
