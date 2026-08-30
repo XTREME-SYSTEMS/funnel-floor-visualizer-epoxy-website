@@ -5,7 +5,7 @@ import { LOGO_URL, XTREME_AI_ICON_URL } from "@/components/Logo";
 import { Image } from "@/components/ui/image";
 import AppShell from "@/components/app/AppShell";
 import {
-  Shield, CreditCard, CheckCircle2, ArrowRight, Lock
+  Shield, CreditCard, CheckCircle2, ArrowRight, Lock, Gift
 } from "lucide-react";
 
 const EDITIONS = {
@@ -50,8 +50,34 @@ export default function DownloadPage() {
   const [agreed, setAgreed] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [promoCode, setPromoCode] = useState("");
+  const [promoResult, setPromoResult] = useState(null);
+  const [promoChecking, setPromoChecking] = useState(false);
 
   const update = (k) => (e) => setForm({ ...form, [k]: e.target.value });
+
+  const applyPromoCode = async () => {
+    setPromoResult(null);
+    if (!promoCode.trim()) return;
+    setPromoChecking(true);
+    try {
+      const codes = await base44.entities.PromoCode.filter({ code: promoCode.trim().toUpperCase(), active: true });
+      const code = codes[0];
+      if (!code) {
+        setPromoResult({ error: "Invalid code." });
+        return;
+      }
+      if (code.uses >= code.max_uses) {
+        setPromoResult({ error: "This code has been fully redeemed." });
+        return;
+      }
+      setPromoResult({ success: code.tool_name ? `Unlocks: ${code.tool_name}` : "Bonus tools unlocked!" });
+    } catch (err) {
+      setPromoResult({ error: "Could not validate code." });
+    } finally {
+      setPromoChecking(false);
+    }
+  };
 
   const handleCheckout = async () => {
     setError("");
@@ -121,6 +147,35 @@ export default function DownloadPage() {
             anytime in the 15 days and you pay nothing. After that, it's $19.99/month.
           </p>
         </div>
+      </div>
+
+      {/* Promo code */}
+      <div className="rounded-2xl bg-amber-50 border border-amber-200 p-4 mb-4">
+        <div className="flex items-center gap-2 mb-2">
+          <Gift className="h-5 w-5 text-amber-600" />
+          <span className="text-sm font-bold text-stone-900">Have a Promo Code?</span>
+        </div>
+        <div className="flex gap-2">
+          <input
+            value={promoCode}
+            onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
+            placeholder="Enter code"
+            className="flex-1 h-11 rounded-xl border border-stone-200 px-3 text-sm uppercase font-bold tracking-wider focus:border-amber-500 outline-none"
+          />
+          <button
+            onClick={applyPromoCode}
+            disabled={promoChecking || !promoCode.trim()}
+            className="px-5 h-11 rounded-xl bg-stone-900 text-white font-bold text-sm disabled:opacity-50"
+          >
+            {promoChecking ? "..." : "Apply"}
+          </button>
+        </div>
+        {promoResult?.error && <p className="mt-2 text-xs text-red-600">{promoResult.error}</p>}
+        {promoResult?.success && (
+          <p className="mt-2 text-xs text-green-700 flex items-center gap-1">
+            <CheckCircle2 className="h-4 w-4" /> {promoResult.success}
+          </p>
+        )}
       </div>
 
       {/* Terms & conditions */}
