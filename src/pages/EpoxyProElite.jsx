@@ -39,7 +39,7 @@ const FEATURES = [
 ];
 
 export default function EpoxyProElite() {
-  const { canInstall, isInstalled, promptInstall } = usePwaInstall();
+  const { isInstalled } = usePwaInstall();
   const [showLoyalty, setShowLoyalty] = useState(false);
 
   return (

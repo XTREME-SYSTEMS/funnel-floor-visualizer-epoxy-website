@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { LOGO_URL, XTREME_AI_ICON_URL } from "@/components/Logo";
 import { Image } from "@/components/ui/image";
