@@ -49,7 +49,7 @@ export default function EpoxyProElite() {
         <div className="max-w-2xl mx-auto px-4 h-16 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
             <img src={LOGO_URL} alt="XPS" className="h-8 w-8 object-contain" />
-            <span className="text-white font-bold text-sm">Epoxy Pro Elite</span>
+            <span className="text-white font-bold text-sm">Xtreme AI Contractor</span>
           </Link>
           <div className="flex items-center gap-2">
             <div className="h-8 px-2.5 rounded-lg flex items-center gap-1 text-[11px] font-bold" style={{ background: 'linear-gradient(180deg, #FFE25A 0%, #FFD700 45%, #C8A300 100%)', border: '2px solid #000', color: '#1a1a1a' }}>
@@ -69,13 +69,11 @@ export default function EpoxyProElite() {
             <Image src={XTREME_AI_ICON_URL} alt="Xtreme AI Systems" className="w-full h-full" fittingType="fit" />
           </div>
           <p className="text-xs tracking-[0.2em] uppercase font-bold text-amber-500 mt-2">Xtreme AI Systems</p>
-          <h1 className="text-2xl font-black text-white mt-1">Epoxy Home AI</h1>
+          <h1 className="text-2xl font-black text-white mt-1">Xtreme AI Contractor Edition</h1>
           <p className="text-sm text-stone-400 mt-1">Your contractor command center — leads, bids, pricing, and rewards in one app.</p>
-          {canInstall && !isInstalled && (
-            <button onClick={promptInstall} className="mt-4 inline-flex h-11 px-6 items-center justify-center gap-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold text-sm transition">
-              <Download className="h-4 w-4" /> Download App
-            </button>
-          )}
+          <Link to="/download?edition=contractor" className="mt-4 inline-flex h-11 px-6 items-center justify-center gap-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold text-sm transition">
+            <Download className="h-4 w-4" /> Download App
+          </Link>
           {isInstalled && (
             <p className="mt-3 text-xs text-amber-500 font-semibold flex items-center justify-center gap-1">
               <CheckCircle2 className="h-3.5 w-3.5" /> App installed
@@ -209,9 +207,9 @@ export default function EpoxyProElite() {
         </div>
 
         {/* CTA */}
-        <button className="w-full h-12 rounded-xl flex items-center justify-center gap-2 text-sm font-bold mb-6" style={{ background: 'linear-gradient(180deg, #FFE25A 0%, #FFD700 45%, #C8A300 100%)', border: '2px solid #000', color: '#1a1a1a', boxShadow: '0 4px 12px rgba(255,215,0,.4), inset 0 1px rgba(255,255,255,.4)' }}>
+        <Link to="/download?edition=contractor" className="w-full h-12 rounded-xl flex items-center justify-center gap-2 text-sm font-bold mb-6" style={{ background: 'linear-gradient(180deg, #FFE25A 0%, #FFD700 45%, #C8A300 100%)', border: '2px solid #000', color: '#1a1a1a', boxShadow: '0 4px 12px rgba(255,215,0,.4), inset 0 1px rgba(255,255,255,.4)' }}>
           <Sparkles className="h-4 w-4" /> Activate My Elite Account <ArrowRight className="h-4 w-4" />
-        </button>
+        </Link>
 
         <Link to="/" className="block text-center text-xs text-stone-500 hover:text-amber-500 transition pb-8">
           ← Back to site

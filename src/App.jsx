@@ -45,6 +45,8 @@ import Reviews from '@/pages/admin/Reviews';
 import EpoxyProGuide from '@/pages/EpoxyProGuide';
 import AppOnboarding from '@/pages/AppOnboarding';
 import EpoxyProElite from '@/pages/EpoxyProElite';
+import DownloadPage from '@/pages/Download';
+import ThankYou from '@/pages/ThankYou';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -91,6 +93,8 @@ const AuthenticatedApp = () => {
       <Route path="/epoxy-pro-guide" element={<EpoxyProGuide />} />
       <Route path="/app-onboarding" element={<AppOnboarding />} />
       <Route path="/elite" element={<EpoxyProElite />} />
+      <Route path="/download" element={<DownloadPage />} />
+      <Route path="/ThankYou" element={<ThankYou />} />
       <Route path="/admin" element={<AdminLayout />}>
         <Route index element={<Dashboard />} />
         <Route path="leads" element={<Leads />} />

@@ -61,7 +61,7 @@ export default function EliteSection() {
             <div>
               <div className="text-xs font-bold tracking-[0.2em] text-amber-500">DOWNLOAD THE APP</div>
               <h2 className="text-3xl md:text-5xl font-semibold tracking-tight text-white">
-                Epoxy Pro Elite
+                Xtreme AI Contractor Edition
               </h2>
             </div>
           </div>
@@ -107,9 +107,9 @@ export default function EliteSection() {
           </div>
 
           <div className="mt-8 flex flex-col sm:flex-row gap-3">
-            <button onClick={handleDownload} className="inline-flex h-12 px-8 items-center justify-center gap-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold transition animate-pop-bounce">
-              <Download className="h-5 w-5" /> Download Epoxy Pro Elite
-            </button>
+            <Link to="/download?edition=contractor" className="inline-flex h-12 px-8 items-center justify-center gap-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold transition animate-pop-bounce">
+              <Download className="h-5 w-5" /> Download Xtreme AI Contractor Edition
+            </Link>
             <Link to="/funnel" className="inline-flex h-12 px-8 items-center justify-center rounded-xl bg-stone-800 hover:bg-stone-700 text-white font-semibold transition">
               Start an estimate
             </Link>
@@ -143,7 +143,7 @@ export default function EliteSection() {
               </div>
               <div className="flex items-center gap-1.5 flex-1 justify-center">
                 <img src={LOGO_URL} alt="XPS" className="h-7 w-7 object-contain" />
-                <span className="text-[11px] font-extrabold text-stone-900">Epoxy Pro Elite</span>
+                <span className="text-[11px] font-extrabold text-stone-900">Xtreme AI</span>
               </div>
               <div className="h-8 px-2.5 rounded-lg flex items-center gap-1 text-[10px] font-bold" style={{ background: 'linear-gradient(180deg, #FFE25A 0%, #FFD700 45%, #C8A300 100%)', border: '2px solid #000', color: '#1a1a1a' }}>
                 <Award className="h-3 w-3" /> 1,250 pts
@@ -157,7 +157,7 @@ export default function EliteSection() {
                 <div className="w-14 h-14 mx-auto overflow-hidden">
                   <Image src={XTREME_AI_ICON_URL} alt="Xtreme AI" className="w-full h-full" fittingType="fit" />
                 </div>
-                <h3 className="text-base font-black text-stone-900 leading-tight mt-1">Epoxy Home AI</h3>
+                <h3 className="text-base font-black text-stone-900 leading-tight mt-1">Xtreme AI</h3>
                 <p className="text-[10px] text-stone-500 mt-0.5">Your contractor command center</p>
               </div>
 

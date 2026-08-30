@@ -82,18 +82,38 @@ Deno.serve(async (req: Request) => {
     if (!Number.isInteger(quantity) || quantity < 1) {
       return new Response(JSON.stringify({ error: "Invalid quantity" }), { status: 400 });
     }
-    // Example — replace with your real trusted product source:
-    //   const product = (await base44.asServiceRole.entities.Product.filter({ id: productId }))[0];
-    //   if (!product) return new Response(JSON.stringify({ error: "Unknown product" }), { status: 400 });
-    //   const productName = product.name; const price = String(product.price); const currency = product.currency ?? "USD";
-    const productName = "Purchase"; // TODO: from your trusted product source
-    const price = "0.00";           // TODO: authoritative per-unit price (major units), resolved server-side
+    // Server-side product catalog — prices resolved here, never trusted from the client.
+    const PRODUCTS = {
+      "home-designer": { name: "Xtreme AI — Home Designer Edition", price: "19.99" },
+      "contractor": { name: "Xtreme AI — Contractor Edition", price: "19.99" },
+    };
+    const product = PRODUCTS[productId];
+    if (!product) {
+      return new Response(JSON.stringify({ error: "Unknown product" }), { status: 400 });
+    }
+    const productName = product.name;
+    const price = product.price;
     const currency = "USD";
-    // For a SUBSCRIPTION set this to Wix's subscriptionInfo; leave null for a one-time payment.
-    const subscriptionInfo = null;
-    // Where Wix returns the buyer. Both MUST be real, PUBLICLY reachable routes in this app: the
-    // returning buyer is often anonymous, so a missing or login-gated route strands a paid customer.
-    // Match your router exactly — `/ThankYou`, not `/thank-you`.
+    // Subscription: $19.99/month with a 15-day free trial. CC is captured but not
+    // charged during the trial; cancel during the trial = zero charges.
+    const subscriptionInfo = {
+      subscriptionSettings: {
+        frequency: "MONTH",
+        freeTrialPeriod: {
+          frequency: "DAY",
+          interval: 15,
+        },
+      },
+      title: "Xtreme AI Starter Plan",
+      description: "15-day free trial, then $19.99/month. Cancel anytime during the trial with zero charges.",
+    };
+    // Pre-fill Wix checkout with contact info collected in the agreement step.
+    const customerInfo = {};
+    if (body.firstName) customerInfo.firstName = String(body.firstName).slice(0, 100);
+    if (body.lastName) customerInfo.lastName = String(body.lastName).slice(0, 100);
+    if (body.email) customerInfo.email = String(body.email);
+    if (body.phone) customerInfo.phone = String(body.phone);
+    // Where Wix returns the buyer. Both MUST be real, PUBLICLY reachable routes in this app.
     const thankYouPath = "/ThankYou";
     const postFlowPath = "/";
     // ===== END APP-SPECIFIC =====
@@ -107,8 +127,11 @@ Deno.serve(async (req: Request) => {
     const constructBody = {
       cart: {
         items: [{ name: productName, quantity, price, ...(subscriptionInfo ? { subscriptionInfo } : {}) }],
-        // Prefill the signed-in buyer's email if we have one; anonymous buyers enter it on Wix.
-        ...(appUser?.email ? { customerInfo: { email: appUser.email } } : {}),
+        // Pre-fill checkout with contact info from the agreement step (or the signed-in user's email).
+        customerInfo: {
+          ...(appUser?.email ? { email: appUser.email } : {}),
+          ...customerInfo,
+        },
       },
       callbackUrls: {
         thankYouPageUrl: `${appUrl}${thankYouPath}`,

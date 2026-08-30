@@ -11,6 +11,10 @@
     "location": {
       "type": "string",
       "description": "User's location (ZIP code or city/state) collected during app onboarding"
+    },
+    "plan": {
+      "type": "string",
+      "description": "Active subscription plan ID ('home-designer' or 'contractor'). Set by the payments webhook on ORDER_APPROVED, cleared on SUBSCRIPTION_CANCELED/EXPIRED."
     }
   },
   "required": [
