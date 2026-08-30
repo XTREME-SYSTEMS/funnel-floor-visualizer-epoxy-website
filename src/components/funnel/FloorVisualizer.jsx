@@ -15,8 +15,8 @@ const SHEEN_OPTIONS = [
   { key: "gloss", label: "Gloss", desc: "High-gloss wet-look with sharp mirror-like reflections", img: "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/e6eb3dffc_generated_image.png" },
 ];
 
-// Build a plain-English color description from a hex so the image model
-// applies the EXACT color rather than guessing what a color name looks like.
+// Build a VIVID color description from a hex so the image model applies the
+// EXACT color. Uses real-world object comparisons the AI can reliably reproduce.
 function hexToColorDesc(hex) {
   if (!hex) return "";
   const h = hex.replace("#", "");
@@ -28,14 +28,39 @@ function hexToColorDesc(hex) {
   const lum = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
   const sat = max === 0 ? 0 : (max - min) / max;
 
-  let tone = lum > 0.75 ? "very light" : lum > 0.55 ? "light" : lum > 0.35 ? "medium" : lum > 0.15 ? "dark" : "very dark";
-  let hue = "neutral gray";
-  if (sat > 0.15) {
-    if (r >= g && r >= b) hue = b > g ? "magenta/pink" : g > b * 0.8 ? "warm brown/tan" : "red/orange";
-    else if (g >= r && g >= b) hue = r > b ? "yellow/gold" : "green";
-    else if (b >= r && b >= g) hue = r > g ? "purple" : "blue";
+  // Determine hue family with vivid real-world comparisons
+  let hueName = "";
+  let vividDesc = "";
+
+  if (sat < 0.12) {
+    // Grayscale
+    if (lum > 0.85) { hueName = "white"; vividDesc = "pure white, like fresh snow"; }
+    else if (lum > 0.65) { hueName = "light gray"; vividDesc = "light gray, like concrete sidewalk"; }
+    else if (lum > 0.35) { hueName = "medium gray"; vividDesc = "medium gray, like pebbles"; }
+    else if (lum > 0.15) { hueName = "dark gray"; vividDesc = "dark gray, like asphalt"; }
+    else { hueName = "black"; vividDesc = "black, like coal"; }
+  } else if (b >= r && b >= g) {
+    // Blue family
+    if (r > g) { hueName = "purple"; vividDesc = lum > 0.5 ? "light purple, like lavender" : "deep purple, like eggplant"; }
+    else if (lum > 0.6) { hueName = "light blue"; vividDesc = "light blue, like a clear sky"; }
+    else if (lum > 0.35) { hueName = "blue"; vividDesc = "ocean blue, like deep ocean water"; }
+    else { hueName = "dark blue"; vividDesc = "navy blue, like a dark navy suit"; }
+  } else if (g >= r && g >= b) {
+    // Green family
+    if (r > b) { hueName = "yellow-green"; vividDesc = lum > 0.6 ? "lime green, like a lime" : "olive green, like olive oil"; }
+    else if (lum > 0.5) { hueName = "light green"; vividDesc = "light green, like fresh grass"; }
+    else { hueName = "dark green"; vividDesc = "forest green, like pine trees"; }
+  } else if (r >= g && r >= b) {
+    // Red/orange/brown family
+    if (b > g) { hueName = "magenta"; vividDesc = "pink/magenta, like a pink flower"; }
+    else if (lum > 0.6 && g > b * 0.8) { hueName = "tan"; vividDesc = "tan/beige, like sand"; }
+    else if (lum > 0.5 && g > b * 0.7) { hueName = "brown"; vividDesc = "warm brown, like chocolate"; }
+    else if (lum > 0.45) { hueName = "orange"; vividDesc = "orange, like a traffic cone"; }
+    else if (lum > 0.3) { hueName = "red-brown"; vividDesc = "dark red-brown, like rust"; }
+    else { hueName = "dark red"; vividDesc = "deep red, like wine"; }
   }
-  return `${tone} ${hue} (hex ${hex.toUpperCase()})`;
+
+  return `${vividDesc} (${hueName}, hex ${hex.toUpperCase()}, RGB ${r},${g},${b})`;
 }
 
 function sheenDesc(key) {
@@ -81,21 +106,14 @@ export default function FloorVisualizer({ onPhotoChange, onColorSelected, initia
       const colorName = selectedColor?.name || "";
       const colorHex = selectedColor?.hex || "";
       const colorDesc = hexToColorDesc(colorHex);
-      const swatchUrl = selectedColor?.image_url;
       const isFlake = systemName.toLowerCase().includes("flake");
-      // Pass the color swatch photo as a second reference image so the AI can
-      // see the EXACT color and match it — text descriptions alone are unreliable.
-      const refImages = swatchUrl ? [photoUrls[0], swatchUrl] : photoUrls;
-      const colorRef = swatchUrl
-        ? ` Match the EXACT color shown in the second reference image (the color swatch photo). `
-        : "";
       const flakeClause = isFlake
-        ? ` The floor has a full-broadcast decorative vinyl flake/chip texture with multi-toned ${colorDesc} flakes scattered evenly across the surface, exactly matching the manufacturer color chart named "${colorName}".${colorRef}The dominant floor color MUST be ${colorDesc} — do not drift toward gray or neutral tones.`
-        : ` The floor is a solid ${colorDesc} surface matching the manufacturer color chart named "${colorName}".${colorRef}The floor color MUST be exactly ${colorDesc} — do not drift toward gray or neutral tones.`;
-      const prompt = `Photorealistic interior design rendering of the EXACT same room shown in the first reference photo — identical walls, geometry, lighting, and camera angle. ONLY the floor has changed: it is now a newly installed ${systemName} concrete floor.${flakeClause} The floor surface has ${sheenDesc(sheen)}. Seamless, professional epoxy/concrete coating installation. Preserve every detail of the room above the floor line. High-end real-estate photography, wide angle, natural light.`;
+        ? ` The floor has a full-broadcast decorative vinyl flake/chip texture. The flakes are ${colorDesc}. The overall dominant color of the floor MUST be ${colorDesc}. This is the color "${colorName}" — it is NOT gray, NOT neutral, NOT charcoal. The floor must clearly and obviously appear ${colorDesc}. Scatter multi-toned ${colorDesc} vinyl flakes evenly across the entire floor surface.`
+        : ` The floor is a solid ${colorDesc} surface. The floor color MUST be exactly ${colorDesc}. This is the color "${colorName}" — it is NOT gray, NOT neutral. The floor must clearly and obviously appear ${colorDesc}.`;
+      const prompt = `Photorealistic interior design rendering of the EXACT same room shown in the reference photo — identical walls, geometry, lighting, and camera angle. ONLY the floor has changed: it is now a newly installed ${systemName} concrete floor.${flakeClause} The floor surface has ${sheenDesc(sheen)}. CRITICAL: The floor color must be ${colorDesc} — do NOT make it gray, do NOT make it neutral, do NOT make it charcoal. Seamless, professional epoxy/concrete coating installation. Preserve every detail of the room above the floor line. High-end real-estate photography, wide angle, natural light.`;
       const res = await base44.integrations.Core.GenerateImage({
         prompt,
-        existing_image_urls: refImages,
+        existing_image_urls: photoUrls,
       });
       if (res?.url) {
         setConceptUrl(res.url);
