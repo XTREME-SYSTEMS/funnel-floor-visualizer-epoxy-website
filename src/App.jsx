@@ -104,7 +104,7 @@ const AuthenticatedApp = () => {
       <Route path="/guides" element={<Guides />} />
       <Route path="/epoxy-pro-guide" element={<EpoxyProGuide />} />
       <Route path="/app-onboarding" element={<AppOnboarding />} />
-      <Route path="/elite" element={<Navigate to="/care" replace />} />
+      <Route path="/elite" element={<EpoxyProElite />} />
       <Route path="/download" element={<DownloadPage />} />
       <Route element={<ClientCareShell />}>
         <Route path="/care" element={<CareHome />} />
