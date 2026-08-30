@@ -7,6 +7,7 @@ import { ChevronRight } from "lucide-react";
 import BackButton from "@/components/BackButton";
 import Logo from "@/components/Logo";
 import PageNotFound from "@/lib/PageNotFound";
+import Footer from "@/components/home/Footer";
 
 export default function GeneratedPageView() {
   const { slug } = useParams();
@@ -139,23 +140,7 @@ export default function GeneratedPageView() {
         <p className="mt-10 text-xs text-stone-500 leading-relaxed">{settings.disclaimer}</p>
       </article>
 
-      <footer className="bg-stone-950 text-stone-400 py-10 px-6 text-sm">
-        <div className="max-w-4xl mx-auto flex flex-col sm:flex-row gap-4 justify-between">
-          <div>
-            <div className="text-white font-semibold">{settings.company_name}</div>
-            <div className="mt-1">{settings.phone} · {settings.email}</div>
-            <div className="mt-1">{settings.service_area}</div>
-          </div>
-          <div className="flex flex-col gap-1 sm:items-end">
-            <Link to="/guides" className="hover:text-white">All Guides</Link>
-            <Link to="/epoxy-garage-floor-cost" className="hover:text-white">Epoxy Garage Floor Cost</Link>
-            <Link to="/2-car-garage-epoxy-cost" className="hover:text-white">2-Car Garage Epoxy Cost</Link>
-            <Link to="/3-car-garage-epoxy-cost" className="hover:text-white">3-Car Garage Epoxy Cost</Link>
-            <Link to="/garage-floor-coating-cost" className="hover:text-white">Garage Floor Coating Cost</Link>
-            <Link to="/locations" className="hover:text-white">Locations</Link>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

@@ -4,6 +4,7 @@ import { ArrowRight, ShieldCheck, Users, MapPin, GraduationCap } from "lucide-re
 import PageNav from "@/components/PageNav";
 import PageHero from "@/components/PageHero";
 import { useSettings } from "@/lib/useSettings";
+import Footer from "@/components/home/Footer";
 
 export default function About() {
   const { settings } = useSettings();
@@ -73,6 +74,7 @@ export default function About() {
           </div>
         </div>
       </section>
+      <Footer />
     </div>
   );
 }

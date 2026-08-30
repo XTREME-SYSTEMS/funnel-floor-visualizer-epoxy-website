@@ -4,6 +4,7 @@ import { base44 } from "@/api/base44Client";
 import { trackEvent } from "@/lib/tracking";
 import { BookOpen, ArrowRight, MapPin } from "lucide-react";
 import { SEO_LOCATIONS, locationPath } from "@/lib/seoConfig";
+import Footer from "@/components/home/Footer";
 
 export default function Guides() {
   const [pages, setPages] = useState([]);
@@ -81,6 +82,7 @@ export default function Guides() {
           </div>
         </div>
       </section>
+      <Footer />
     </div>
   );
 }

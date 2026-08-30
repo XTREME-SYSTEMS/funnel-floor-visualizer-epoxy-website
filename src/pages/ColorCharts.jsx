@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import SwatchImg from "@/components/ui/SwatchImg";
 import BackButton from "@/components/BackButton";
 import Logo from "@/components/Logo";
+import Footer from "@/components/home/Footer";
 
 const SYSTEMS = [
   { key: "all", label: "All Finishes" },
@@ -137,6 +138,7 @@ export default function ColorCharts() {
           </Link>
         </div>
       </div>
+      <Footer />
     </div>
   );
 }

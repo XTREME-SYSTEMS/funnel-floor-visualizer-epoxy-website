@@ -19,6 +19,7 @@ import {
   NEP_INFO
 } from "@/lib/brandLocations";
 import { trackEvent } from "@/lib/tracking";
+import Footer from "@/components/home/Footer";
 
 // Group the XPS Xpress stores by state for a readable listing.
 function groupByState(locations) {
@@ -37,7 +38,8 @@ const STATE_NAMES = {
   NY: "New York", NJ: "New Jersey", PA: "Pennsylvania", SC: "South Carolina",
   GA: "Georgia", NC: "North Carolina", OK: "Oklahoma", WI: "Wisconsin",
   TN: "Tennessee", KY: "Kentucky", IA: "Iowa", IL: "Illinois", MI: "Michigan",
-  CO: "Colorado",
+  CO: "Colorado", IN: "Indiana", OH: "Ohio", NM: "New Mexico", NV: "Nevada",
+  UT: "Utah", CA: "California", AZ: "Arizona",
   ON: "Ontario",
   BC: "British Columbia",
   AB: "Alberta"
@@ -324,6 +326,7 @@ export default function Locations() {
           </Link>
         </div>
       </section>
+      <Footer />
     </div>
   );
 }

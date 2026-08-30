@@ -6,6 +6,7 @@ import PageHero from "@/components/PageHero";
 import { Image } from "@/components/ui/image";
 import { FLOOR_SYSTEM_DATA } from "@/lib/colorData";
 import { GALLERY_IMAGES } from "@/lib/galleryImages";
+import Footer from "@/components/home/Footer";
 
 const CATEGORY_LABEL = {
   epoxy: "Epoxy Coatings",
@@ -96,6 +97,7 @@ export default function Gallery() {
           </div>
         </div>
       </section>
+      <Footer />
     </div>
   );
 }

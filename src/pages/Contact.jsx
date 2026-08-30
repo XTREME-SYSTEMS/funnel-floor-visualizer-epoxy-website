@@ -6,6 +6,7 @@ import { useSettings } from "@/lib/useSettings";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import Footer from "@/components/home/Footer";
 
 export default function Contact() {
   const { settings } = useSettings();
@@ -131,6 +132,7 @@ export default function Contact() {
           </form>
         </div>
       </section>
+      <Footer />
     </div>
   );
 }

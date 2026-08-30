@@ -4,6 +4,7 @@ import { Star, ArrowRight, ExternalLink } from "lucide-react";
 import PageHero from "@/components/PageHero";
 import PageNav from "@/components/PageNav";
 import { useSettings } from "@/lib/useSettings";
+import Footer from "@/components/home/Footer";
 
 export default function Reviews() {
   const { settings, isLoading } = useSettings();
@@ -84,6 +85,7 @@ export default function Reviews() {
           </div>
         </div>
       </section>
+      <Footer />
     </div>
   );
 }

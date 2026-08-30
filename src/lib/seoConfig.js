@@ -2,7 +2,7 @@
 // Route-aware: src/components/Seo.jsx reads useLocation() and applies the
 // matching entry here (title, description, canonical, OG/Twitter, JSON-LD).
 
-import { XPS_LOCATIONS } from "@/lib/xpsLocations";
+import { XPS_LOCATIONS, ALL_WORLDWIDE_LOCATIONS } from "@/lib/xpsLocations";
 
 export const SITE_URL = "https://epoxygaragefloorestimate.com";
 
@@ -133,6 +133,45 @@ export function webPageLd(path, title, description) {
     url: `${SITE_URL}${path}`,
     isPartOf: { "@id": `${SITE_URL}/#website` },
     publisher: { "@id": `${SITE_URL}/#business` },
+    speakable: {
+      "@type": "SpeakableSpecification",
+      cssSelector: ["h1", "h2", ".speakable"],
+    },
+  };
+}
+
+// ItemList of all XPS locations worldwide — injected on the homepage so Google
+// discovers every store and service area in a single crawl.
+export function allLocationsLd() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "XPS Xpress Locations — 70+ Stores Nationwide & International",
+    description: "All Xtreme Polishing Systems and XPS Xpress retail store, training, and distribution locations.",
+    numberOfItems: ALL_WORLDWIDE_LOCATIONS.length,
+    itemListElement: ALL_WORLDWIDE_LOCATIONS.map((loc, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: `XPS Xpress — ${loc.city}, ${loc.state}`,
+      url: `${SITE_URL}${locationPath(loc)}`,
+      item: {
+        "@type": "Place",
+        name: `XPS Xpress — ${loc.city}, ${loc.state}`,
+        address: {
+          "@type": "PostalAddress",
+          streetAddress: loc.address,
+          addressLocality: loc.city,
+          addressRegion: loc.state,
+          addressCountry: loc.country || "US",
+        },
+        geo: {
+          "@type": "GeoCoordinates",
+          latitude: loc.lat,
+          longitude: loc.lng,
+        },
+        telephone: loc.phone || undefined,
+      },
+    })),
   };
 }
 
@@ -273,7 +312,9 @@ export const STATE_NAMES = {
   NY: "New York", NJ: "New Jersey", PA: "Pennsylvania", SC: "South Carolina",
   GA: "Georgia", NC: "North Carolina", OK: "Oklahoma", WI: "Wisconsin",
   TN: "Tennessee", KY: "Kentucky", IA: "Iowa", IL: "Illinois", MI: "Michigan",
-  CO: "Colorado",
+  CO: "Colorado", IN: "Indiana", OH: "Ohio", NM: "New Mexico", NV: "Nevada",
+  UT: "Utah", CA: "California", AZ: "Arizona",
+  ON: "Ontario", AB: "Alberta", BC: "British Columbia",
 };
 
 export function citySlug(city) {
@@ -326,6 +367,12 @@ export function locationLocalBusinessLd(loc) {
       addressCountry: loc.country || "US",
     },
     areaServed: `${loc.city}, ${loc.state} and surrounding ${stateName}`,
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: loc.lat,
+      longitude: loc.lng,
+    },
+    hasMap: `https://www.google.com/maps/search/?api=1&query=${loc.lat},${loc.lng}`,
     parentOrganization: { "@id": `${SITE_URL}/#business` },
     aggregateRating: {
       "@type": "AggregateRating",
@@ -501,6 +548,8 @@ export function buildJsonLd(path, cfg) {
   if (cfg.service) blocks.push(serviceLd(cfg.service.name, cfg.description, path, cfg.service.priceRange));
   if (cfg.howTo) blocks.push(howToLd(cfg.howTo));
   if (cfg.software) blocks.push(softwareApplicationLd(cfg.software.name, path));
+  // All locations ItemList on homepage — gives Google the full store network
+  if (path === "/") blocks.push(allLocationsLd());
   // Individual reviews on homepage and reviews page for rich results
   if (path === "/" || path === "/reviews") blocks.push(...reviewLd(REVIEWS));
   // ImageObject for gallery and color-charts pages

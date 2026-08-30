@@ -7,6 +7,7 @@ import {
   Star, CheckCircle2,
 } from "lucide-react";
 import PageNav from "@/components/PageNav";
+import Footer from "@/components/home/Footer";
 
 const STEPS = [
   { icon: MapPin, t: "Enter your address", d: "Tell us where your garage is. We look up its real square footage from public property records — no guessing.", accent: "from-sky-500 to-blue-600" },
@@ -279,6 +280,7 @@ export default function HowItWorks() {
           </div>
         </motion.div>
       </section>
+      <Footer />
     </div>
   );
 }
