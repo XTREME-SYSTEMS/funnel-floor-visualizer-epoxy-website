@@ -150,33 +150,69 @@ function estatelySlug(address) {
     .replace(/-+/g, "-");
 }
 
-// Scrape Estately via Browserbase Fetch with structured-JSON extraction.
-// Returns the extracted property facts, or null when unconfigured / not found.
-async function browserbasePropertyLookup(address) {
+// Build a Realtor.com property detail URL from a street address.
+// Format: https://www.realtor.com/realestateandhomes-detail/{street}_{city}_{state}_{zip}
+function realtorUrl(address) {
+  const parts = address.split(",").map((s) => s.trim()).filter(Boolean);
+  if (parts.length < 3) return null;
+  const clean = (s) => s.toLowerCase().replace(/[^a-z0-9\s]/g, "").replace(/\s+/g, "-").replace(/-+/g, "-").replace(/^-|-$/g, "");
+  const street = clean(parts[0]);
+  const city = clean(parts[1]);
+  const lastPart = parts[parts.length - 1];
+  const m = lastPart.match(/^([A-Za-z]{2})\s*(\d{5})?/);
+  if (!m) return null;
+  const state = m[1].toUpperCase();
+  const zip = m[2] || "";
+  return `https://www.realtor.com/realestateandhomes-detail/${street}_${city}_${state}${zip ? `_${zip}` : ""}`;
+}
+
+// Build a Zillow search URL. Zillow redirects /homes/{query}_rb/ to the matching
+// property details page when an exact address is found.
+function zillowUrl(address) {
+  return `https://www.zillow.com/homes/${encodeURIComponent(address)}_rb/`;
+}
+
+// Scrape multiple public-records sources via the Browserbase cloud browser with
+// structured-JSON extraction. Tries Realtor.com, Zillow, then Estately — each has
+// different coverage, so trying several maximizes the chance of finding real
+// garage data. Returns the extracted facts + which source succeeded, or null.
+async function browserbaseMultiSourceLookup(address) {
   const apiKey = secrets.get("BROWSERBASE_API_KEY");
   if (!apiKey) return null;
 
-  const url = `https://www.estately.com/listings/info/${estatelySlug(address)}`;
   const schema = {
     type: "object",
     properties: {
-      found: { type: "boolean", description: "True if a property listing matching this address was found on the page" },
+      found: { type: "boolean", description: "True if a property matching this address was found on the page" },
       interior_sqft: { type: "number", description: "Interior living area in square feet" },
-      beds: { type: "number", description: "Number of bedrooms" },
-      baths: { type: "number", description: "Number of bathrooms" },
-      parking_desc: { type: "string", description: "Parking/garage description from the listing, e.g. 'one car carport', '2 car garage', or empty if none mentioned" },
-      garage_spaces: { type: "number", description: "Number of enclosed garage parking spaces (0 if carport only or none)" }
+      garage_spaces: { type: "number", description: "Number of enclosed garage parking spaces (0 if carport only or none)" },
+      parking_desc: { type: "string", description: "Parking/garage description, e.g. '2 car garage', 'one car carport', or empty if none mentioned" },
+      lot_sqft: { type: "number", description: "Lot size in square feet" }
     },
     required: ["found"]
   };
 
-  const data = await bbFetch(apiKey, { url, format: "json", schema });
-  let content = data?.content;
-  if (typeof content === "string") {
-    try { content = JSON.parse(content); } catch { return null; }
+  const sources = [
+    { name: "realtor", url: realtorUrl(address) },
+    { name: "zillow", url: zillowUrl(address) },
+    { name: "estately", url: `https://www.estately.com/listings/info/${estatelySlug(address)}` }
+  ].filter((s) => s.url);
+
+  for (const source of sources) {
+    try {
+      const data = await bbFetch(apiKey, { url: source.url, format: "json", schema });
+      let content = data?.content;
+      if (typeof content === "string") {
+        try { content = JSON.parse(content); } catch { continue; }
+      }
+      if (content && content.found !== false) {
+        return { ...content, source_name: source.name };
+      }
+    } catch {
+      // try next source
+    }
   }
-  if (!content || content.found === false) return null;
-  return content;
+  return null;
 }
 
 // Convert extracted property facts to a garage sqft estimate.
@@ -207,35 +243,44 @@ export default async function(req) {
 
     if (!address) return Response.json({ error: "Address is required" }, { status: 400 });
 
-    // 1. Geocode the address (validates it and gives lat/lon for the OSM fallback)
-    const geo = await geocode(address);
-    if (!geo) {
-      return Response.json({
-        address_valid: false,
-        sqft: fallbackSqft,
-        source: "fallback_size",
-        note: "Address could not be verified; using selected garage size estimate."
-      });
-    }
-
-    // 2. Try Browserbase (Estately) first — most accurate garage data
-    const listing = await browserbasePropertyLookup(address);
+    // 1. Try the Browserbase cloud browser FIRST across multiple public-records
+    // sources (Realtor.com, Zillow, Estately). This needs only the address string
+    // (no geocoding), so it runs even when Nominatim is rate-limited. Each source
+    // has different coverage, so trying several maximizes the chance of finding
+    // the real garage square footage from public records.
+    const listing = await browserbaseMultiSourceLookup(address);
     const listingSqft = garageSqftFromListing(listing);
     if (listingSqft) {
+      // Best-effort geocode for lat/lon (don't block the response on it).
+      let geo = null;
+      try { geo = await geocode(address); } catch {}
       return Response.json({
         address_valid: true,
         sqft: listingSqft,
-        latitude: geo.lat,
-        longitude: geo.lon,
-        matched_address: geo.displayName,
-        source: "browserbase_estately",
+        latitude: geo?.lat ?? null,
+        longitude: geo?.lon ?? null,
+        matched_address: geo?.displayName ?? null,
+        source: `browserbase_${listing.source_name}`,
         garage_spaces: listing.garage_spaces ?? null,
         interior_sqft: listing.interior_sqft ?? null,
         parking_desc: listing.parking_desc ?? null
       });
     }
 
-    // 3. Fall back to OpenStreetMap building footprints
+    // 2. Fall back to OpenStreetMap building footprints (needs geocoding).
+    let geo = null;
+    try { geo = await geocode(address); } catch {}
+
+    if (!geo) {
+      return Response.json({
+        address_valid: false,
+        sqft: fallbackSqft,
+        source: "fallback_size",
+        browserbase_attempted: true,
+        note: "No public-records listing found and address could not be geocoded; using selected garage size estimate."
+      });
+    }
+
     let buildings = [];
     try {
       buildings = await findBuildings(geo.lat, geo.lon);
@@ -267,7 +312,7 @@ export default async function(req) {
       source,
       buildings_found: buildings.length,
       garage_found: garages.length > 0,
-      browserbase_attempted: !!secrets.get("BROWSERBASE_API_KEY")
+      browserbase_attempted: true
     });
   } catch (error) {
     return Response.json({ error: error.message }, { status: 500 });

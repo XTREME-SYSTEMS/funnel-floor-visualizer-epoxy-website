@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Search, MapPin, Home, Ruler, CheckCircle2, Loader2 } from "lucide-react";
+import { Image } from "@/components/ui/image";
+import { XTREME_AI_ICON_URL } from "@/components/Logo";
 
 const STEPS = [
   { icon: Search, label: "Searching public property records…", duration: 1200 },
@@ -65,8 +67,8 @@ export default function ScrapeProgress({ address, lookup, onComplete }) {
     <div className="min-h-screen flex items-center justify-center bg-stone-950 px-6">
       <div className="w-full max-w-lg">
         <div className="text-center mb-8">
-          <div className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-amber-500/10 mb-4">
-            <Search className="h-8 w-8 text-amber-500 animate-pulse" />
+          <div className="inline-flex items-center justify-center rounded-2xl overflow-hidden mb-4 border-2 border-amber-500 shadow-lg shadow-amber-500/30" style={{ width: 96, height: 96 }}>
+            <Image src={XTREME_AI_ICON_URL} alt="Xtreme AI Systems" className="w-full h-full" fittingType="fill" />
           </div>
           <h2 className="text-2xl font-semibold text-white">Looking up your garage</h2>
           <p className="mt-2 text-stone-400 text-sm truncate">{address}</p>

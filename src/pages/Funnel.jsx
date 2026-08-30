@@ -12,7 +12,8 @@ import BackButton from "@/components/BackButton";
 import ScrapeProgress from "@/components/funnel/ScrapeProgress";
 import FloorVisualizer from "@/components/funnel/FloorVisualizer";
 import ResultVisualizer from "@/components/funnel/ResultVisualizer";
-import Logo from "@/components/Logo";
+import Logo, { XTREME_AI_ICON_URL } from "@/components/Logo";
+import { Image } from "@/components/ui/image";
 import { generateBidPdf } from "@/lib/bidPdf";
 
 const CONDITIONS = [
@@ -264,8 +265,8 @@ export default function Funnel() {
           {/* Step 0: Welcome */}
           {step === 0 && (
             <div className="text-center">
-              <div className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-amber-500/10 mb-6">
-                <ShieldCheck className="h-8 w-8 text-amber-500" />
+              <div className="inline-flex items-center justify-center rounded-2xl overflow-hidden mb-6 shadow-lg shadow-amber-500/30 border-2 border-amber-500" style={{ width: 128, height: 128 }}>
+                <Image src={XTREME_AI_ICON_URL} alt="Xtreme AI Systems — Intelligence For Growth" className="w-full h-full" fittingType="fill" />
               </div>
               <h1 className="text-3xl md:text-4xl font-semibold tracking-tight text-stone-900">
                 Get Your Garage Floor Estimate
