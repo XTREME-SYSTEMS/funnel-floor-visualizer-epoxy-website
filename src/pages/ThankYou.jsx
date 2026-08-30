@@ -12,7 +12,7 @@ export default function ThankYou() {
   const [installing, setInstalling] = useState(false);
 
   const edition = searchParams.get("edition") === "client-care" ? "client-care" : "home-designer";
-  const appPath = edition === "client-care" ? "/care" : "/";
+  const appPath = edition === "client-care" ? "/elite" : "/";
 
   const handleInstall = async () => {
     setInstalling(true);
