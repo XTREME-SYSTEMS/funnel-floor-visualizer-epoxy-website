@@ -10,9 +10,9 @@ import { AI_DISCLOSURE } from "@/lib/brand";
 const SYSTEMS = FLOOR_SYSTEM_DATA.map((s) => ({ name: s.name, slug: s.slug }));
 
 const SHEEN_OPTIONS = [
-  { key: "matte", label: "Matte", desc: "Flat, no reflection — soft non-reflective finish" },
-  { key: "satin", label: "Satin", desc: "Subtle soft sheen with low reflection" },
-  { key: "gloss", label: "Gloss", desc: "High-gloss wet-look with sharp mirror-like reflections" },
+  { key: "matte", label: "Matte", desc: "Flat, no reflection — soft non-reflective finish", img: "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/a17c942a3_generated_image.png" },
+  { key: "satin", label: "Satin", desc: "Subtle soft sheen with low reflection", img: "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/382c09329_generated_image.png" },
+  { key: "gloss", label: "Gloss", desc: "High-gloss wet-look with sharp mirror-like reflections", img: "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/e6eb3dffc_generated_image.png" },
 ];
 
 // Build a plain-English color description from a hex so the image model
@@ -158,17 +158,11 @@ export default function FloorVisualizer({ onPhotoChange, onColorSelected, initia
                   : "border-stone-200 bg-white hover:border-stone-300"
               }`}
             >
-              <span
-                className="w-full h-8 rounded-lg"
-                style={{
-                  background: sheen === s.key
-                    ? "linear-gradient(180deg, #FFF6D5 0%, #D4AF37 45%, #8B6914 100%)"
-                    : sheen === "matte"
-                    ? "#9a9a9a"
-                    : sheen === "satin"
-                    ? "linear-gradient(180deg, #c0c0c0, #8a8a8a)"
-                    : "linear-gradient(180deg, #f0f0f0, #6a6a6a)",
-                }}
+              <img
+                src={s.img}
+                alt={s.label}
+                loading="lazy"
+                className={`w-full h-14 object-cover rounded-lg ${sheen === s.key ? "ring-2 ring-amber-500" : ""}`}
               />
               <span className="text-xs font-bold text-stone-800">{s.label}</span>
             </button>
