@@ -265,8 +265,8 @@ export default function Funnel() {
           {/* Step 0: Welcome */}
           {step === 0 && (
             <div className="text-center">
-              <div className="inline-flex items-center justify-center rounded-2xl overflow-hidden mb-6 shadow-lg shadow-amber-500/30 border-2 border-amber-500" style={{ width: 128, height: 128 }}>
-                <Image src={XTREME_AI_ICON_URL} alt="Xtreme AI Systems — Intelligence For Growth" className="w-full h-full" fittingType="fill" />
+              <div className="inline-flex items-center justify-center mb-6" style={{ width: 128, height: 128 }}>
+                <Image src={XTREME_AI_ICON_URL} alt="Xtreme AI Systems — Intelligence For Growth" className="w-full h-full" fittingType="fit" />
               </div>
               <h1 className="text-3xl md:text-4xl font-semibold tracking-tight text-stone-900">
                 Get Your Garage Floor Estimate
