@@ -4,6 +4,7 @@ import { base44 } from "@/api/base44Client";
 import { LOGO_URL, XTREME_AI_ICON_URL } from "@/components/Logo";
 import { Image } from "@/components/ui/image";
 import AppShell from "@/components/app/AppShell";
+import ContractorMarketing from "@/components/download/ContractorMarketing";
 import {
   Shield, CreditCard, CheckCircle2, ArrowRight, Lock, Gift
 } from "lucide-react";
@@ -135,6 +136,9 @@ export default function DownloadPage() {
           <span className="text-stone-600 text-sm">15-day free trial</span>
         </div>
       </div>
+
+      {/* Contractor edition marketing */}
+      {edition === "contractor" && <ContractorMarketing />}
 
       {/* Credit card required banner */}
       <div className="rounded-2xl bg-stone-900 p-4 mb-4 flex items-start gap-3">
