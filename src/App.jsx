@@ -44,7 +44,7 @@ import SopSystem from '@/pages/admin/SopSystem';
 import Reviews from '@/pages/admin/Reviews';
 import EpoxyProGuide from '@/pages/EpoxyProGuide';
 import AppOnboarding from '@/pages/AppOnboarding';
-import EpoxyProElite from '@/pages/EpoxyProElite';
+import EpoxyProAssistant from '@/pages/EpoxyProAssistant';
 import DownloadPage from '@/pages/Download';
 import ThankYou from '@/pages/ThankYou';
 import Questionnaire from '@/pages/Questionnaire';
@@ -104,7 +104,7 @@ const AuthenticatedApp = () => {
       <Route path="/guides" element={<Guides />} />
       <Route path="/epoxy-pro-guide" element={<EpoxyProGuide />} />
       <Route path="/app-onboarding" element={<AppOnboarding />} />
-      <Route path="/elite" element={<EpoxyProElite />} />
+      <Route path="/elite" element={<EpoxyProAssistant />} />
       <Route path="/download" element={<DownloadPage />} />
       <Route element={<ClientCareShell />}>
         <Route path="/care" element={<CareHome />} />

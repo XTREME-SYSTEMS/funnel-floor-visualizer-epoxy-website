@@ -227,6 +227,10 @@
   .xa-input { width: 100%; height: 44px; border-radius: 11px; border: 1px solid var(--vx-border); background: var(--vx-panel); color: var(--vx-text); padding: 0 14px; font-size: 14px; outline: none; transition: border-color .12s; }
   .xa-input:focus { border-color: var(--vx-accent); }
 
+  /* Metallic gold hover — visible glow on cards/buttons so users see what they're choosing */
+  .xa-gold-hover { transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.12s ease; }
+  .xa-gold-hover:hover { border-color: #D4AF37; box-shadow: 0 0 0 2px rgba(212,175,55,0.25), 0 0 16px -4px rgba(212,175,55,0.5); transform: translateY(-1px); }
+
   /* === Desktop responsive shell === */
   .vx-main-col { display: flex; flex-direction: column; flex: 1; min-height: 0; min-width: 0; }
   .vx-desktop-sidebar { display: none; }
