@@ -5,7 +5,7 @@ import { LOGO_URL } from "@/components/Logo";
 import { usePwaInstall } from "@/lib/usePwaInstall";
 
 const APP_PERKS = [
-  "Get exclusive offers only for Epoxy Pro App users",
+  "Get exclusive offers only for Epoxy Pro Homeowner users",
   "Up-to-the-moment updates on your projects",
   "Opportunities to experience the most advanced products on the market",
 ];
@@ -56,7 +56,7 @@ export default function MobileSection() {
         <div>
           <div className="text-xs font-bold tracking-[0.2em] text-amber-500">DOWNLOAD THE APP</div>
           <h2 className="mt-3 text-3xl md:text-5xl font-semibold tracking-tight text-white">
-            Epoxy Pro App
+            Epoxy Pro Homeowner
           </h2>
           <p className="mt-4 text-stone-400 leading-relaxed">
             The only garage floor app that lets you visualize, estimate, and book — all from your phone. No waiting, no pressure, no home visit required to get your number.
@@ -144,7 +144,7 @@ export default function MobileSection() {
               <div className="px-4 pt-5 pb-4 text-center">
                 <img src={LOGO_URL} alt="XPS" className="w-20 h-20 object-contain mx-auto" style={{ filter: 'drop-shadow(0 6px 14px rgba(184,134,11,.25))' }} />
                 <p className="text-[8px] tracking-[0.2em] uppercase font-bold" style={{ color: '#D9B835' }}>Xtreme Polishing Systems</p>
-                <h3 className="text-lg font-black text-stone-900 leading-tight mt-1">Epoxy Pro App</h3>
+                <h3 className="text-lg font-black text-stone-900 leading-tight mt-1">Epoxy Pro Homeowner</h3>
                 <p className="text-[10px] text-stone-500 mt-1">Visualize, estimate, and book — all in one place.</p>
                 <button className="mt-3 w-full h-9 rounded-xl flex items-center justify-center gap-1.5 text-[11px] font-extrabold" style={{ background: 'linear-gradient(180deg, #FFE25A 0%, #FFD700 45%, #C8A300 100%)', border: '2px solid #000', color: '#1a1a1a', boxShadow: '0 4px 12px rgba(255,215,0,.4), inset 0 1px rgba(255,255,255,.4)' }}>
                   <Sparkles className="h-3.5 w-3.5" /> Get My Free Estimate <ArrowRight className="h-3.5 w-3.5" />
