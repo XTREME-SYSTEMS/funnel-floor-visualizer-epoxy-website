@@ -1,0 +1,28 @@
+{
+  "name": "Comment",
+  "type": "object",
+  "properties": {
+    "target_type": {
+      "type": "string",
+      "enum": [
+        "tool",
+        "app"
+      ]
+    },
+    "target_id": {
+      "type": "string"
+    },
+    "target_name": {
+      "type": "string"
+    },
+    "text": {
+      "type": "string",
+      "maxLength": 500
+    }
+  },
+  "required": [
+    "target_type",
+    "target_id",
+    "text"
+  ]
+}

@@ -124,6 +124,17 @@
   body {
     @apply bg-background text-foreground font-body;
   }
+
+  /* Hide all scrollbars for a polished, app-like look — scroll still works */
+  ::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    display: none;
+  }
+  * {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
 }
 
 @layer utilities {

@@ -14,7 +14,22 @@
     },
     "plan": {
       "type": "string",
-      "description": "Active subscription plan ID ('home-designer' or 'contractor'). Set by the payments webhook on ORDER_APPROVED, cleared on SUBSCRIPTION_CANCELED/EXPIRED."
+      "description": "Active subscription plan ID ('home-designer' or 'contractor'). Set by the payments webhook on ORDER_APPROVED, cleared on SUBSCRIPTION_CANCELED/EXPIRED or questionnaire non-compliance."
+    },
+    "questionnaire_completed": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the user completed the required 10-question questionnaire"
+    },
+    "questionnaire_warning_sent": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the 20-hour warning was sent before the 24h enforcement deadline"
+    },
+    "downloaded_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the user's subscription was activated (start of the 24h questionnaire clock)"
     }
   },
   "required": [

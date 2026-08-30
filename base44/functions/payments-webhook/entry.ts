@@ -151,8 +151,13 @@ async function handleOrderApproved(db: any, eventData: any): Promise<Response> {
     grantUserId = users?.[0]?.id;
   }
   if (grantUserId) {
-    await db.entities.User.update(grantUserId, { plan: purchase.productId });
-    console.log("payments-webhook: granted plan", { userId: grantUserId, plan: purchase.productId });
+    await db.entities.User.update(grantUserId, {
+      plan: purchase.productId,
+      downloaded_at: new Date().toISOString(),
+      questionnaire_completed: false,
+      questionnaire_warning_sent: false,
+    });
+    console.log("payments-webhook: granted plan + started questionnaire clock", { userId: grantUserId, plan: purchase.productId });
   } else {
     // No matching user yet — the buyer will claim their plan when they sign up with
     // the same email. The purchase record itself holds the productId for reconciliation.

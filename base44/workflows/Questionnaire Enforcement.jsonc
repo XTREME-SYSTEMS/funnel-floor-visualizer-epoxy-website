@@ -1,0 +1,44 @@
+{
+  "trigger": {
+    "condition": null,
+    "config": {
+      "trigger_type": "scheduled",
+      "events": [],
+      "schedule_mode": "recurring",
+      "cron_expression": "0 * * * *",
+      "one_time_date": null,
+      "timezone": "America/New_York",
+      "interval_value": null,
+      "interval_unit": null,
+      "interval_anchor": null,
+      "ends_type": "never",
+      "ends_on_date": null,
+      "ends_after_count": null
+    }
+  },
+  "definition": {
+    "document": {
+      "dsl": "1.0.0",
+      "name": "questionnaire_enforcement",
+      "version": "1.0",
+      "namespace": "base44"
+    },
+    "do": [
+      {
+        "check_compliance": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "checkQuestionnaireCompliance"
+          },
+          "then": "end",
+          "x-base44": {
+            "title": "Check questionnaire compliance",
+            "description": "Warn at 20h, shut off at 24h"
+          }
+        }
+      }
+    ]
+  },
+  "description": "Checks every hour for users who haven't completed the required 10-question questionnaire \u2014 sends a warning email at 20 hours and shuts off app access at 24 hours, per the download agreement.",
+  "name": "Questionnaire Enforcement"
+}

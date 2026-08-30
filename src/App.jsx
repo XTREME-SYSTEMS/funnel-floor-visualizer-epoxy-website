@@ -47,6 +47,9 @@ import AppOnboarding from '@/pages/AppOnboarding';
 import EpoxyProElite from '@/pages/EpoxyProElite';
 import DownloadPage from '@/pages/Download';
 import ThankYou from '@/pages/ThankYou';
+import Questionnaire from '@/pages/Questionnaire';
+import AppSettings from '@/pages/AppSettings';
+import ToolManager from '@/pages/admin/ToolManager';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -95,6 +98,8 @@ const AuthenticatedApp = () => {
       <Route path="/elite" element={<EpoxyProElite />} />
       <Route path="/download" element={<DownloadPage />} />
       <Route path="/ThankYou" element={<ThankYou />} />
+      <Route path="/questionnaire" element={<Questionnaire />} />
+      <Route path="/app-settings" element={<AppSettings />} />
       <Route path="/admin" element={<AdminLayout />}>
         <Route index element={<Dashboard />} />
         <Route path="leads" element={<Leads />} />
@@ -106,6 +111,7 @@ const AuthenticatedApp = () => {
         <Route path="google" element={<GoogleSeo />} />
         <Route path="factory" element={<SeoFactory />} />
         <Route path="sop" element={<SopSystem />} />
+        <Route path="tools" element={<ToolManager />} />
         <Route path="settings" element={<SettingsPage />} />
       </Route>
       <Route path="/:state/:citySlug" element={<LocationSeoPage />} />

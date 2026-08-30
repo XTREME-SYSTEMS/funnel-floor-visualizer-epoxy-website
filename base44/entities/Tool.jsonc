@@ -1,0 +1,36 @@
+{
+  "name": "Tool",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 500
+    },
+    "icon": {
+      "type": "string",
+      "description": "lucide-react icon name"
+    },
+    "edition": {
+      "type": "string",
+      "enum": [
+        "home-designer",
+        "contractor"
+      ]
+    },
+    "active": {
+      "type": "boolean",
+      "default": true
+    },
+    "order": {
+      "type": "number",
+      "default": 0
+    }
+  },
+  "required": [
+    "name",
+    "edition"
+  ]
+}

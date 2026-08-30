@@ -1,0 +1,35 @@
+{
+  "name": "PromoCode",
+  "type": "object",
+  "properties": {
+    "code": {
+      "type": "string"
+    },
+    "tool_id": {
+      "type": "string",
+      "description": "Tool this code unlocks (optional \u2014 if empty, unlocks general access)"
+    },
+    "tool_name": {
+      "type": "string"
+    },
+    "max_uses": {
+      "type": "number",
+      "default": 1
+    },
+    "uses": {
+      "type": "number",
+      "default": 0
+    },
+    "active": {
+      "type": "boolean",
+      "default": true
+    },
+    "notes": {
+      "type": "string",
+      "maxLength": 500
+    }
+  },
+  "required": [
+    "code"
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "name": "Rating",
+  "type": "object",
+  "properties": {
+    "target_type": {
+      "type": "string",
+      "enum": [
+        "tool",
+        "app"
+      ]
+    },
+    "target_id": {
+      "type": "string"
+    },
+    "target_name": {
+      "type": "string"
+    },
+    "stars": {
+      "type": "number",
+      "minimum": 1,
+      "maximum": 5
+    },
+    "text": {
+      "type": "string",
+      "maxLength": 500
+    }
+  },
+  "required": [
+    "target_type",
+    "target_id",
+    "stars"
+  ]
+}
