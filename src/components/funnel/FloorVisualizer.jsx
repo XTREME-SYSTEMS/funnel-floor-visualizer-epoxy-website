@@ -1,74 +1,53 @@
-import React, { useState, useMemo, useRef } from "react";
-import { Upload, Loader2, ImageIcon, Sparkles, MoveHorizontal, AlertCircle } from "lucide-react";
+import React, { useState, useMemo } from "react";
+import { Loader2, Sparkles, AlertCircle } from "lucide-react";
 import { base44 } from "@/api/base44Client";
-import { COLOR_DATA } from "@/lib/colorData";
+import { getSystemColorRecords } from "@/lib/floorColors";
+import { FLOOR_SYSTEM_DATA } from "@/data/colorData";
+import PhotoUpload from "@/components/visualizer/PhotoUpload";
+import Disclosure from "@/components/vq/Disclosure";
+import { AI_DISCLOSURE } from "@/lib/brand";
 
-const SYSTEMS = [
-  { key: "flake", label: "Flake" },
-  { key: "metallic", label: "Metallic" },
-  { key: "solid", label: "Solid" },
-  { key: "quartz", label: "Quartz" },
-  { key: "glitter", label: "Glitter" },
-  { key: "dye_stain", label: "Stain" }
-];
+const SYSTEMS = FLOOR_SYSTEM_DATA.map((s) => ({ name: s.name, slug: s.slug }));
 
-// Simple visualizer flow:
+// Visualizer flow from the xtremevisualizer4 package:
 // 1. Pick a color from the color chart
 // 2. Upload a photo of your floor
 // 3. Press the button
 // 4. See your floor with that color applied
 export default function FloorVisualizer({ onPhotoChange, onColorSelected, initialPhoto, initialColor }) {
-  const [system, setSystem] = useState(initialColor?.system || "flake");
-  const [photoUrl, setPhotoUrl] = useState(initialPhoto || "");
-  const [uploading, setUploading] = useState(false);
+  const [systemName, setSystemName] = useState(initialColor?.system || "Flake Epoxy");
+  const [photoUrls, setPhotoUrls] = useState(initialPhoto ? [initialPhoto] : []);
   const [selectedColor, setSelectedColor] = useState(initialColor || null);
   const [generating, setGenerating] = useState(false);
   const [conceptUrl, setConceptUrl] = useState("");
-  const [comparePos, setComparePos] = useState(50);
   const [error, setError] = useState("");
-  const compareRef = useRef(null);
-  const dragging = useRef(false);
 
-  const colors = useMemo(
-    () => COLOR_DATA.filter((c) => c.system === system).sort((a, b) => a.rank - b.rank),
-    [system]
-  );
-
-  const handleUpload = async (e) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    setUploading(true);
-    setError("");
-    try {
-      const { file_url } = await base44.integrations.Core.UploadFile({ file });
-      setPhotoUrl(file_url);
-      setConceptUrl("");
-      onPhotoChange?.(file_url);
-    } catch (err) {
-      setError("Upload failed. Please try again.");
-      console.error(err);
-    }
-    setUploading(false);
-  };
+  const colorRecords = useMemo(() => getSystemColorRecords(systemName), [systemName]);
 
   const pickColor = (c) => {
     setSelectedColor(c);
     setConceptUrl("");
-    onColorSelected?.(c);
+    onColorSelected?.({ code: c.code, color_name: c.name, hex: c.hex, system: systemName });
   };
 
-  const generateConcept = async () => {
-    if (!photoUrl || !selectedColor) return;
+  const handleUploaded = (urls) => {
+    setPhotoUrls(urls);
+    setConceptUrl("");
+    onPhotoChange?.(urls[0] || "");
+  };
+
+  const generate = async () => {
+    if (!photoUrls.length || !selectedColor) return;
     setGenerating(true);
     setError("");
+    setConceptUrl("");
     try {
-      const prompt = `Photorealistic interior of the same garage, but the floor has been resurfaced with a ${selectedColor.color_name} ${system} epoxy floor coating. The floor color is ${selectedColor.hex} (${selectedColor.color_name}, color code ${selectedColor.code}). Keep the walls, ceiling, garage door, and all objects identical to the original photo. Only the concrete floor surface changes — it now has a smooth, professional ${system} epoxy coating in ${selectedColor.color_name}. Realistic lighting and reflections consistent with a high gloss floor finish.`;
-
+      const colorName = selectedColor?.name || "";
+      const prompt = `Photorealistic interior design rendering of the uploaded room with a newly installed ${systemName} floor in the color "${colorName}" with a high-gloss wet-look sheen with sharp mirror-like reflections. Seamless, professional concrete coating finish. Same room geometry, walls, and lighting as the original photo. High-end real-estate photography, wide angle, natural light.`;
       const res = await base44.integrations.Core.GenerateImage({
         prompt,
-        existing_image_urls: [photoUrl],
+        existing_image_urls: photoUrls,
       });
-
       if (res?.url) {
         setConceptUrl(res.url);
       } else {
@@ -81,14 +60,6 @@ export default function FloorVisualizer({ onPhotoChange, onColorSelected, initia
     setGenerating(false);
   };
 
-  const moveCompare = (clientX) => {
-    const el = compareRef.current;
-    if (!el) return;
-    const rect = el.getBoundingClientRect();
-    const p = ((clientX - rect.left) / rect.width) * 100;
-    setComparePos(Math.max(0, Math.min(100, p)));
-  };
-
   return (
     <div className="space-y-6">
       {/* Step 1: Pick a color from the color chart */}
@@ -97,19 +68,19 @@ export default function FloorVisualizer({ onPhotoChange, onColorSelected, initia
         <div className="flex flex-wrap gap-2 mb-3">
           {SYSTEMS.map((s) => (
             <button
-              key={s.key}
-              onClick={() => { setSystem(s.key); setSelectedColor(null); setConceptUrl(""); }}
+              key={s.slug}
+              onClick={() => { setSystemName(s.name); setSelectedColor(null); setConceptUrl(""); }}
               className={`px-3 py-1.5 rounded-full text-xs font-semibold transition ${
-                system === s.key ? "bg-stone-950 text-white" : "bg-white text-stone-600 border border-stone-200"
+                systemName === s.name ? "bg-stone-950 text-white" : "bg-white text-stone-600 border border-stone-200"
               }`}
             >
-              {s.label}
+              {s.name}
             </button>
           ))}
         </div>
 
         <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 max-h-56 overflow-y-auto pr-1">
-          {colors.map((c) => (
+          {colorRecords.map((c) => (
             <button
               key={c.code}
               onClick={() => pickColor(c)}
@@ -119,8 +90,12 @@ export default function FloorVisualizer({ onPhotoChange, onColorSelected, initia
                   : "border-stone-200 bg-white hover:border-stone-300"
               }`}
             >
-              <img src={c.image_url} alt={c.color_name} loading="lazy" className="h-12 w-full object-cover object-top rounded-lg" />
-              <span className="text-[11px] font-medium text-stone-700 truncate w-full text-center">{c.color_name}</span>
+              {c.image_url ? (
+                <img src={c.image_url} alt={c.name} loading="lazy" className="h-12 w-full object-cover object-top rounded-lg" />
+              ) : (
+                <span className="h-12 w-full rounded-lg" style={{ background: c.hex }} />
+              )}
+              <span className="text-[11px] font-medium text-stone-700 truncate w-full text-center">{c.name}</span>
               <span className="text-[10px] text-stone-400">{c.code}</span>
             </button>
           ))}
@@ -130,41 +105,14 @@ export default function FloorVisualizer({ onPhotoChange, onColorSelected, initia
       {/* Step 2: Upload your floor photo */}
       <div>
         <h4 className="font-semibold text-stone-900 mb-3">2. Upload a photo of your floor</h4>
-        {!photoUrl ? (
-          <label className="flex flex-col items-center justify-center gap-2 border-2 border-dashed border-stone-300 rounded-2xl p-8 cursor-pointer hover:border-amber-500 hover:bg-amber-50/40 transition">
-            {uploading ? (
-              <Loader2 className="h-8 w-8 text-amber-500 animate-spin" />
-            ) : (
-              <Upload className="h-8 w-8 text-stone-400" />
-            )}
-            <span className="text-sm font-medium text-stone-600">
-              {uploading ? "Uploading…" : "Tap to upload a photo of your garage floor"}
-            </span>
-            <span className="text-xs text-stone-400">JPG or PNG</span>
-            <input type="file" accept="image/*" className="hidden" onChange={handleUpload} />
-          </label>
-        ) : (
-          <div className="relative rounded-2xl overflow-hidden border border-stone-200">
-            <img src={photoUrl} alt="Your garage floor" className="w-full h-48 object-cover" />
-            <button
-              onClick={() => {
-                setPhotoUrl("");
-                setConceptUrl("");
-                onPhotoChange?.("");
-              }}
-              className="absolute top-2 right-2 text-xs font-semibold bg-stone-950/80 text-white px-3 py-1.5 rounded-lg hover:bg-stone-950"
-            >
-              Change photo
-            </button>
-          </div>
-        )}
+        <PhotoUpload photoUrls={photoUrls} onUploaded={handleUploaded} />
       </div>
 
       {/* Step 3: Press the button */}
-      {photoUrl && selectedColor && (
+      {photoUrls.length > 0 && selectedColor && (
         <div>
           <button
-            onClick={generateConcept}
+            onClick={generate}
             disabled={generating}
             className="w-full h-14 rounded-xl flex items-center justify-center gap-2 text-base font-bold disabled:opacity-60 transition"
             style={{
@@ -184,9 +132,6 @@ export default function FloorVisualizer({ onPhotoChange, onColorSelected, initia
               </>
             )}
           </button>
-          <p className="mt-2 text-xs text-stone-400 text-center">
-            AI-generated concept — actual results may vary.
-          </p>
         </div>
       )}
 
@@ -197,59 +142,31 @@ export default function FloorVisualizer({ onPhotoChange, onColorSelected, initia
         </div>
       )}
 
-      {/* Step 4: Result — before/after compare */}
+      {/* Step 4: Result — before/after */}
       {conceptUrl && (
         <div>
-          <div className="flex items-center gap-2 mb-3">
-            <ImageIcon className="h-5 w-5 text-amber-500" />
-            <h4 className="font-semibold text-stone-900">Your transformation</h4>
-          </div>
-          <p className="text-sm text-stone-500 mb-4">Drag the slider to compare your current floor with the {selectedColor?.color_name} finish.</p>
-
-          <div
-            ref={compareRef}
-            className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden cursor-ew-resize select-none bg-stone-100"
-            onMouseDown={(e) => { dragging.current = true; moveCompare(e.clientX); }}
-            onMouseMove={(e) => dragging.current && moveCompare(e.clientX)}
-            onMouseUp={() => (dragging.current = false)}
-            onMouseLeave={() => (dragging.current = false)}
-            onTouchStart={(e) => moveCompare(e.touches[0].clientX)}
-            onTouchMove={(e) => moveCompare(e.touches[0].clientX)}
-          >
-            {/* AFTER (full container) */}
-            <img src={conceptUrl} alt="After" className="absolute inset-0 w-full h-full object-cover" />
-            {/* BEFORE (clipped to slider) */}
-            <div className="absolute inset-0 overflow-hidden" style={{ width: `${comparePos}%` }}>
-              <img
-                src={photoUrl}
-                alt="Before"
-                className="absolute inset-0 h-full object-cover"
-                style={{ width: `${comparePos > 0 ? 10000 / comparePos : 100}%` }}
-              />
+          <h4 className="font-semibold text-stone-900 mb-3">Your transformation</h4>
+          <div className="grid grid-cols-2 gap-2">
+            <div className="rounded-xl overflow-hidden border border-stone-200">
+              <img src={photoUrls[0]} alt="Before" className="w-full h-48 object-cover" />
+              <p className="text-[10px] tracking-[0.16em] text-stone-400 p-2">BEFORE</p>
             </div>
-            <span className="absolute top-3 left-3 text-[10px] font-bold tracking-widest bg-stone-900/80 text-white px-2 py-1 rounded z-10">BEFORE</span>
-            <span className="absolute top-3 right-3 text-[10px] font-bold tracking-widest bg-amber-500 text-stone-950 px-2 py-1 rounded z-10">AFTER</span>
-            <div className="absolute top-0 bottom-0 w-1 bg-white shadow-lg z-10" style={{ left: `${comparePos}%` }}>
-              <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 h-10 w-10 rounded-full bg-white shadow-lg flex items-center justify-center">
-                <MoveHorizontal className="h-5 w-5 text-stone-900" />
-              </div>
+            <div className="rounded-xl overflow-hidden border border-amber-300">
+              <img src={conceptUrl} alt="After" className="w-full h-48 object-cover" />
+              <p className="text-[10px] tracking-[0.16em] text-amber-600 p-2">AFTER — {selectedColor?.name}</p>
             </div>
-            {selectedColor && (
-              <div className="absolute bottom-3 right-3 z-10 flex items-center gap-1.5 bg-stone-900/80 text-white px-2.5 py-1 rounded-lg text-xs font-semibold">
-                <span className="inline-block w-3 h-3 rounded-full border border-white/40" style={{ background: selectedColor.hex }} />
-                {selectedColor.color_name}
-              </div>
-            )}
           </div>
-
           <button
-            onClick={generateConcept}
+            onClick={generate}
             disabled={generating}
             className="mt-3 w-full h-11 rounded-xl flex items-center justify-center gap-2 text-sm font-bold bg-stone-100 text-stone-700 hover:bg-stone-200 transition disabled:opacity-60"
           >
             {generating ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
             {generating ? "Regenerating…" : "Regenerate"}
           </button>
+          <div className="mt-3">
+            <Disclosure text={AI_DISCLOSURE} />
+          </div>
         </div>
       )}
     </div>
