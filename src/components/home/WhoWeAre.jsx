@@ -130,37 +130,33 @@ export default function WhoWeAre({ settings }) {
           </div>
         </div>
 
-        {/* Sales Pros team — 3-image banner: Sales Manager | Team | Robert */}
+        {/* Sales Pros team — compiled banner: wide team photo on top, two portraits below */}
         <div className="mt-16 rounded-3xl border border-stone-200 overflow-hidden bg-white shadow-sm">
-          <div className="bg-stone-950 grid grid-cols-3 items-stretch">
-            <div className="h-44 sm:h-56 md:h-80 bg-stone-950 overflow-hidden">
+          {/* Full-width team photo (landscape) — fit so all text & faces stay visible */}
+          <div className="bg-stone-950">
+            <Image
+              src={TEAM_IMG}
+              alt="Xtreme Polishing Systems rockstar sales pros team with floor polishing equipment in Pompano Beach FL"
+              fittingType="fit"
+              className="w-full h-48 sm:h-64 md:h-96"
+            />
+          </div>
+          {/* Two portraits side by side on desktop, stacked on mobile — fit so heads & text aren't cut */}
+          <div className="grid sm:grid-cols-2 gap-px bg-stone-950">
+            <div className="bg-stone-950">
               <Image
                 src={SALES_MANAGER_IMG}
                 alt="Xtreme Polishing Systems Sales Manager holding FlexQuartz epoxy coating buckets in the Pompano Beach warehouse"
-                fittingType="fill"
-                focalPointX={0.5}
-                focalPointY={0.5}
-                className="h-full w-full"
-                style={{ transform: 'translateY(4in)' }}
-              />
-            </div>
-            <div className="h-44 sm:h-56 md:h-80 bg-stone-950 flex items-center justify-center">
-              <Image
-                src={TEAM_IMG}
-                alt="Xtreme Polishing Systems rockstar sales pros team with floor polishing equipment in Pompano Beach FL"
                 fittingType="fit"
-                className="h-full w-full"
+                className="w-full h-80 sm:h-96 md:h-[32rem]"
               />
             </div>
-            <div className="h-44 sm:h-56 md:h-80 bg-stone-950 overflow-hidden">
+            <div className="bg-stone-950">
               <Image
                 src={ROBERT_PCU_IMG}
                 alt="Robert, Polished Concrete University master trainer with 10 years at Xtreme Polishing Systems, teaching Stardek coating skills"
-                fittingType="fill"
-                focalPointX={0.5}
-                focalPointY={0.5}
-                className="h-full w-full"
-                style={{ transform: 'translateY(0.75in)' }}
+                fittingType="fit"
+                className="w-full h-80 sm:h-96 md:h-[32rem]"
               />
             </div>
           </div>
