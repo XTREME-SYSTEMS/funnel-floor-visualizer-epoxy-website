@@ -1,8 +1,7 @@
 import React, { useState, useMemo, useRef } from "react";
-import { Upload, Loader2, ImageIcon, Sparkles, MoveHorizontal, Wand2, AlertCircle } from "lucide-react";
+import { Upload, Loader2, ImageIcon, Sparkles, MoveHorizontal, AlertCircle } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { COLOR_DATA } from "@/lib/colorData";
-import MaskEditor from "@/components/visualizer/MaskEditor";
 
 const SYSTEMS = [
   { key: "flake", label: "Flake" },
@@ -13,22 +12,16 @@ const SYSTEMS = [
   { key: "dye_stain", label: "Stain" }
 ];
 
-const FINISHES = [
-  { key: "matte", label: "Matte" },
-  { key: "satin", label: "Satin" },
-  { key: "gloss", label: "High Gloss" },
-];
-
-// New visualizer — mask the floor area, then AI-generate a realistic preview
-// using the exact uploaded photo + selected color. Replaces the old CSS-tint
-// approach with a proper mask-based AI concept render.
+// Simple visualizer flow:
+// 1. Pick a color from the color chart
+// 2. Upload a photo of your floor
+// 3. Press the button
+// 4. See your floor with that color applied
 export default function FloorVisualizer({ onPhotoChange, onColorSelected, initialPhoto, initialColor }) {
   const [system, setSystem] = useState(initialColor?.system || "flake");
   const [photoUrl, setPhotoUrl] = useState(initialPhoto || "");
   const [uploading, setUploading] = useState(false);
   const [selectedColor, setSelectedColor] = useState(initialColor || null);
-  const [finish, setFinish] = useState("gloss");
-  const [mask, setMask] = useState(null);
   const [generating, setGenerating] = useState(false);
   const [conceptUrl, setConceptUrl] = useState("");
   const [comparePos, setComparePos] = useState(50);
@@ -50,7 +43,6 @@ export default function FloorVisualizer({ onPhotoChange, onColorSelected, initia
       const { file_url } = await base44.integrations.Core.UploadFile({ file });
       setPhotoUrl(file_url);
       setConceptUrl("");
-      setMask(null);
       onPhotoChange?.(file_url);
     } catch (err) {
       setError("Upload failed. Please try again.");
@@ -70,8 +62,7 @@ export default function FloorVisualizer({ onPhotoChange, onColorSelected, initia
     setGenerating(true);
     setError("");
     try {
-      const finishLabel = FINISHES.find((f) => f.key === finish)?.label || "High Gloss";
-      const prompt = `Photorealistic interior of the same garage, but the floor has been resurfaced with a ${selectedColor.color_name} ${system} epoxy floor coating. The floor color is ${selectedColor.hex} (${selectedColor.color_name}, color code ${selectedColor.code}). The finish is ${finishLabel.toLowerCase()}. Keep the walls, ceiling, garage door, and all objects identical to the original photo. Only the concrete floor surface changes — it now has a smooth, professional ${system} epoxy coating in ${selectedColor.color_name}. Realistic lighting and reflections consistent with a ${finishLabel.toLowerCase()} floor finish.`;
+      const prompt = `Photorealistic interior of the same garage, but the floor has been resurfaced with a ${selectedColor.color_name} ${system} epoxy floor coating. The floor color is ${selectedColor.hex} (${selectedColor.color_name}, color code ${selectedColor.code}). Keep the walls, ceiling, garage door, and all objects identical to the original photo. Only the concrete floor surface changes — it now has a smooth, professional ${system} epoxy coating in ${selectedColor.color_name}. Realistic lighting and reflections consistent with a high gloss floor finish.`;
 
       const res = await base44.integrations.Core.GenerateImage({
         prompt,
@@ -100,8 +91,45 @@ export default function FloorVisualizer({ onPhotoChange, onColorSelected, initia
 
   return (
     <div className="space-y-6">
-      {/* Step 1: Upload */}
+      {/* Step 1: Pick a color from the color chart */}
       <div>
+        <h4 className="font-semibold text-stone-900 mb-3">1. Choose your color</h4>
+        <div className="flex flex-wrap gap-2 mb-3">
+          {SYSTEMS.map((s) => (
+            <button
+              key={s.key}
+              onClick={() => { setSystem(s.key); setSelectedColor(null); setConceptUrl(""); }}
+              className={`px-3 py-1.5 rounded-full text-xs font-semibold transition ${
+                system === s.key ? "bg-stone-950 text-white" : "bg-white text-stone-600 border border-stone-200"
+              }`}
+            >
+              {s.label}
+            </button>
+          ))}
+        </div>
+
+        <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 max-h-56 overflow-y-auto pr-1">
+          {colors.map((c) => (
+            <button
+              key={c.code}
+              onClick={() => pickColor(c)}
+              className={`flex flex-col items-center gap-1 p-2 rounded-xl border transition ${
+                selectedColor?.code === c.code
+                  ? "border-amber-500 bg-amber-50"
+                  : "border-stone-200 bg-white hover:border-stone-300"
+              }`}
+            >
+              <img src={c.image_url} alt={c.color_name} loading="lazy" className="h-12 w-full object-cover object-top rounded-lg" />
+              <span className="text-[11px] font-medium text-stone-700 truncate w-full text-center">{c.color_name}</span>
+              <span className="text-[10px] text-stone-400">{c.code}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Step 2: Upload your floor photo */}
+      <div>
+        <h4 className="font-semibold text-stone-900 mb-3">2. Upload a photo of your floor</h4>
         {!photoUrl ? (
           <label className="flex flex-col items-center justify-center gap-2 border-2 border-dashed border-stone-300 rounded-2xl p-8 cursor-pointer hover:border-amber-500 hover:bg-amber-50/40 transition">
             {uploading ? (
@@ -122,7 +150,6 @@ export default function FloorVisualizer({ onPhotoChange, onColorSelected, initia
               onClick={() => {
                 setPhotoUrl("");
                 setConceptUrl("");
-                setMask(null);
                 onPhotoChange?.("");
               }}
               className="absolute top-2 right-2 text-xs font-semibold bg-stone-950/80 text-white px-3 py-1.5 rounded-lg hover:bg-stone-950"
@@ -133,79 +160,7 @@ export default function FloorVisualizer({ onPhotoChange, onColorSelected, initia
         )}
       </div>
 
-      {/* Step 2: Mask the floor area */}
-      {photoUrl && (
-        <div>
-          <div className="flex items-center gap-2 mb-3">
-            <Wand2 className="h-5 w-5 text-amber-500" />
-            <h4 className="font-semibold text-stone-900">Mask the floor area</h4>
-          </div>
-          <p className="text-sm text-stone-500 mb-3">
-            Paint over the floor so the AI knows exactly where to apply your new coating.
-            Tap <span className="font-semibold text-amber-600">Auto-Detect</span> for a quick start.
-          </p>
-          <MaskEditor photoUrl={photoUrl} onMaskChange={setMask} />
-        </div>
-      )}
-
-      {/* Step 3: Pick system + color */}
-      {photoUrl && (
-        <div>
-          <div className="flex flex-wrap gap-2 mb-3">
-            {SYSTEMS.map((s) => (
-              <button
-                key={s.key}
-                onClick={() => { setSystem(s.key); setSelectedColor(null); setConceptUrl(""); }}
-                className={`px-3 py-1.5 rounded-full text-xs font-semibold transition ${
-                  system === s.key ? "bg-stone-950 text-white" : "bg-white text-stone-600 border border-stone-200"
-                }`}
-              >
-                {s.label}
-              </button>
-            ))}
-          </div>
-
-          <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 max-h-56 overflow-y-auto pr-1">
-            {colors.map((c) => (
-              <button
-                key={c.code}
-                onClick={() => pickColor(c)}
-                className={`flex flex-col items-center gap-1 p-2 rounded-xl border transition ${
-                  selectedColor?.code === c.code
-                    ? "border-amber-500 bg-amber-50"
-                    : "border-stone-200 bg-white hover:border-stone-300"
-                }`}
-              >
-                <img src={c.image_url} alt={c.color_name} loading="lazy" className="h-12 w-full object-cover object-top rounded-lg" />
-                <span className="text-[11px] font-medium text-stone-700 truncate w-full text-center">{c.color_name}</span>
-                <span className="text-[10px] text-stone-400">{c.code}</span>
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Step 4: Finish selector */}
-      {photoUrl && selectedColor && (
-        <div>
-          <p className="text-sm font-semibold text-stone-700 mb-2">Finish</p>
-          <div className="flex gap-2">
-            {FINISHES.map((f) => (
-              <button
-                key={f.key}
-                onClick={() => { setFinish(f.key); setConceptUrl(""); }}
-                className={`px-4 py-2 rounded-lg text-xs font-semibold border transition ${
-                  finish === f.key ? "bg-stone-950 text-white border-stone-950" : "bg-white text-stone-600 border-stone-200 hover:border-stone-400"
-                }`}
-              >
-                {f.label}
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Step 5: Generate */}
+      {/* Step 3: Press the button */}
       {photoUrl && selectedColor && (
         <div>
           <button
@@ -225,12 +180,12 @@ export default function FloorVisualizer({ onPhotoChange, onColorSelected, initia
               </>
             ) : (
               <>
-                <Sparkles className="h-5 w-5" /> Generate Floor Preview
+                <Sparkles className="h-5 w-5" /> Visualize My Floor
               </>
             )}
           </button>
           <p className="mt-2 text-xs text-stone-400 text-center">
-            AI-generated concept — actual results may vary. {mask ? `Mask coverage: ${mask.coverage}%` : ""}
+            AI-generated concept — actual results may vary.
           </p>
         </div>
       )}
@@ -242,7 +197,7 @@ export default function FloorVisualizer({ onPhotoChange, onColorSelected, initia
         </div>
       )}
 
-      {/* Step 6: Result — before/after compare */}
+      {/* Step 4: Result — before/after compare */}
       {conceptUrl && (
         <div>
           <div className="flex items-center gap-2 mb-3">
