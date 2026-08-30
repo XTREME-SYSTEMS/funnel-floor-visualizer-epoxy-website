@@ -50,8 +50,8 @@ for (const c of COLOR_DATA) {
 }
 
 // Representative swatch color per floor system — chosen for hue variety across the
-// system picker (gray, blue, orange, silver, red). Names must exist in that system's
-// COLOR_DATA chart; falls back to rank 1 if the name isn't found.
+// system picker (gray, blue, orange, silver, red). Uses ACTUAL manufacturer hex.
+// Names must exist in that system's COLOR_DATA chart; falls back to rank 1 if not found.
 const REPRESENTATIVE_COLOR_NAME: Record<string, string> = {
   'Flake Epoxy': 'Orbit',          // gray
   'Metallic Epoxy': 'Ocean Blue',  // blue
@@ -73,31 +73,30 @@ export function getSystemRepresentative(name: string): { name: string; hex: stri
   return match || records[0];
 }
 
-// Returns the brightened actual color-chart hex values for a floor system (full chart).
+// Returns the actual color-chart hex values for a floor system (full chart).
 export function getSystemColors(name: string): string[] {
   const key = SYSTEM_KEY_MAP[name];
   const colors = key ? colorsBySystem[key] : undefined;
   if (!colors?.length) {
-    // Fallback to FLOOR_SYSTEM_DATA subset
     const sys = FLOOR_SYSTEM_DATA.find(s => s.name === name);
     if (!sys || !sys.colors?.length) return ['#888888'];
-    return sys.colors.map(c => brighten(c.hex));
+    return sys.colors.map(c => c.hex);
   }
-  return colors.map(c => brighten(c.hex));
+  return colors.map(c => c.hex);
 }
 
-// Returns color records (name + brightened hex + code + image_url) for full chart display.
+// Returns color records (name + actual hex + code + image_url) for full chart display.
 export function getSystemColorRecords(name: string): { name: string; hex: string; code: string; image_url?: string }[] {
   const key = SYSTEM_KEY_MAP[name];
   const colors = key ? colorsBySystem[key] : undefined;
   if (!colors?.length) {
     const sys = FLOOR_SYSTEM_DATA.find(s => s.name === name);
     if (!sys || !sys.colors?.length) return [];
-    return sys.colors.map(c => ({ name: c.name, hex: brighten(c.hex), code: c.code }));
+    return sys.colors.map(c => ({ name: c.name, hex: c.hex, code: c.code }));
   }
   // Glitter product photos are round pucks — skip them so swatches render as squares
   // (consistent with every other system's square swatch).
-  return colors.map(c => ({ name: c.color_name, hex: brighten(c.hex), code: c.code, image_url: key === 'glitter' ? undefined : c.image_url }));
+  return colors.map(c => ({ name: c.color_name, hex: c.hex, code: c.code, image_url: key === 'glitter' ? undefined : c.image_url }));
 }
 
 // Representative multi-stop gradient built from the actual color chart.
