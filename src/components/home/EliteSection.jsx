@@ -145,7 +145,7 @@ export default function EliteSection() {
                 <img src={LOGO_URL} alt="XPS" className="h-7 w-7 object-contain" />
                 <span className="text-[11px] font-extrabold text-stone-900">Xtreme AI</span>
               </div>
-              <div className="h-8 px-2.5 rounded-lg flex items-center gap-1 text-[10px] font-bold" style={{ background: 'linear-gradient(180deg, #FFE25A 0%, #FFD700 45%, #C8A300 100%)', border: '2px solid #000', color: '#1a1a1a' }}>
+              <div className="h-8 px-2.5 rounded-lg flex items-center gap-1 text-[10px] font-bold" style={{ background: 'linear-gradient(180deg, #FFF6D5 0%, #D4AF37 45%, #8B6914 100%)', border: '2px solid #000', color: '#1a1a1a' }}>
                 <Award className="h-3 w-3" /> 1,250 pts
               </div>
             </div>
@@ -166,7 +166,7 @@ export default function EliteSection() {
                 <div className="grid grid-cols-4 gap-1.5">
                   {HOME_BUTTONS.map((b) => (
                     <div key={b.label} className="flex flex-col items-center gap-0.5">
-                      <div className="h-10 w-10 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(180deg, #FFE25A 0%, #FFD700 45%, #C8A300 100%)', border: '1.5px solid #000' }}>
+                      <div className="h-10 w-10 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(180deg, #FFF6D5 0%, #D4AF37 45%, #8B6914 100%)', border: '1.5px solid #000' }}>
                         <b.icon className="h-4 w-4 text-stone-900" strokeWidth={2} />
                       </div>
                       <span className="text-[7px] font-bold text-stone-700 text-center leading-tight">{b.label}</span>
@@ -185,7 +185,7 @@ export default function EliteSection() {
                   <div className="text-[10px] text-white font-bold">14 new leads today</div>
                   <div className="text-[8px] text-stone-400">3 hot · 6 warm · 5 cold</div>
                   <div className="mt-1.5 h-1.5 rounded-full bg-stone-700 overflow-hidden">
-                    <div className="h-full rounded-full" style={{ width: '68%', background: 'linear-gradient(90deg, #FFE25A, #FFD700)' }} />
+                    <div className="h-full rounded-full" style={{ width: '68%', background: 'linear-gradient(90deg, #FFF6D5, #D4AF37)' }} />
                   </div>
                 </div>
               </div>

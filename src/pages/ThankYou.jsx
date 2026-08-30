@@ -55,10 +55,10 @@ export default function ThankYou() {
               disabled={installing}
               className="w-full h-12 rounded-xl flex items-center justify-center gap-2 text-sm font-bold disabled:opacity-60 transition"
               style={{
-                background: "linear-gradient(180deg, #FFE25A 0%, #FFD700 45%, #C8A300 100%)",
+                background: "linear-gradient(180deg, #FFF6D5 0%, #D4AF37 45%, #8B6914 100%)",
                 border: "2px solid #000",
                 color: "#1a1a1a",
-                boxShadow: "0 4px 12px rgba(255,215,0,.4), inset 0 1px rgba(255,255,255,.4)",
+                boxShadow: "0 4px 12px rgba(212,175,55,.4), inset 0 1px rgba(255,255,255,.4)",
               }}
             >
               <DownloadIcon className="h-4 w-4" /> {installing ? "Installing..." : "Install on Home Screen"}

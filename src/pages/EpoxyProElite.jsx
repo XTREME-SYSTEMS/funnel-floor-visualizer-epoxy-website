@@ -91,7 +91,7 @@ export default function EpoxyProElite() {
                 onClick={() => handleToolClick(tool)}
                 className="flex flex-col items-center gap-1.5 group"
               >
-                <div className="h-14 w-14 rounded-2xl flex items-center justify-center transition group-hover:scale-105" style={{ background: "linear-gradient(180deg, #FFE25A 0%, #FFD700 45%, #C8A300 100%)", border: "2px solid #000", boxShadow: "0 4px 12px rgba(255,215,0,.3), inset 0 1px rgba(255,255,255,.4)" }}>
+                <div className="h-14 w-14 rounded-2xl flex items-center justify-center transition group-hover:scale-105" style={{ background: "linear-gradient(180deg, #FFF6D5 0%, #D4AF37 45%, #8B6914 100%)", border: "2px solid #000", boxShadow: "0 4px 12px rgba(212,175,55,.3), inset 0 1px rgba(255,255,255,.4)" }}>
                   <Icon className="h-6 w-6 text-stone-900" strokeWidth={2} />
                 </div>
                 <span className="text-[11px] font-bold text-stone-700 text-center leading-tight">{tool.name}</span>
@@ -118,7 +118,7 @@ export default function EpoxyProElite() {
           </div>
         </div>
         <div className="mt-3 h-2 rounded-full bg-stone-800 overflow-hidden">
-          <div className="h-full rounded-full" style={{ width: "68%", background: "linear-gradient(90deg, #FFE25A, #FFD700)" }} />
+          <div className="h-full rounded-full" style={{ width: "68%", background: "linear-gradient(90deg, #FFF6D5, #D4AF37)" }} />
         </div>
       </div>
 
@@ -133,7 +133,7 @@ export default function EpoxyProElite() {
         </div>
         <div className="text-xs text-stone-500">2,400 sqft · 3-car garage · Metallic system</div>
         <div className="text-lg font-extrabold text-stone-900 mt-1">$8,400 – $9,600</div>
-        <button className="mt-3 w-full h-10 rounded-xl flex items-center justify-center gap-2 text-sm font-bold" style={{ background: "linear-gradient(180deg, #FFE25A 0%, #FFD700 45%, #C8A300 100%)", border: "2px solid #000", color: "#1a1a1a" }}>
+        <button className="mt-3 w-full h-10 rounded-xl flex items-center justify-center gap-2 text-sm font-bold" style={{ background: "linear-gradient(180deg, #FFF6D5 0%, #D4AF37 45%, #8B6914 100%)", border: "2px solid #000", color: "#1a1a1a" }}>
           <Zap className="h-4 w-4" /> Generate New Bid <ArrowRight className="h-4 w-4" />
         </button>
       </div>
@@ -215,7 +215,7 @@ export default function EpoxyProElite() {
 
       {/* CTA */}
       {!user?.plan && (
-        <Link to="/download?edition=contractor" className="w-full h-12 rounded-xl flex items-center justify-center gap-2 text-sm font-bold mb-6" style={{ background: "linear-gradient(180deg, #FFE25A 0%, #FFD700 45%, #C8A300 100%)", border: "2px solid #000", color: "#1a1a1a", boxShadow: "0 4px 12px rgba(255,215,0,.4), inset 0 1px rgba(255,255,255,.4)" }}>
+        <Link to="/download?edition=contractor" className="w-full h-12 rounded-xl flex items-center justify-center gap-2 text-sm font-bold mb-6" style={{ background: "linear-gradient(180deg, #FFF6D5 0%, #D4AF37 45%, #8B6914 100%)", border: "2px solid #000", color: "#1a1a1a", boxShadow: "0 4px 12px rgba(212,175,55,.4), inset 0 1px rgba(255,255,255,.4)" }}>
           <Sparkles className="h-4 w-4" /> Activate My Elite Account <ArrowRight className="h-4 w-4" />
         </Link>
       )}
