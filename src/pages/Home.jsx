@@ -9,7 +9,6 @@ import FlakeShowcase from "@/components/home/FlakeShowcase";
 import FloorTypeGallery from "@/components/home/FloorTypeGallery";
 import ApplicationSpaces from "@/components/home/ApplicationSpaces";
 import MobileSection from "@/components/home/MobileSection";
-import EliteSection from "@/components/home/EliteSection";
 import Gallery from "@/components/home/Gallery";
 import WhoWeAre from "@/components/home/WhoWeAre";
 import FAQ from "@/components/home/FAQ";
@@ -36,7 +35,6 @@ export default function Home() {
       <ApplicationSpaces />
       <FlakeShowcase />
       <MobileSection />
-      <EliteSection />
       <WhoWeAre settings={settings} />
       <Gallery items={settings.gallery} />
       <FAQ />
