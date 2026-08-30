@@ -133,7 +133,7 @@ export default function WhoWeAre({ settings }) {
         {/* Sales Pros team — 3-image banner: Sales Manager | Team | Robert */}
         <div className="mt-16 rounded-3xl border border-stone-200 overflow-hidden bg-white shadow-sm">
           <div className="bg-stone-950 grid grid-cols-3 items-stretch">
-            <div className="h-44 sm:h-56 md:h-80 bg-stone-950">
+            <div className="h-44 sm:h-56 md:h-80 bg-stone-950 overflow-hidden">
               <Image
                 src={SALES_MANAGER_IMG}
                 alt="Xtreme Polishing Systems Sales Manager holding FlexQuartz epoxy coating buckets in the Pompano Beach warehouse"
@@ -141,6 +141,7 @@ export default function WhoWeAre({ settings }) {
                 focalPointX={0.5}
                 focalPointY={0.5}
                 className="h-full w-full"
+                style={{ transform: 'translateY(4in)' }}
               />
             </div>
             <div className="h-44 sm:h-56 md:h-80 bg-stone-950 flex items-center justify-center">
@@ -151,7 +152,7 @@ export default function WhoWeAre({ settings }) {
                 className="h-full w-full"
               />
             </div>
-            <div className="h-44 sm:h-56 md:h-80 bg-stone-950">
+            <div className="h-44 sm:h-56 md:h-80 bg-stone-950 overflow-hidden">
               <Image
                 src={ROBERT_PCU_IMG}
                 alt="Robert, Polished Concrete University master trainer with 10 years at Xtreme Polishing Systems, teaching Stardek coating skills"
@@ -159,6 +160,7 @@ export default function WhoWeAre({ settings }) {
                 focalPointX={0.5}
                 focalPointY={0.5}
                 className="h-full w-full"
+                style={{ transform: 'translateY(0.75in)' }}
               />
             </div>
           </div>
