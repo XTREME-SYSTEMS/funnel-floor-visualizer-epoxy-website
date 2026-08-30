@@ -135,8 +135,8 @@ export default function WhoWeAre({ settings }) {
 
         {/* Sales Pros team — 3-image banner: Equipment | Rockstar Team | Floor Finish */}
         <div className="mt-16 rounded-3xl border border-stone-200 overflow-hidden bg-white shadow-sm">
-          <div className="grid grid-cols-1 sm:grid-cols-3">
-            <div className="h-64 sm:h-80 md:h-96">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
+            <div className="h-44 sm:h-56 sm:flex-1">
               <Image
                 src={EQUIPMENT_IMG}
                 alt="Industrial-grade floor polishing equipment and dust collection system at the Xtreme Polishing Systems showroom"
@@ -146,17 +146,17 @@ export default function WhoWeAre({ settings }) {
                 className="h-full w-full"
               />
             </div>
-            <div className="h-64 sm:h-80 md:h-96">
+            <div className="h-48 sm:h-80 sm:flex-[2.5]">
               <Image
                 src={ROCKSTAR_TEAM_IMG}
                 alt="Xtreme Polishing Systems rockstar sales pros team with industrial floor polishing equipment — Xtreme Projects Need Xtreme Solutions"
                 fittingType="fill"
-                focalPointX={0.5}
+                focalPointX={0.65}
                 focalPointY={0.5}
                 className="h-full w-full"
               />
             </div>
-            <div className="h-64 sm:h-80 md:h-96">
+            <div className="h-44 sm:h-56 sm:flex-1">
               <Image
                 src={FLOOR_FINISH_IMG}
                 alt="High-gloss metallic epoxy polished concrete floor finish by Xtreme Polishing Systems"
