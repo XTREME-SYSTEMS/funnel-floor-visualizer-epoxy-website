@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { X, ChevronLeft, ChevronRight, Check } from "lucide-react";
-import { compositeFloorImage } from "@/lib/floorComposite";
+import { base44 } from "@/api/base44Client";
 import ESignCard from "./ESignCard";
 import PhotoUploader from "./PhotoUploader";
 import ColorChartPicker from "./ColorChartPicker";
@@ -37,10 +37,17 @@ export default function VisionWorkflow({ onClose }) {
     setGenerating(true);
     setComposites([]);
     try {
-      const results = await Promise.all(photos.map((p) => compositeFloorImage(p.url, selectedColor)));
+      const results = await Promise.all(photos.map(async (p) => {
+        const res = await base44.integrations.Core.GenerateImage({
+          prompt: `Photorealistic interior of the same space, but the concrete floor has been resurfaced with a ${selectedColor.color_name} ${selectedColor.system || "flake"} epoxy floor coating. The floor color is ${selectedColor.hex} (${selectedColor.color_name}, color code ${selectedColor.code}). The finish is ${sheen}. Keep the walls, ceiling, and all objects identical to the original photo. Only the floor surface changes — it now has a smooth, professional epoxy coating in ${selectedColor.color_name}.`,
+          existing_image_urls: [p.url],
+        });
+        return res?.url || p.url;
+      }));
       setComposites(results);
     } catch (err) {
       console.error(err);
+      setComposites(photos.map((p) => p.url));
     }
     setGenerating(false);
   };

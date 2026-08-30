@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Upload, Loader2, Save, Trash2, X, Sparkles } from "lucide-react";
 import { base44 } from "@/api/base44Client";
-import { compositeFloorImage } from "@/lib/floorComposite";
 import { COLOR_DATA } from "@/lib/colorData";
 import { Image } from "@/components/ui/image";
 import BeforeAfter from "@/components/funnel/BeforeAfter";
@@ -35,10 +34,13 @@ export default function AppVisualizer({ appData }) {
       setProcessing(true);
       setAfterUrl("");
       try {
-        const url = await compositeFloorImage(photoUrl, { hex: selectedColor.hex, system });
-        if (!cancelled) setAfterUrl(url);
+        const res = await base44.integrations.Core.GenerateImage({
+          prompt: `Photorealistic interior of the same garage, but the concrete floor has been resurfaced with a ${selectedColor.color_name} ${system} epoxy floor coating. The floor color is ${selectedColor.hex} (${selectedColor.color_name}, color code ${selectedColor.code}). The finish is high gloss. Keep the walls, ceiling, garage door, and all objects identical to the original photo. Only the floor surface changes — it now has a smooth, professional epoxy coating in ${selectedColor.color_name}.`,
+          existing_image_urls: [photoUrl],
+        });
+        if (!cancelled) setAfterUrl(res?.url || photoUrl);
       } catch {
-        if (!cancelled) setAfterUrl("");
+        if (!cancelled) setAfterUrl(photoUrl);
       } finally {
         if (!cancelled) setProcessing(false);
       }
@@ -82,10 +84,13 @@ export default function AppVisualizer({ appData }) {
     setViewing(floor);
     setProcessing(true);
     try {
-      const url = await compositeFloorImage(floor.photoUrl, { hex: floor.colorHex, system: floor.system });
-      setAfterUrl(url);
+      const res = await base44.integrations.Core.GenerateImage({
+        prompt: `Photorealistic interior of the same garage, but the concrete floor has been resurfaced with a ${floor.colorName} ${floor.system} epoxy floor coating. The floor color is ${floor.colorHex} (${floor.colorName}). The finish is high gloss. Keep the walls, ceiling, garage door, and all objects identical to the original photo. Only the floor surface changes — it now has a smooth, professional epoxy coating in ${floor.colorName}.`,
+        existing_image_urls: [floor.photoUrl],
+      });
+      setAfterUrl(res?.url || floor.photoUrl);
     } catch {
-      setAfterUrl("");
+      setAfterUrl(floor.photoUrl);
     } finally {
       setProcessing(false);
     }
