@@ -57,23 +57,26 @@ function darken(c, t) { return mix(c, { r: 0, g: 0, b: 0 }, t); }
 
 // ── Procedural flake texture ──────────────────────────────────────────────
 // Draws hundreds of small colored flakes in variations of the base hex,
-// simulating a vinyl-chip epoxy flake floor. The flake palette is derived
-// from the exact color chart hex: base, lightened, very light, darkened,
-// white, and dark gray — matching how real flake blends look.
+// simulating a vinyl-chip epoxy flake floor. The flake palette is WEIGHTED
+// so the selected color and its shades dominate (~78%); white and gray
+// accents are kept to ~22% — matching real flake blend proportions so the
+// floor reads as the EXACT selected color, not a washed-out gray.
 function drawFlakes(ctx, x, y, w, h, baseHex) {
   const base = hexToRgb(baseHex);
+  // Weighted palette: base + its shades appear far more often than accents
   const palette = [
-    base,
-    lighten(base, 0.3),
-    lighten(base, 0.6),
-    darken(base, 0.2),
-    { r: 240, g: 240, b: 240 },
-    { r: 65, g: 65, b: 65 },
+    { c: base,                  w: 3 },  // exact color — most common
+    { c: lighten(base, 0.25),   w: 2 },  // lighter shade
+    { c: darken(base, 0.18),    w: 2 },  // darker shade
+    { c: lighten(base, 0.5),    w: 1 },  // very light highlight
+    { c: { r: 235, g: 235, b: 235 }, w: 1 },  // white accent (rare)
+    { c: { r: 70, g: 70, b: 70 },     w: 1 },  // dark gray accent (rare)
   ];
+  const totalWeight = palette.reduce((s, p) => s + p.w, 0);
 
-  // Base epoxy fill — slightly darkened for depth under the flakes
-  const db = darken(base, 0.06);
-  ctx.fillStyle = rgba(db.r, db.g, db.b, 0.93);
+  // Base epoxy fill — the EXACT selected hex (no darkening) so the floor
+  // reads as the chosen color even where flakes are sparse
+  ctx.fillStyle = rgba(base.r, base.g, base.b, 0.97);
   ctx.fillRect(x, y, w, h);
 
   // Scale flake size to image resolution so flakes look consistent
@@ -84,8 +87,14 @@ function drawFlakes(ctx, x, y, w, h, baseHex) {
     const fx = x + Math.random() * w;
     const fy = y + Math.random() * h;
     const fs = (2 + Math.random() * 5) * scale;
-    const c = palette[Math.floor(Math.random() * palette.length)];
-    const a = 0.5 + Math.random() * 0.5;
+    // Weighted random pick
+    let r = Math.random() * totalWeight;
+    let c = base;
+    for (const p of palette) {
+      r -= p.w;
+      if (r <= 0) { c = p.c; break; }
+    }
+    const a = 0.55 + Math.random() * 0.45;
     ctx.fillStyle = rgba(c.r, c.g, c.b, a);
     ctx.fillRect(fx, fy, fs, fs);
   }
@@ -93,11 +102,11 @@ function drawFlakes(ctx, x, y, w, h, baseHex) {
 
 // ── Procedural metallic texture ───────────────────────────────────────────
 // Smooth radial gradients in lighter/darker variations create the swirled,
-// reflective look of a metallic epoxy floor.
+// reflective look of a metallic epoxy floor. Base fill uses the EXACT hex.
 function drawMetallic(ctx, x, y, w, h, baseHex) {
   const base = hexToRgb(baseHex);
 
-  ctx.fillStyle = rgba(base.r, base.g, base.b, 0.93);
+  ctx.fillStyle = rgba(base.r, base.g, base.b, 0.97);
   ctx.fillRect(x, y, w, h);
 
   const scale = Math.max(w / 1200, 0.8);
@@ -131,9 +140,10 @@ function drawMetallic(ctx, x, y, w, h, baseHex) {
 }
 
 // ── Solid color ───────────────────────────────────────────────────────────
+// Uses the EXACT selected hex at high opacity for accurate color reproduction.
 function drawSolid(ctx, x, y, w, h, baseHex) {
   const base = hexToRgb(baseHex);
-  ctx.fillStyle = rgba(base.r, base.g, base.b, 0.93);
+  ctx.fillStyle = rgba(base.r, base.g, base.b, 0.97);
   ctx.fillRect(x, y, w, h);
 }
 
@@ -215,8 +225,10 @@ export async function compositeFloorImage(photoUrl, color, sheen = "gloss") {
   octx.fillStyle = "rgba(0,0,0,1)";
   octx.fillRect(0, floorTop + fadeH, w, floorH - fadeH);
 
-  // Composite the textured floor onto the exact original photo
-  ctx.globalAlpha = 0.88;
+  // Composite the textured floor onto the exact original photo.
+  // 0.93 opacity — the selected color dominates while a small amount of the
+  // original floor texture shows through for realistic blending.
+  ctx.globalAlpha = 0.93;
   ctx.drawImage(overlay, 0, 0);
   ctx.globalAlpha = 1;
 
