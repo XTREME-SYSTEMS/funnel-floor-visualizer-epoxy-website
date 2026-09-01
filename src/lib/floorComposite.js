@@ -45,6 +45,18 @@ function hexToRgb(hex) {
   return { r: parseInt(m[1], 16), g: parseInt(m[2], 16), b: parseInt(m[3], 16) };
 }
 
+// Normalize the system identifier to a canonical key the composite understands.
+// Handles all formats: "flake", "flake-epoxy", "Flake Epoxy", "metallic-epoxy", etc.
+function normalizeSystem(system) {
+  const s = (system || "flake").toLowerCase();
+  if (s.startsWith("metallic")) return "metallic";
+  if (s.startsWith("flake")) return "flake";
+  if (s.startsWith("quartz")) return "quartz";
+  if (s.startsWith("glitter")) return "glitter";
+  if (s.startsWith("solid") || s.includes("dye") || s.includes("stain") || s.includes("sealed") || s.includes("polyaspartic")) return "solid";
+  return "flake"; // default — most epoxy systems use a flake-style texture
+}
+
 function rgba(r, g, b, a) {
   return `rgba(${Math.round(r)},${Math.round(g)},${Math.round(b)},${a})`;
 }
@@ -183,8 +195,9 @@ export async function compositeFloorImage(photoUrl, color, sheen = "gloss") {
   octx.closePath();
   octx.clip();
 
-  // Draw the procedural texture based on the finish system
-  const system = color.system || "flake";
+  // Draw the procedural texture based on the finish system.
+  // normalizeSystem handles all slug formats (e.g. "flake-epoxy" → "flake").
+  const system = normalizeSystem(color.system);
   const baseHex = color.hex || "#777777";
 
   if (system === "metallic") {

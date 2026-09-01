@@ -58,20 +58,24 @@ export default function FloorVisualizer({ onPhotoChange, onColorSelected, initia
   const onFileChange = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
+
+    // Always create a data URL for the composite — same-origin, so the
+    // canvas is never tainted and toDataURL always works.
+    const dataUrl = await new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.readAsDataURL(file);
+    });
+    setPhotoUrl(dataUrl);
+    setConceptUrl("");
+
+    // Upload for storage separately (non-blocking) so the Funnel/Lead has
+    // a permanent URL. If it fails, fall back to the data URL.
     try {
       const { file_url } = await base44.integrations.Core.UploadFile({ file });
-      setPhotoUrl(file_url);
-      setConceptUrl("");
       onPhotoChange?.(file_url);
-    } catch (err) {
-      // Fallback: use base64 data URL for preview only
-      const reader = new FileReader();
-      reader.onload = () => {
-        setPhotoUrl(reader.result);
-        setConceptUrl("");
-        onPhotoChange?.(reader.result);
-      };
-      reader.readAsDataURL(file);
+    } catch {
+      onPhotoChange?.(dataUrl);
     }
   };
 
@@ -81,15 +85,15 @@ export default function FloorVisualizer({ onPhotoChange, onColorSelected, initia
     setError("");
     setConceptUrl("");
     try {
-      const systemSlug = FLOOR_SYSTEM_DATA.find((s) => s.name === systemName)?.slug || "flake";
+      // Pass systemName directly — compositeFloorImage normalizes it
       const dataUrl = await compositeFloorImage(photoUrl, {
         hex: selectedColor.hex,
-        system: systemSlug,
+        system: systemName,
       }, finish);
       setConceptUrl(dataUrl);
     } catch (err) {
-      setError("Could not generate preview. Please try again.");
-      console.error(err);
+      setError(`Could not generate preview: ${err?.message || "Unknown error"}`);
+      console.error("[FloorVisualizer] composite failed:", err);
     }
     setGenerating(false);
   };
