@@ -49,6 +49,7 @@ import ThankYou from '@/pages/ThankYou';
 import Questionnaire from '@/pages/Questionnaire';
 import AppSettings from '@/pages/AppSettings';
 import ToolManager from '@/pages/admin/ToolManager';
+import VisualizerTest from '@/pages/VisualizerTest';
 
 
 const AuthenticatedApp = () => {
@@ -115,6 +116,7 @@ const AuthenticatedApp = () => {
       </Route>
       <Route path="/:state/:citySlug" element={<LocationSeoPage />} />
       <Route path="/:slug" element={<GeneratedPageView />} />
+      <Route path="/visualizer-test" element={<VisualizerTest />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );

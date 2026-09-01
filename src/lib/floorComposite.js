@@ -227,16 +227,18 @@ export async function compositeFloorImage(photoUrl, color, sheen = "gloss") {
 
   octx.restore();
 
-  // Gradient alpha mask at the top edge for a smooth wall-to-floor transition
-  octx.globalCompositeOperation = "destination-in";
+  // Gradient alpha mask at the top edge for a smooth wall-to-floor transition.
+  // destination-out ERASES pixels where the source is opaque — so a gradient
+  // from opaque (top) to transparent (bottom) creates a fade while leaving
+  // the rest of the texture fully intact. (destination-in with two fillRects
+  // would erase everything — each rect wipes content outside its own region.)
+  octx.globalCompositeOperation = "destination-out";
   const fadeH = h * 0.10;
   const mask = octx.createLinearGradient(0, floorTop, 0, floorTop + fadeH);
-  mask.addColorStop(0, "rgba(0,0,0,0)");
-  mask.addColorStop(1, "rgba(0,0,0,1)");
+  mask.addColorStop(0, "rgba(0,0,0,1)");   // fully erase at top edge
+  mask.addColorStop(1, "rgba(0,0,0,0)");   // no erasure below fade zone
   octx.fillStyle = mask;
   octx.fillRect(0, floorTop, w, fadeH);
-  octx.fillStyle = "rgba(0,0,0,1)";
-  octx.fillRect(0, floorTop + fadeH, w, floorH - fadeH);
 
   // Composite the textured floor onto the exact original photo.
   // 0.93 opacity — the selected color dominates while a small amount of the
