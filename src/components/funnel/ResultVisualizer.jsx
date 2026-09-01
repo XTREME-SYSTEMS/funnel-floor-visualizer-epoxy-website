@@ -1,8 +1,14 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Loader2, MoveHorizontal } from "lucide-react";
 import { compositeFloorImage } from "@/lib/floorComposite";
+import { FLOOR_SYSTEM_DATA } from "@/data/colorData";
 
 const FALLBACK_BEFORE = "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/2fa2f386d_generated_image.png";
+
+// Map system display name to the slug the composite function expects
+function systemNameToSlug(name) {
+  return FLOOR_SYSTEM_DATA.find((s) => s.name === name)?.slug || "flake";
+}
 
 // Canvas-based result visualizer — composites the EXACT uploaded photo with
 // a procedural texture generated from the exact color chart hex value.
@@ -28,7 +34,7 @@ export default function ResultVisualizer({ photoUrl, color, onAfterReady }) {
       try {
         const dataUrl = await compositeFloorImage(photoUrl, {
           hex: color.hex,
-          system: color.system || "flake",
+          system: systemNameToSlug(color.system),
         }, "gloss");
         if (!cancelled) {
           setAfterUrl(dataUrl);

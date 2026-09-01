@@ -1,89 +1,53 @@
-import React, { useState, useMemo } from "react";
-import { Loader2, Sparkles, AlertCircle } from "lucide-react";
-import { getSystemColorRecords } from "@/lib/floorColors";
+import React, { useState, useMemo, useRef } from "react";
+import { Loader2, Sparkles, AlertCircle, Upload, Wand2 } from "lucide-react";
+import { getSystemColorRecords, getSystemRepresentative } from "@/lib/floorColors";
 import { FLOOR_SYSTEM_DATA } from "@/data/colorData";
 import { compositeFloorImage } from "@/lib/floorComposite";
-import PhotoUpload from "@/components/visualizer/PhotoUpload";
+import { base44 } from "@/api/base44Client";
 import Disclosure from "@/components/vq/Disclosure";
 import { AI_DISCLOSURE } from "@/lib/brand";
 
-const SYSTEMS = FLOOR_SYSTEM_DATA.map((s) => ({ name: s.name, slug: s.slug }));
+// Systems available in the visualizer (excludes Joint Fill & Repair — not a finish)
+const SYSTEMS = FLOOR_SYSTEM_DATA
+  .filter((s) => s.name !== "Joint Fill & Repair")
+  .map((s) => ({ name: s.name, slug: s.slug }));
 
-const SHEEN_OPTIONS = [
-  { key: "matte", label: "Matte", desc: "Flat, no reflection — soft non-reflective finish", img: "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/a17c942a3_generated_image.png" },
-  { key: "satin", label: "Satin", desc: "Subtle soft sheen with low reflection", img: "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/382c09329_generated_image.png" },
-  { key: "gloss", label: "Gloss", desc: "High-gloss wet-look with sharp mirror-like reflections", img: "https://media.base44.com/images/public/6a77f4491f0bf92de9a3ed8b/e6eb3dffc_generated_image.png" },
+const FINISHES = [
+  { key: "matte", label: "Matte", desc: "Flat, no reflection — soft non-reflective finish" },
+  { key: "satin", label: "Satin", desc: "Subtle soft sheen with low reflection" },
+  { key: "gloss", label: "High Gloss", desc: "High-gloss wet-look with sharp mirror-like reflections" },
 ];
 
-// Build a VIVID color description from a hex so the image model applies the
-// EXACT color. Uses real-world object comparisons the AI can reliably reproduce.
-function hexToColorDesc(hex) {
-  if (!hex) return "";
-  const h = hex.replace("#", "");
-  const r = parseInt(h.slice(0, 2), 16);
-  const g = parseInt(h.slice(2, 4), 16);
-  const b = parseInt(h.slice(4, 6), 16);
-  const max = Math.max(r, g, b);
-  const min = Math.min(r, g, b);
-  const lum = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-  const sat = max === 0 ? 0 : (max - min) / max;
-
-  // Determine hue family with vivid real-world comparisons
-  let hueName = "";
-  let vividDesc = "";
-
-  if (sat < 0.12) {
-    // Grayscale
-    if (lum > 0.85) { hueName = "white"; vividDesc = "pure white, like fresh snow"; }
-    else if (lum > 0.65) { hueName = "light gray"; vividDesc = "light gray, like concrete sidewalk"; }
-    else if (lum > 0.35) { hueName = "medium gray"; vividDesc = "medium gray, like pebbles"; }
-    else if (lum > 0.15) { hueName = "dark gray"; vividDesc = "dark gray, like asphalt"; }
-    else { hueName = "black"; vividDesc = "black, like coal"; }
-  } else if (b >= r && b >= g) {
-    // Blue family
-    if (r > g) { hueName = "purple"; vividDesc = lum > 0.5 ? "light purple, like lavender" : "deep purple, like eggplant"; }
-    else if (lum > 0.6) { hueName = "light blue"; vividDesc = "light blue, like a clear sky"; }
-    else if (lum > 0.35) { hueName = "blue"; vividDesc = "ocean blue, like deep ocean water"; }
-    else { hueName = "dark blue"; vividDesc = "navy blue, like a dark navy suit"; }
-  } else if (g >= r && g >= b) {
-    // Green family
-    if (r > b) { hueName = "yellow-green"; vividDesc = lum > 0.6 ? "lime green, like a lime" : "olive green, like olive oil"; }
-    else if (lum > 0.5) { hueName = "light green"; vividDesc = "light green, like fresh grass"; }
-    else { hueName = "dark green"; vividDesc = "forest green, like pine trees"; }
-  } else if (r >= g && r >= b) {
-    // Red/orange/brown family
-    if (b > g) { hueName = "magenta"; vividDesc = "pink/magenta, like a pink flower"; }
-    else if (lum > 0.6 && g > b * 0.8) { hueName = "tan"; vividDesc = "tan/beige, like sand"; }
-    else if (lum > 0.5 && g > b * 0.7) { hueName = "brown"; vividDesc = "warm brown, like chocolate"; }
-    else if (lum > 0.45) { hueName = "orange"; vividDesc = "orange, like a traffic cone"; }
-    else if (lum > 0.3) { hueName = "red-brown"; vividDesc = "dark red-brown, like rust"; }
-    else { hueName = "dark red"; vividDesc = "deep red, like wine"; }
-  }
-
-  return `${vividDesc} (${hueName}, hex ${hex.toUpperCase()}, RGB ${r},${g},${b})`;
-}
-
-function sheenDesc(key) {
-  if (key === "matte") return "a flat matte finish with no reflections and a soft, non-reflective surface";
-  if (key === "satin") return "a satin finish with a subtle soft sheen and low, diffuse reflection";
-  return "a high-gloss wet-look finish with sharp mirror-like reflections and deep clarity";
-}
-
 // Visualizer flow from the xtremevisualizer4 package:
-// 1. Pick a color from the color chart
-// 2. Upload a photo of your floor
-// 3. Press the button
-// 4. See your floor with that color applied
+// 1. Pick a floor system
+// 2. Pick a color from the system's exact color chart
+// 3. Pick a finish (Matte / Satin / High Gloss)
+// 4. Upload a photo of the floor
+// 5. Press "Visualize My Floor" — the system composites the exact color chart
+//    color onto the uploaded photo using canvas-based procedural rendering.
+//    This guarantees the EXACT color (no AI guessing).
 export default function FloorVisualizer({ onPhotoChange, onColorSelected, initialPhoto, initialColor }) {
-  const [systemName, setSystemName] = useState(initialColor?.system || "Flake Epoxy");
-  const [photoUrls, setPhotoUrls] = useState(initialPhoto ? [initialPhoto] : []);
-  const [selectedColor, setSelectedColor] = useState(initialColor || null);
-  const [sheen, setSheen] = useState("gloss");
+  // Normalize initialColor: Funnel passes { code, color_name, hex, system }
+  // but color records use { name, hex, code, image_url }
+  const normalizedInitial = initialColor
+    ? { ...initialColor, name: initialColor.name || initialColor.color_name }
+    : null;
+  const [systemName, setSystemName] = useState(normalizedInitial?.system || "Flake Epoxy");
+  const [photoUrl, setPhotoUrl] = useState(initialPhoto || "");
+  const [selectedColor, setSelectedColor] = useState(normalizedInitial);
+  const [finish, setFinish] = useState("gloss");
   const [generating, setGenerating] = useState(false);
   const [conceptUrl, setConceptUrl] = useState("");
   const [error, setError] = useState("");
+  const fileInputRef = useRef(null);
 
   const colorRecords = useMemo(() => getSystemColorRecords(systemName), [systemName]);
+
+  const pickSystem = (name) => {
+    setSystemName(name);
+    setSelectedColor(null);
+    setConceptUrl("");
+  };
 
   const pickColor = (c) => {
     setSelectedColor(c);
@@ -91,23 +55,37 @@ export default function FloorVisualizer({ onPhotoChange, onColorSelected, initia
     onColorSelected?.({ code: c.code, color_name: c.name, hex: c.hex, system: systemName });
   };
 
-  const handleUploaded = (urls) => {
-    setPhotoUrls(urls);
-    setConceptUrl("");
-    onPhotoChange?.(urls[0] || "");
+  const onFileChange = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    try {
+      const { file_url } = await base44.integrations.Core.UploadFile({ file });
+      setPhotoUrl(file_url);
+      setConceptUrl("");
+      onPhotoChange?.(file_url);
+    } catch (err) {
+      // Fallback: use base64 data URL for preview only
+      const reader = new FileReader();
+      reader.onload = () => {
+        setPhotoUrl(reader.result);
+        setConceptUrl("");
+        onPhotoChange?.(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const generate = async () => {
-    if (!photoUrls.length || !selectedColor) return;
+    if (!photoUrl || !selectedColor) return;
     setGenerating(true);
     setError("");
     setConceptUrl("");
     try {
-      const systemKey = FLOOR_SYSTEM_DATA.find((s) => s.name === systemName)?.slug || "flake";
-      const dataUrl = await compositeFloorImage(photoUrls[0], {
+      const systemSlug = FLOOR_SYSTEM_DATA.find((s) => s.name === systemName)?.slug || "flake";
+      const dataUrl = await compositeFloorImage(photoUrl, {
         hex: selectedColor.hex,
-        system: systemKey,
-      }, sheen);
+        system: systemSlug,
+      }, finish);
       setConceptUrl(dataUrl);
     } catch (err) {
       setError("Could not generate preview. Please try again.");
@@ -118,24 +96,41 @@ export default function FloorVisualizer({ onPhotoChange, onColorSelected, initia
 
   return (
     <div className="space-y-6">
-      {/* Step 1: Pick a color from the color chart */}
+      {/* Step 1: Choose floor system */}
       <div>
-        <h4 className="font-semibold text-stone-900 mb-3">1. Choose your color</h4>
-        <div className="flex flex-wrap gap-2 mb-3">
-          {SYSTEMS.map((s) => (
-            <button
-              key={s.slug}
-              onClick={() => { setSystemName(s.name); setSelectedColor(null); setConceptUrl(""); }}
-              className={`px-3 py-1.5 rounded-full text-xs font-semibold transition ${
-                systemName === s.name ? "bg-stone-950 text-white" : "bg-white text-stone-600 border border-stone-200"
-              }`}
-            >
-              {s.name}
-            </button>
-          ))}
+        <h4 className="font-semibold text-stone-900 mb-3">1. Choose your floor system</h4>
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+          {SYSTEMS.map((s) => {
+            const rep = getSystemRepresentative(s.name);
+            return (
+              <button
+                key={s.slug}
+                onClick={() => pickSystem(s.name)}
+                className={`flex flex-col gap-2 p-3 rounded-xl border transition text-left ${
+                  systemName === s.name
+                    ? "border-amber-500 bg-amber-50"
+                    : "border-stone-200 bg-white hover:border-stone-300"
+                }`}
+              >
+                <div className="h-10 rounded-lg overflow-hidden border border-stone-200 flex">
+                  {rep?.image_url ? (
+                    <img src={rep.image_url} alt={rep.name} loading="lazy" className="w-full h-full object-cover" />
+                  ) : (
+                    <span className="w-full" style={{ background: rep?.hex || "#888" }} />
+                  )}
+                </div>
+                <span className="text-xs font-bold text-stone-800 truncate">{s.name}</span>
+              </button>
+            );
+          })}
         </div>
+      </div>
 
-        <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 max-h-56 overflow-y-auto pr-1">
+      {/* Step 2: Choose color from the system's exact color chart */}
+      <div>
+        <h4 className="font-semibold text-stone-900 mb-1">{systemName} color chart</h4>
+        <p className="text-xs text-stone-500 mb-3">These are the exact manufacturer colors — what you pick is what you get.</p>
+        <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 max-h-64 overflow-y-auto pr-1">
           {colorRecords.map((c) => (
             <button
               key={c.code}
@@ -158,41 +153,55 @@ export default function FloorVisualizer({ onPhotoChange, onColorSelected, initia
         </div>
       </div>
 
-      {/* Step 2: Choose your sheen */}
+      {/* Step 3: Choose finish */}
       <div>
-        <h4 className="font-semibold text-stone-900 mb-3">2. Choose your sheen</h4>
+        <h4 className="font-semibold text-stone-900 mb-3">3. Choose your finish</h4>
         <div className="grid grid-cols-3 gap-2">
-          {SHEEN_OPTIONS.map((s) => (
+          {FINISHES.map((f) => (
             <button
-              key={s.key}
-              onClick={() => { setSheen(s.key); setConceptUrl(""); }}
+              key={f.key}
+              onClick={() => { setFinish(f.key); setConceptUrl(""); }}
               className={`flex flex-col items-center gap-1 p-3 rounded-xl border transition ${
-                sheen === s.key
+                finish === f.key
                   ? "border-amber-500 bg-amber-50"
                   : "border-stone-200 bg-white hover:border-stone-300"
               }`}
             >
-              <img
-                src={s.img}
-                alt={s.label}
-                loading="lazy"
-                className={`w-full h-14 object-cover rounded-lg ${sheen === s.key ? "ring-2 ring-amber-500" : ""}`}
-              />
-              <span className="text-xs font-bold text-stone-800">{s.label}</span>
+              <span className="text-xs font-bold text-stone-800">{f.label}</span>
             </button>
           ))}
         </div>
-        <p className="mt-2 text-xs text-stone-500">{SHEEN_OPTIONS.find((s) => s.key === sheen)?.desc}</p>
+        <p className="mt-2 text-xs text-stone-500">{FINISHES.find((f) => f.key === finish)?.desc}</p>
       </div>
 
-      {/* Step 3: Upload your floor photo */}
+      {/* Step 4: Upload a photo of the floor */}
       <div>
-        <h4 className="font-semibold text-stone-900 mb-3">3. Upload a photo of your floor</h4>
-        <PhotoUpload photoUrls={photoUrls} onUploaded={handleUploaded} />
+        <h4 className="font-semibold text-stone-900 mb-3">4. Upload a photo of your floor</h4>
+        <div
+          onClick={() => fileInputRef.current?.click()}
+          className="relative rounded-xl border-2 border-dashed border-stone-300 hover:border-amber-500 transition cursor-pointer p-6 flex flex-col items-center gap-2 bg-stone-50"
+        >
+          {photoUrl ? (
+            <img src={photoUrl} alt="Your floor" className="max-h-40 rounded-lg" />
+          ) : (
+            <>
+              <Upload className="h-8 w-8 text-stone-400" />
+              <span className="text-sm font-medium text-stone-600">Tap to upload a photo</span>
+              <span className="text-xs text-stone-400">Garage, basement, patio — any concrete floor</span>
+            </>
+          )}
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            onChange={onFileChange}
+            className="hidden"
+          />
+        </div>
       </div>
 
-      {/* Step 4: Press the button */}
-      {photoUrls.length > 0 && selectedColor && (
+      {/* Step 5: Visualize */}
+      {photoUrl && selectedColor && (
         <div>
           <button
             onClick={generate}
@@ -207,11 +216,11 @@ export default function FloorVisualizer({ onPhotoChange, onColorSelected, initia
           >
             {generating ? (
               <>
-                <Loader2 className="h-5 w-5 animate-spin" /> Generating your preview…
+                <Loader2 className="h-5 w-5 animate-spin" /> Rendering your floor…
               </>
             ) : (
               <>
-                <Sparkles className="h-5 w-5" /> Visualize My Floor
+                <Wand2 className="h-5 w-5" /> Visualize My Floor
               </>
             )}
           </button>
@@ -225,18 +234,20 @@ export default function FloorVisualizer({ onPhotoChange, onColorSelected, initia
         </div>
       )}
 
-      {/* Step 4: Result — before/after */}
+      {/* Result — before/after */}
       {conceptUrl && (
         <div>
           <h4 className="font-semibold text-stone-900 mb-3">Your transformation</h4>
           <div className="grid grid-cols-2 gap-2">
             <div className="rounded-xl overflow-hidden border border-stone-200">
-              <img src={photoUrls[0]} alt="Before" className="w-full h-48 object-cover" />
+              <img src={photoUrl} alt="Before" className="w-full h-48 object-cover" />
               <p className="text-[10px] tracking-[0.16em] text-stone-400 p-2">BEFORE</p>
             </div>
             <div className="rounded-xl overflow-hidden border border-amber-300">
               <img src={conceptUrl} alt="After" className="w-full h-48 object-cover" />
-              <p className="text-[10px] tracking-[0.16em] text-amber-600 p-2">AFTER — {selectedColor?.name} · {sheen}</p>
+              <p className="text-[10px] tracking-[0.16em] text-amber-600 p-2">
+                AFTER — {selectedColor?.name} · {FINISHES.find((f) => f.key === finish)?.label}
+              </p>
             </div>
           </div>
           <button
